@@ -95,6 +95,9 @@ dev = [
   "ipyprogress",
   "ipython"
 ]
+[tool.setuptools.dynamic]
+readme = {file = ["README-PyPI.md"], content-type = "text/markdown"}
+
 
 [project.urls]
 "Homepage" = "https://github.com/DataScienceUIBK/rankify"

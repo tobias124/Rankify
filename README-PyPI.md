@@ -1,6 +1,6 @@
 
 
-# <p align="center"><img src="./images/rankify-crop.png" width="300" style ="border-radius: 50;"/></p>
+
 ### <div align="center">🔥 Rankify: A Comprehensive Python Toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation 🔥<div>
 
 
@@ -11,7 +11,7 @@
 <a><img alt="Static Badge" src="https://img.shields.io/badge/Python-3.10_3.11-blue"></a>
 <a href="https://opensource.org/license/apache-2-0"><img src="https://img.shields.io/static/v1?label=License&message=Apache-2.0&color=red"></a>
  <a href="https://pepy.tech/projects/rankify"><img src="https://static.pepy.tech/badge/rankify" alt="PyPI Downloads"></a>
-<a href="https://github.com/DataScienceUIBK/rankify/releases"><img alt="GitHub release" src="https://img.shields.io/github/release/DataScienceUIBK/rankify.svg?label=Version&color=orange"></a> <!--   -->
+<a href="https://github.com/DataScienceUIBK/rankify/releases"><img alt="GitHub release" src="https://img.shields.io/github/release/DataScienceUIBK/rankify.svg?label=Version&color=orange"></a>    
 </div>
 
 
@@ -19,9 +19,7 @@ _A modular and efficient retrieval, reranking  and RAG  framework designed to wo
 
 _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and retrieval-augmented generation (RAG) research. Our toolkit integrates 40 pre-retrieved benchmark datasets and supports 7 retrieval techniques, 24 state-of-the-art re-ranking models, and multiple RAG methods. Rankify provides a modular and extensible framework, enabling seamless experimentation and benchmarking across retrieval pipelines. Comprehensive documentation, open-source implementation, and pre-built evaluation tools make Rankify a powerful resource for researchers and practitioners in the field._
 
-<p align="center">
-<img src="images/overview.png" width="700" height="900" >
-</p>
+
 
 ## :sparkles: Features
 
