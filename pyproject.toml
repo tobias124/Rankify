@@ -1,0 +1,105 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["rankify", "rankify.models", "rankify.retrievers", "rankify.generator"]
+
+[project]
+name = "rankify"
+version = "0.1.0"
+description = "A Comprehensive Python Toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+
+keywords = ["retrieval", "re-ranking", "RAG", "nlp", "search"]
+
+authors = [
+  {name = "Abdelrahman Abdallah", email = "abdoelsayed2016@gmail.com"}
+]
+maintainers = [
+  {name = "Abdelrahman Abdallah", email = "abdoelsayed2016@gmail.com"}
+]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3 :: Only",
+]
+
+# Default installation includes minimal dependencies
+dependencies = [
+  "pandas==2.2.3",
+  "prettytable==3.11.0",
+  "tqdm==4.66.5",
+  "requests==2.32.3",
+  "transformers==4.45.2",
+  "datasets==3.2.0",
+  "httpx==0.27.2",
+]
+
+[project.optional-dependencies]
+base = [
+  "sentencepiece==0.2.0",
+  "openai==1.52.2",
+  "anthropic==0.37.1",
+  "litellm==1.50.4",
+  "together==1.3.3",
+  "onnxruntime==1.19.2",
+  "llama-cpp-python==0.2.76",
+  "ftfy==6.3.1",
+  "dacite==1.8.1",
+  "fschat[model_worker]>=0.2.36",
+  "llm-blender==0.0.2",
+  "sentence_transformers==3.3.0",
+
+]
+
+reranking = [
+  "rankify[base]",  
+  "vllm==0.7.0",
+  "flash-attn==2.7.4.post1",
+  "ninja==1.11.1.3"
+]
+
+retriever = [
+  "pyserini==0.43.0",
+  "faiss-cpu==1.9.0.post1",
+  "omegaconf==2.3.0",
+  "h5py==3.12.1",
+  "py7zr==0.22.0",
+  "ujson==5.10.0",
+  "ninja==1.11.1.3",
+  "gitpython==3.1.44",
+  "transformers==4.45.2",
+
+]
+
+rag = [
+ "rankify[base]"
+]
+
+all = [
+  "rankify[reranking]",
+  "rankify[retriever]",
+  "rankify[rag]"
+]
+
+dev = [
+  "ruff",
+  "isort",
+  "pytest",
+  "ipyprogress",
+  "ipython"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/DataScienceUIBK/rankify"
+"Documentation" = "http://rankify.readthedocs.io/"
+"Issues" = "https://github.com/DataScienceUIBK/rankify/issues"
+"Source Code" = "https://github.com/DataScienceUIBK/rankify"
+"Hugging Face Dataset" = "https://huggingface.co/datasets/abdoelsayed/reranking-datasets"
+"PyPI" = "https://pypi.org/project/rankify/"
