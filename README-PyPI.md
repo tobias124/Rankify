@@ -164,7 +164,7 @@ rm -rf ~/.cache/torch_extensions/*
 
 ---
 
-## :rocket: Quick Start
+## 🚀 Quick Start
 
 ### **1️⃣. Pre-retrieved Datasets**  
 
@@ -715,11 +715,11 @@ Thank you for helping make this project better!
 ---
 
 
-## :bookmark: License
+## 🔖 License
 
 Rankify is licensed under the Apache-2.0 License - see the [LICENSE](https://opensource.org/license/apache-2-0) file for details.
 
-## :star2: Citation
+## 🌟 Citation
 
 Please kindly cite our paper if helps your research:
 

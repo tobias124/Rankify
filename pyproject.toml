@@ -7,9 +7,9 @@ packages = ["rankify", "rankify.models", "rankify.retrievers", "rankify.generato
 
 [project]
 name = "rankify"
-version = "0.1.1"
+version = "0.1.0.post1"
 description = "A Comprehensive Python Toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation"
-readme = "README.md"
+readme = "README-PyPI.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
 
@@ -95,8 +95,7 @@ dev = [
   "ipyprogress",
   "ipython"
 ]
-[tool.setuptools.dynamic]
-readme = {file = ["README-PyPI.md"], content-type = "text/markdown"}
+
 
 
 [project.urls]
