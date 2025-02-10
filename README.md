@@ -726,6 +726,22 @@ Thank you for helping make this project better!
 
 Rankify is licensed under the Apache-2.0 License - see the [LICENSE](https://opensource.org/license/apache-2-0) file for details.
 
+## 🙏 Acknowledgments  
+
+We would like to express our gratitude to the following libraries, which have greatly contributed to the development of **Rankify**:  
+
+- **Rerankers** – A powerful Python library for integrating various reranking methods.  
+  🔗 [GitHub Repository](https://github.com/AnswerDotAI/rerankers/tree/main)  
+
+- **Pyserini** – A toolkit for supporting BM25-based retrieval and integration with sparse/dense retrievers.  
+  🔗 [GitHub Repository](https://github.com/castorini/pyserini)  
+
+- **FlashRAG** – A modular framework for Retrieval-Augmented Generation (RAG) research.  
+  🔗 [GitHub Repository](https://github.com/RUC-NLPIR/FlashRAG)  
+
+
+
+
 ## :star2: Citation
 
 Please kindly cite our paper if helps your research:
