@@ -6,9 +6,12 @@ build-backend = "setuptools.build_meta"
 where = ["."]
 include = ["rankify*"]
 
+[tool.setuptools.package-data]
+"rankify.utils.retrievers.colbert.colbert.indexing.codecs" = ["*.cpp", "*.cu", "*.h"]
+
 [project]
 name = "rankify"
-version = "0.1.0.post3"
+version = "0.1.0.post4"
 description = "A Comprehensive Python Toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation"
 readme = "README-PyPI.md"
 requires-python = ">=3.10"
