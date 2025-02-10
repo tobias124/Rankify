@@ -101,25 +101,7 @@ To install **Rankify**, simply use **pip** (requires Python 3.10+):
 pip install rankify
 ```
 
-Or, to install from **GitHub** for the latest development version:  
-
-```bash
-git clone https://github.com/DataScienceUIBK/rankify.git
-cd rankify
-pip install -e .
-# For full functionality we recommend installing Rankify with all dependencies:
-pip install -e ".[all]"
-# Install dependencies for retrieval only (BM25, DPR, ANCE, etc.)
-pip install -e ".[retriever]"
-# Install dependencies for base re-ranking only (excluding vLLM)
-pip install -e ".[base]"
-# Install base re-ranking with vLLM support for `FirstModelReranker`, `LiT5ScoreReranker`, `LiT5DistillReranker`, `VicunaReranker`, and `ZephyrReranker'.
-pip install -e ".[reranking]"
-# Install dependencies for retrieval-augmented generation (RAG)
-pip install -e ".[rag]"
-```
 This will install the base functionality required for retrieval, re-ranking, and retrieval-augmented generation (RAG).  
-
 
 #### Recommended Installation  
 
@@ -145,6 +127,28 @@ pip install "rankify[reranking]"
 # Install dependencies for retrieval-augmented generation (RAG)
 pip install "rankify[rag]"
 ```
+
+Or, to install from **GitHub** for the latest development version:  
+
+
+```bash
+git clone https://github.com/DataScienceUIBK/rankify.git
+cd rankify
+pip install -e .
+# For full functionality we recommend installing Rankify with all dependencies:
+pip install -e ".[all]"
+# Install dependencies for retrieval only (BM25, DPR, ANCE, etc.)
+pip install -e ".[retriever]"
+# Install dependencies for base re-ranking only (excluding vLLM)
+pip install -e ".[base]"
+# Install base re-ranking with vLLM support for `FirstModelReranker`, `LiT5ScoreReranker`, `LiT5DistillReranker`, `VicunaReranker`, and `ZephyrReranker'.
+pip install -e ".[reranking]"
+# Install dependencies for retrieval-augmented generation (RAG)
+pip install -e ".[rag]"
+```
+
+
+
 #### Using ColBERT Retriever  
 
 If you want to use **ColBERT Retriever**, follow these additional setup steps:
