@@ -646,6 +646,9 @@ print(after_ranking_metrics)
 - ✅ **BGE** 
 - ✅ **Contriever** 
 - ✅ **BPR** 
+- 📍 **Spar** 
+- 📍 **Dragon** 
+- 📍 **Hybird** 
 ---
 
 ### **2️⃣ Rerankers**  
