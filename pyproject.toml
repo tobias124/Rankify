@@ -2,8 +2,9 @@
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["rankify", "rankify.models", "rankify.retrievers", "rankify.dataset", "rankify.metrics",  "rankify.utils", "rankify.generator"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rankify*"]
 
 [project]
 name = "rankify"
