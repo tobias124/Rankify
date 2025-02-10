@@ -758,4 +758,4 @@ Please kindly cite our paper if helps your research:
 ## Star History
 
 
-[![Star History Chart](https://api.star-history.com/svg?repos=DataScienceUIBK/Rankify&type=Timeline)](https://star-history.com/#DataScienceUIBK/Rankify&Timeline)
+[![Star History Chart](https://api.star-history.com/svg?repos=DataScienceUIBK/Rankify&type=Date)](https://star-history.com/#DataScienceUIBK/Rankify&Date)
