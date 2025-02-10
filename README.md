@@ -212,7 +212,7 @@ from rankify.dataset.dataset import Dataset
 Dataset.avaiable_dataset()
 ```
 
-**BM25 Retriever**
+**BM25 Retriever Datasets**
 ```python
 from rankify.dataset.dataset import Dataset
 # Download BM25-retrieved documents for nq-dev
@@ -250,7 +250,7 @@ dataset = Dataset(retriever="bm25", dataset_name="arc-dev", n_docs=100)
 documents = dataset.download(force_download=False)
 ```
 
-**BGE Retriever**
+**BGE Retriever Datasets**
 ```python
 from rankify.dataset.dataset import Dataset
 # Download BGE-retrieved documents for nq-dev
@@ -264,7 +264,7 @@ dataset = Dataset(retriever="bge", dataset_name="archivialqa-dev", n_docs=100)
 documents = dataset.download(force_download=False)
 ```
 
-**ColBERT Retriever**
+**ColBERT Retriever Datasets**
 
 
 ```python
@@ -280,7 +280,7 @@ dataset = Dataset(retriever="colbert", dataset_name="archivialqa-dev", n_docs=10
 documents = dataset.download(force_download=False)
 ```
 
-**MSS-DPR Retriever**
+**MSS-DPR Retriever Datasets**
 
 
 ```python
@@ -296,7 +296,7 @@ dataset = Dataset(retriever="mss-dpr", dataset_name="archivialqa-dev", n_docs=10
 documents = dataset.download(force_download=False)
 ```
 
-**MSS Retriever**
+**MSS Retriever Datasets**
 
 ```python
 from rankify.dataset.dataset import Dataset
@@ -311,7 +311,7 @@ dataset = Dataset(retriever="mss", dataset_name="archivialqa-dev", n_docs=100)
 documents = dataset.download(force_download=False)
 ```
 
-**Contriever Retriever**
+**Contriever Retriever Datasets**
 
 ```python
 from rankify.dataset.dataset import Dataset
@@ -327,7 +327,7 @@ documents = dataset.download(force_download=False)
 ```
 
 
-**ANCE Retriever**
+**ANCE Retriever Datasets**
 
 ```python
 from rankify.dataset.dataset import Dataset
