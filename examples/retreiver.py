@@ -20,10 +20,41 @@ documents = [
     Document(question=Question("Who wrote Hamlet?"), answers=Answer(["Shakespeare"]), contexts=[])
 ]
 
-retriever = Retriever(method="bge", n_docs=5 , index_type="wiki" )
+
+
+
+retriever = Retriever(method="colbert", n_docs=1 , index_type="wiki" )
 retrieved_documents = retriever.retrieve(documents)
 
 # Print the first retrieved document
 for i, doc in enumerate(retrieved_documents):
     print(f"\nDocument {i+1}:")
     print(doc)
+
+retriever = Retriever(method="colbert", n_docs=1 , index_type="msmarco" )
+retrieved_documents = retriever.retrieve(documents)
+
+
+# Print the first retrieved document
+for i, doc in enumerate(retrieved_documents):
+    print(f"\nDocument {i+1}:")
+    print(doc)
+
+
+retriever = Retriever(method="bge", n_docs=1 , index_type="wiki" )
+retrieved_documents = retriever.retrieve(documents)
+
+# Print the first retrieved document
+for i, doc in enumerate(retrieved_documents):
+    print(f"\nDocument {i+1}:")
+    print(doc)
+
+retriever = Retriever(method="bge", n_docs=1 , index_type="msmarco" )
+retrieved_documents = retriever.retrieve(documents)
+# Print the first retrieved document
+for i, doc in enumerate(retrieved_documents):
+    print(f"\nDocument {i+1}:")
+    print(doc)
+
+
+
