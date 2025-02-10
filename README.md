@@ -20,7 +20,7 @@ _A modular and efficient retrieval, reranking  and RAG  framework designed to wo
 _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and retrieval-augmented generation (RAG) research. Our toolkit integrates 40 pre-retrieved benchmark datasets and supports 7 retrieval techniques, 24 state-of-the-art re-ranking models, and multiple RAG methods. Rankify provides a modular and extensible framework, enabling seamless experimentation and benchmarking across retrieval pipelines. Comprehensive documentation, open-source implementation, and pre-built evaluation tools make Rankify a powerful resource for researchers and practitioners in the field._
 
 <p align="center">
-<img src="images/overview.png" width="700" height="900" >
+<img src="images/overview.png" width="500" height="500" >
 </p>
 
 ## :sparkles: Features
@@ -754,3 +754,8 @@ Please kindly cite our paper if helps your research:
   year={2025}
 }
 ```
+
+## Star History
+
+
+[![Star History Chart](https://api.star-history.com/svg?repos=DataScienceUIBK/Rankify&type=Timeline)](https://star-history.com/#DataScienceUIBK/Rankify&Timeline)
