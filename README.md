@@ -353,6 +353,393 @@ documents = Dataset.load_dataset('./tests/out-datasets/bm25/web_questions/test.j
 ```
 Now, you can integrate **retrieved documents** with **re-ranking** and **RAG** workflows! 🚀  
 
+
+
+
+#### Feature Comparison for Pre-Retrieved Datasets  
+
+The following table provides an overview of the availability of different retrieval methods (**BM25, DPR, ColBERT, ANCE, BGE, Contriever**) for each dataset.  
+
+✅ **Completed**  
+🕒 **Pending**  
+
+<table style="width: 100%;">
+  <tr>
+    <th align="center">Dataset</th> 
+    <th align="center">BM25</th> 
+    <th align="center">DPR</th> 
+    <th align="center">ColBERT</th>
+    <th align="center">ANCE</th>
+    <th align="center">BGE</th>
+    <th align="center">Contriever</th>
+  </tr>
+  <tr>
+    <td align="left">2WikimultihopQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">ArchivialQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">ChroniclingAmericaQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">EntityQuestions</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">AmbigQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">ARC</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">ASQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">MS MARCO</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">AY2</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">Bamboogle</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">BoolQ</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">CommonSenseQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">CuratedTREC</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">ELI5</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">FERMI</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">FEVER</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">HellaSwag</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">HotpotQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">MMLU</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+  <tr>
+    <td align="left">Musique</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    <tr>
+    <td align="left">NarrativeQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    <tr>
+    <td align="left">NQ</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    <tr>
+    <td align="left">OpenbookQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    <tr>
+    <td align="left">PIQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    <tr>
+    <td align="left">PopQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    <tr>
+    <td align="left">Quartz</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    <tr>
+    <td align="left">SIQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    <tr>
+    <td align="left">StrategyQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    </tr>
+    <tr>
+    <td align="left">TREX</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    </tr>
+    <tr>
+    <td align="left">TriviaQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+    </tr>
+    <tr>
+    <td align="left">TruthfulQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+      </tr>
+    <tr>
+    <td align="left">TruthfulQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+      </tr>
+    <tr>
+    <td align="left">WebQ</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+      </tr>
+    <tr>
+    <td align="left">WikiQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+      </tr>
+    <tr>
+    <td align="left">WikiAsp</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+        </tr>
+    <tr>
+    <td align="left">WikiPassageQA</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+        </tr>
+    <tr>
+    <td align="left">WNED</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+        </tr>
+    <tr>
+    <td align="left">WoW</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+        </tr>
+    <tr>
+    <td align="left">Zsre</td>
+    <td align="center">✅</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+    <td align="center">🕒</td>
+  </tr>
+</table>
+
+
+
+
 ---
 
 ### 2️⃣. Running Retrieval
