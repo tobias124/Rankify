@@ -663,7 +663,6 @@ print(after_ranking_metrics)
 - ✅ **ColBERT Reranker**
 - ✅ **LLM Layerwise Ranker** 
 - ✅ **Splade Reranker**
-- ✅ **ColBERT Reranker**
 - ✅ **UPR Reranker**
 - ✅ **Inranker Reranker**
 - ✅ **Transformer Reranker**
@@ -672,6 +671,8 @@ print(after_ranking_metrics)
 - ✅ **LLM2VEC Reranker**
 - ✅ **ECHO Reranker**
 - ✅ **Incontext Reranker**
+-  📍 **DynRank**
+-  📍 **ASRank**
 ---
 
 ### **3️⃣ Generators**  
