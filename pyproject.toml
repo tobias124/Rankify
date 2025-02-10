@@ -8,7 +8,7 @@ include = ["rankify*"]
 
 [project]
 name = "rankify"
-version = "0.1.0.post2"
+version = "0.1.0.post3"
 description = "A Comprehensive Python Toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation"
 readme = "README-PyPI.md"
 requires-python = ">=3.10"
