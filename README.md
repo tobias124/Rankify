@@ -172,7 +172,7 @@ rm -rf ~/.cache/torch_extensions/*
 
 ## :rocket: Quick Start
 
-### **1️⃣. Pre-retrieved Datasets**  
+### **1️⃣ Pre-retrieved Datasets**  
 
 We provide **1,000 pre-retrieved documents per dataset**, which you can download from:  
 
@@ -742,7 +742,7 @@ The following table provides an overview of the availability of different retrie
 
 ---
 
-### 2️⃣. Running Retrieval
+### 2️⃣ Running Retrieval
 To perform retrieval using **Rankify**, you can choose from various retrieval methods such as **BM25, DPR, ANCE, Contriever, ColBERT, and BGE**.  
 
 **Example: Running Retrieval on Sample Queries**  
@@ -825,7 +825,7 @@ for i, doc in enumerate(retrieved_documents):
 ```
 
 ---
-## 3️⃣. Running Reranking
+## 3️⃣ Running Reranking
 Rankify provides support for multiple reranking models. Below are examples of how to use each model.  
 
 ** Example: Reranking a Document**  
@@ -952,7 +952,7 @@ model = Reranking(method='zephyr_reranker', model_name='rank_zephyr_7b_v1_full')
 ```
 ---
 
-## 4️⃣. Using Generator Module
+## 4️⃣ Using Generator Module
 Rankify provides a **Generator Module** to facilitate **retrieval-augmented generation (RAG)** by integrating retrieved documents into generative models for producing answers. Below is an example of how to use different generator methods.  
 
 ```python
@@ -1033,9 +1033,9 @@ print(after_ranking_metrics)
 - ✅ **BGE** 
 - ✅ **Contriever** 
 - ✅ **BPR** 
-- 📍 **Spar** 
-- 📍 **Dragon** 
-- 📍 **Hybird** 
+- 🕒 **Spar**   
+- 🕒 **Dragon** 
+- 🕒 **Hybird** 
 ---
 
 ### **2️⃣ Rerankers**  
@@ -1065,8 +1065,8 @@ print(after_ranking_metrics)
 - ✅ **LLM2VEC Reranker**
 - ✅ **ECHO Reranker**
 - ✅ **Incontext Reranker**
--  📍 **DynRank**
--  📍 **ASRank**
+- 🕒 **DynRank**
+- 🕒 **ASRank**
 ---
 
 ### **3️⃣ Generators**  
