@@ -8,27 +8,23 @@ import csv
 
 class Question:
     """
-    A class to represent a question.
+    Represents a question with automatic validation.
 
-    Attributes
-    ----------
-    question : str
-        The text of the question.
+    Attributes:
+        question (str): The text of the question.
     """
     def __init__(self, question: str ) -> None:
         """
         Initializes a Question instance.
 
-        Parameters
-        ----------
-        question : str
-            The text of the question.
+        Args:
+            question (str): The text of the question.
 
-        Examples
-        --------
-        >>> q = Question("What is the capital of France?")
-        >>> print(q)
-        Question: What is the capital of France?
+        Example:
+            ```python
+            q = Question("What is the capital of France?")
+            print(q)  # Output: Question: What is the capital of France?
+            ```
         """
         self.question = self.check_question(question)
     @classmethod
@@ -36,20 +32,17 @@ class Question:
         """
         Ensures the question ends with a question mark.
 
-        Parameters
-        ----------
-        question : str
-            The text of the question.
+        Args:
+            question (str): The text of the question.
 
-        Returns
-        -------
-        str
-            The question with a question mark at the end if it was missing.
+        Returns:
+            str: The question with a question mark at the end if it was missing.
 
-        Examples
-        --------
-        >>> Question.check_question("What is the capital of France")
-        'What is the capital of France?'
+        Example:
+            ```python
+            Question.check_question("What is the capital of France")
+            # Output: 'What is the capital of France?'
+            ```
         """
         cls.question = question if question.endswith("?") else question +"?"
         return cls.question
@@ -58,44 +51,41 @@ class Question:
         """
         Returns a string representation of the Question instance.
 
-        Returns
-        -------
-        str
-            The string representation of the question.
+        Returns:
+            str: The formatted question.
 
-        Examples
-        --------
-        >>> q = Question("What is the capital of France?")
-        >>> str(q)
-        'Question: What is the capital of France?'
+        Example:
+            ```python
+            q = Question("What is the capital of France?")
+            str(q)  # Output: 'Question: What is the capital of France?'
+            ```
         """
         return f"Question: {self.question}"
     
 class Answer:
     """
-    A class to represent answers to a question.
+    Represents answers to a question.
 
-    Attributes
-    ----------
-    answers : list of str
-        A list of possible answers to the question.
+    Attributes:
+        answers (list[str]): A list of possible answers.
     """
     def __init__(self, answers:list=None) -> None:
         """
         Initializes an Answer instance.
 
-        Parameters
-        ----------
-        answers : list of str, optional
-            A list of possible answers (default is None).
+        Args:
+            answers (list[str] or str, optional): A list of possible answers. Defaults to None.
 
-        Examples
-        --------
-        >>> a = Answer(["Paris", "Lyon"])
-        >>> print(a)
-        Answer: Paris\nLyon
+        Example:
+            ```python
+            a = Answer(["Paris", "Lyon"])
+            print(a)  
+            # Output:
+            # Answer:
+            # - Paris
+            # - Lyon
+            ```
         """
-
         if isinstance(answers, str):  # If it's a string, convert it to a list
             self.answers = [answers]
         if isinstance(answers, int):
@@ -109,58 +99,48 @@ class Answer:
         """
         Returns a string representation of the Answer instance.
 
-        Returns
-        -------
-        str
-            The string representation of the answers.
+        Returns:
+            str: The formatted answers.
 
-        Examples
-        --------
-        >>> a = Answer(["Paris", "Lyon"])
-        >>> str(a)
-        'Answer: Paris\nLyon'
+        Example:
+            ```python
+            a = Answer(["Paris", "Lyon"])
+            str(a)  
+            # Output: 
+            # Answer: 
+            # - Paris
+            # - Lyon
+            ```
         """
         return f"Answer: \n- "+ "\n- ".join(self.answers)
 
 class Context:
     """
-    A class to represent a context, including metadata such as score and title.
+    Represents a context with metadata such as score and title.
 
-    Attributes
-    ----------
-    score : float, optional
-        The relevance score of the context.
-    has_answer : bool, optional
-        Whether the context contains an answer to the question.
-    id : int, optional
-        The identifier of the context.
-    title : str, optional
-        The title of the context.
-    text : str, optional
-        The text of the context.
+    Attributes:
+        score (float, optional): The relevance score of the context.
+        has_answer (bool, optional): Whether the context contains an answer.
+        id (int, optional): The identifier of the context.
+        title (str, optional): The title of the context.
+        text (str, optional): The text of the context.
     """
     def __init__(self, score: float=None, has_answer: bool=None, id: int=None, title: str=None, text: str=None)-> None:
         """
         Initializes a Context instance.
 
-        Parameters
-        ----------
-        score : float, optional
-            The relevance score of the context (default is None).
-        has_answer : bool, optional
-            Whether the context contains an answer to the question (default is None).
-        id : int, optional
-            The identifier of the context (default is None).
-        title : str, optional
-            The title of the context (default is None).
-        text : str, optional
-            The text of the context (default is None).
+        Args:
+            score (float, optional): The relevance score.
+            has_answer (bool, optional): Whether the context contains an answer.
+            id (int, optional): The identifier of the context.
+            title (str, optional): The title of the context.
+            text (str, optional): The text of the context.
 
-        Examples
-        --------
-        >>> c = Context(score=0.9, has_answer=True, id=1, title="Paris", text="The capital of France is Paris.")
-        >>> print(c)
-        ID: 1\nHas Answer: True\nTitle: Paris\nText: The capital of France is Paris.\nScore: 0.9
+        Example:
+            ```python
+            c = Context(score=0.9, has_answer=True, id=1, title="Paris", text="The capital of France is Paris.")
+            print(c)
+            ```
         """
         self.score: Optional[float] = score
         self.has_answer: Optional[bool] = has_answer
@@ -171,18 +151,19 @@ class Context:
     def to_dict(self, save_text: bool=False) -> Dict[str, Optional[object]]:
 
         """
-        Converts the Context instance to a dictionary representation.
+        Converts the Context instance to a dictionary.
 
-        Returns
-        -------
-        dict
-            A dictionary containing the context's attributes.
+        Args:
+            save_text (bool): Whether to include text in the output dictionary.
 
-        Examples
-        --------
-        >>> c = Context(score=0.9, has_answer=True, id=1, title="Paris", text="The capital of France is Paris.")
-        >>> c.to_dict()
-        {'score': 0.9, 'has_answer': True, 'id': 1, 'title': 'Paris', 'text': 'The capital of France is Paris.'}
+        Returns:
+            dict: The context data.
+
+        Example:
+            ```python
+            c = Context(score=0.9, has_answer=True, id=1, title="Paris", text="The capital of France is Paris.")
+            print(c.to_dict())
+            ```
         """
         context_dict = {
             "score": float(self.score) if self.score is not None else None,
@@ -200,16 +181,14 @@ class Context:
         """
         Returns a string representation of the Context instance.
 
-        Returns
-        -------
-        str
-            The string representation of the context.
+        Returns:
+            str: The formatted context.
 
-        Examples
-        --------
-        >>> c = Context(score=0.9, has_answer=True, id=1, title="Paris", text="The capital of France is Paris.")
-        >>> str(c)
-        'ID: 1\nHas Answer: True\nTitle: Paris\nText: The capital of France is Paris.\nScore: 0.9'
+        Example:
+            ```python
+            c = Context(score=0.9, has_answer=True, id=1, title="Paris", text="The capital of France is Paris.")
+            print(str(c))
+            ```
         """
         return f"ID: {self.id}\nHas Answer: {self.has_answer}\nTitle: {self.title}\nText: {self.text}\nScore: {self.score}"
 

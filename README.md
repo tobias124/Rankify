@@ -14,6 +14,12 @@
 <a href="https://github.com/DataScienceUIBK/rankify/releases"><img alt="GitHub release" src="https://img.shields.io/github/release/DataScienceUIBK/rankify.svg?label=Version&color=orange"></a> <!--   -->
 </div>
 
+If you like our Framework, **don't hesitate to ⭐ star this repository ⭐**. This helps us to **make the Framework more better and scalable to different models and mehods 🤗**.
+
+<img src="./images/output.gif" alt="Star the repo" />
+
+
+
 
 _A modular and efficient retrieval, reranking  and RAG  framework designed to work with state-of-the-art models for retrieval, ranking and rag tasks._
 
@@ -22,6 +28,9 @@ _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and ret
 <p align="center">
 <img src="images/overview.png" width="500" height="500" >
 </p>
+
+
+
 
 ## :sparkles: Features
 

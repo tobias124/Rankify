@@ -1,0 +1,3 @@
+# Retrievers API
+
+::: rankify.retrievers
