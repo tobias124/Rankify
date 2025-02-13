@@ -9,5 +9,6 @@ python:
   install:
     - requirements: docs/requirements.txt  # Use the lightweight docs requirements
 
+
 mkdocs:
-  configuration: mkdocs.yml
+  configuration: docs/mkdocs.yml  
