@@ -1,7 +1,7 @@
-# Welcome to MkDocs
+# Welcome to Rankify
 
 For documentation now please visit our [Rankify Repo](https://github.com/DataScienceUIBK/Rankify).
-
+<!-- 
 ## Commands
 
 * `mkdocs new [dir-name]` - Create a new project.
@@ -15,3 +15,4 @@ For documentation now please visit our [Rankify Repo](https://github.com/DataSci
     docs/
         index.md  # The documentation homepage.
         ...       # Other markdown pages, images and other files.
+-->
