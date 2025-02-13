@@ -1,0 +1,16 @@
+site_name: Rankify Documentation
+site_url: https://github.com/DataScienceUIBK/Rankify
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - API Reference:
+      - Retrievers: retrievers.md
+      - Rerankers: rerankers.md
+      - Generators: generators.md
+  - Contributing: contributing.md
+  - License: license.md
