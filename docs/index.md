@@ -1,6 +1,6 @@
 # Welcome to MkDocs
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+For documentation now please visit our [Rankify Repo](https://github.com/DataScienceUIBK/Rankify).
 
 ## Commands
 
