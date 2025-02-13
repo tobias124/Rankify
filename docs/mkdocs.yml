@@ -3,6 +3,10 @@ site_url: https://github.com/DataScienceUIBK/Rankify
 theme:
   name: material
 
+
+docs_dir: .  # This tells MkDocs that the Markdown files are inside "docs/", not "docs/docs/"
+
+
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
