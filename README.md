@@ -1,5 +1,7 @@
 
 
+[ [English](README.md) | [中文](README_zh.md)]
+
 # <p align="center"><img src="./images/rankify-crop.png" width="300" style ="border-radius: 50;"/></p>
 ### <div align="center">🔥 Rankify: A Comprehensive Python Toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation 🔥<div>
 
