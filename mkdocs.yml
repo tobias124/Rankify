@@ -16,7 +16,7 @@ nav:
   - Getting Started: getting-started.md
   - Installation: installation.md
   - Usage: usage.md
-  - Reference:
+  #- Reference:
       #- Dataset: api/dataset.md
       #- Generator: api/generator.md
       #- Metrics: api/metrics.md
