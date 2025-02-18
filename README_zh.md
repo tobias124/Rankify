@@ -1,3 +1,4 @@
+[ [English](README.md) | [中文](README_zh.md)]
 # <p align="center"><img src="./images/rankify-crop.png" width="300" style ="border-radius: 50;"/></p>
 ### <div align="center">🔥 Rankify: 一个全面的 Python 工具包，专为检索、重排序和检索增强生成（RAG）设计 🔥<div>
 
