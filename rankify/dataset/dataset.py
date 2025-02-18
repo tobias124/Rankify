@@ -284,6 +284,8 @@ class Document:
         """
         question = Question(data["question"])
         answers = Answer(data["answers"])
+        
+        
         contexts = [Context(**ctx) for ctx in data["ctxs"][:n_docs]]
         return cls(question, answers, contexts)
 
@@ -446,6 +448,9 @@ class Dataset:
         with open(filepath , encoding='utf-8') as file:
             data = json.load(file)
         data = [Document.from_dict(d,n_docs) for d in data]
+
+        """print(data[0].contexts[0])
+        asdsada"""
         return data
     @classmethod
     def load_dataset_qa(cls, filepath: str) -> List[Document]:

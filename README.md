@@ -129,14 +129,8 @@ If you prefer to install only specific components, choose from the following:
 # Install dependencies for retrieval only (BM25, DPR, ANCE, etc.)
 pip install "rankify[retriever]"
 
-# Install dependencies for base re-ranking only (excluding vLLM)
-pip install "rankify[base]"
-
 # Install base re-ranking with vLLM support for `FirstModelReranker`, `LiT5ScoreReranker`, `LiT5DistillReranker`, `VicunaReranker`, and `ZephyrReranker'.
 pip install "rankify[reranking]"
-
-# Install dependencies for retrieval-augmented generation (RAG)
-pip install "rankify[rag]"
 ```
 
 Or, to install from **GitHub** for the latest development version:  
@@ -150,12 +144,8 @@ pip install -e .
 pip install -e ".[all]"
 # Install dependencies for retrieval only (BM25, DPR, ANCE, etc.)
 pip install -e ".[retriever]"
-# Install dependencies for base re-ranking only (excluding vLLM)
-pip install -e ".[base]"
 # Install base re-ranking with vLLM support for `FirstModelReranker`, `LiT5ScoreReranker`, `LiT5DistillReranker`, `VicunaReranker`, and `ZephyrReranker'.
 pip install -e ".[reranking]"
-# Install dependencies for retrieval-augmented generation (RAG)
-pip install -e ".[rag]"
 ```
 
 

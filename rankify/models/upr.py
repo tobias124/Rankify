@@ -210,7 +210,7 @@ class UPR(BaseRanking):
             shared_nll_list.append(avg_null)
 
         topk_scores,indexes = torch.topk(-torch.cat(shared_nll_list),k=len(context_tensor))
-        reordered_context = [document.contexts[i] for i in indexes]
+        reordered_context = -[document.contexts[i] for i in indexes]
 
         for i, ctx in enumerate(reordered_context):
             ctx.score = topk_scores[i].item()
