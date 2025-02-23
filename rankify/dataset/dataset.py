@@ -194,58 +194,33 @@ class Context:
 
 class Document:
     """
-    A class to represent a document, consisting of a question, answers, and contexts.
+    Represents a document consisting of a question, answers, and contexts.
 
-    Attributes
-    ----------
-    question : Question
-        The question associated with the document.
-    answers : Answer
-        The answers to the question.
-    contexts : list of Context
-        A list of contexts related to the question.
-    reorder_contexts : list of Context, optional
-        A reordered list of contexts based on their relevance (default is None).
+    Attributes:
+        question (Question): The question associated with the document.
+        answers (Answer): The answers to the question.
+        contexts (list[Context]): A list of related contexts.
+        reorder_contexts (list[Context] or None): A reordered list of contexts based on relevance.
     """
     def __init__(self, question: Question, answers: Answer, contexts: list = None) -> None:
         """
         Initializes a Document instance.
 
-        Parameters
-        ----------
-        question : Question
-            The question associated with the document.
-        answers : Answer
-            The answers to the question.
-        contexts : list of Context
-            A list of contexts related to the question.
+        Args:
+            question (Question): The question associated with the document.
+            answers (Answer): The answers to the question.
+            contexts (list[Context], optional): A list of contexts related to the question.
 
-        Examples
-        --------
-        >>> q = Question("What is the capital of France?")
-        >>> a = Answer(["Paris"])
-        >>> c1 = Context(score=0.9, has_answer=True, id=1, title="Paris", text="The capital of France is Paris.")
-        >>> c2 = Context(score=0.5, has_answer=False, id=2, title="Berlin", text="Berlin is the capital of Germany.")
-        >>> d = Document(question=q, answers=a, contexts=[c1, c2])
-        >>> print(d)
-        Question: What is the capital of France?
-        Answer: Paris
-        Context: 
-        
-        ID: 1
-        Has Answer: True
-        Title: Paris
-        Text: The capital of France is Paris.
-        Score: 0.9
-        
-        ID: 2
-        Has Answer: False
-        Title: Berlin
-        Text: Berlin is the capital of Germany.
-        Score: 0.5
-        Reorder contexts: 
-        
-        """        
+        Example:
+            ```python
+            q = Question("What is the capital of France?")
+            a = Answer(["Paris"])
+            c1 = Context(score=0.9, has_answer=True, id=1, title="Paris", text="The capital of France is Paris.")
+            c2 = Context(score=0.5, has_answer=False, id=2, title="Berlin", text="Berlin is the capital of Germany.")
+            d = Document(question=q, answers=a, contexts=[c1, c2])
+            print(d)
+            ```
+        """
         self.question: Question = question
         self.answers: Answer = answers
         self.contexts: List[Context] = contexts
@@ -254,33 +229,28 @@ class Document:
     @classmethod
     def from_dict(cls, data: dict,n_docs:int=100) -> 'Document':
         """
-        Creates a Document instance from a dictionary representation.
+        Creates a Document instance from a dictionary.
 
-        Parameters
-        ----------
-        data : dict
-            A dictionary containing the question, answers, and contexts.
-        n_docs : int, optional
-            The number of contexts to include (default is 100).
+        Args:
+            data (dict): A dictionary containing the question, answers, and contexts.
+            n_docs (int, optional): The number of contexts to include. Defaults to 100.
 
-        Returns
-        -------
-        Document
-            A new Document instance created from the provided dictionary.
+        Returns:
+            Document: A new Document instance.
 
-        Examples
-        --------
-        >>> data = {
-        ...     "question": "What is the capital of France?",
-        ...     "answers": ["Paris"],
-        ...     "ctxs": [
-        ...         {"score": 0.9, "has_answer": True, "id": 1, "title": "Paris", "text": "The capital of France is Paris."},
-        ...         {"score": 0.5, "has_answer": False, "id": 2, "title": "Berlin", "text": "Berlin is the capital of Germany."}
-        ...     ]
-        ... }
-        >>> d = Document.from_dict(data)
-        >>> print(d.question)
-        Question: What is the capital of France?
+        Example:
+            ```python
+            data = {
+                "question": "What is the capital of France?",
+                "answers": ["Paris"],
+                "ctxs": [
+                    {"score": 0.9, "has_answer": True, "id": 1, "title": "Paris", "text": "The capital of France is Paris."},
+                    {"score": 0.5, "has_answer": False, "id": 2, "title": "Berlin", "text": "Berlin is the capital of Germany."}
+                ]
+            }
+            d = Document.from_dict(data)
+            print(d.question)
+            ```
         """
         question = Question(data["question"])
         answers = Answer(data["answers"])
@@ -290,7 +260,12 @@ class Document:
         return cls(question, answers, contexts)
 
     def to_dict(self) -> Dict[str, Optional[object]]:
-        # Convert the document into a dictionary representation
+        """
+        Converts the document into a dictionary representation.
+
+        Returns:
+            dict: A dictionary containing the question, answers, and contexts.
+        """
         return {
             "question": self.question.question,
             "answers": self.answers.answers,
@@ -303,6 +278,18 @@ class Document:
             "contexts" : [ctx.to_dict() for ctx in self.reorder_contexts]
         }
     def __str__(self) -> str:
+        """
+        Returns a string representation of the Document instance.
+
+        Returns:
+            str: The formatted document information.
+
+        Example:
+            ```python
+            d = Document(Question("What is the capital of France?"), Answer(["Paris"]))
+            print(d)
+            ```
+        """
         contexts_str = "\n\n".join([str(ctx) for ctx in self.contexts])
         reorder_contexts_str= ''
         if self.reorder_contexts is not None:
@@ -310,6 +297,14 @@ class Document:
         return f"{self.question}\n\n{self.answers}\n\nContext: \n\n{contexts_str}\nReorder contexts: \n\n{reorder_contexts_str}"
 
 class Dataset:
+    """
+    Represents a dataset for information retrieval.
+
+    Attributes:
+        retriever (str): The name of the retriever used to obtain the dataset.
+        dataset_name (str): The name of the dataset.
+        n_docs (int): The number of documents to include.
+    """
     PASSAGES_URL = "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/psgs_w100/psgs_w100.tsv?download=true"
     CACHE_DIR = os.environ.get("RERANKING_CACHE_DIR", "./cache")
     PASSAGES_FILE = os.path.join(CACHE_DIR, "psgs_w100.tsv")
@@ -317,20 +312,16 @@ class Dataset:
         """
         Initializes a Dataset instance.
 
-        Parameters
-        ----------
-        retriever : str
-            The name of the retriever used to obtain the dataset.
-        dataset_name : str
-            The name of the dataset.
-        n_docs : int, optional
-            The number of documents to include (default is 1000).
+        Args:
+            retriever (str): The name of the retriever used to obtain the dataset.
+            dataset_name (str): The name of the dataset.
+            n_docs (int, optional): The number of documents to include. Defaults to 1000.
 
-        Examples
-        --------
-        >>> dataset = Dataset(retriever='bm25', dataset_name='example_dataset', n_docs=500)
-        >>> print(dataset.dataset_name)
-        'example_dataset'
+        Example:
+            ```python
+            dataset = Dataset(retriever='bm25', dataset_name='example_dataset', n_docs=500)
+            print(dataset.dataset_name)
+            ```
         """
         self.dataset_name: str  = dataset_name
         self.retriever: str  = retriever
@@ -376,7 +367,17 @@ class Dataset:
     def update_contexts_from_passages(self) -> None:
         """
         Updates the text and title fields of contexts in all documents using the passages TSV file.
-        Downloads the TSV file if it's not already cached.
+        If the TSV file is not already cached, it will be downloaded.
+
+        Raises:
+            ValueError: If the dataset has not been loaded before calling this method.
+
+        Example:
+            ```python
+            dataset = Dataset(retriever="bm25", dataset_name="example_dataset", n_docs=500)
+            dataset.download()
+            dataset.update_contexts_from_passages()
+            ```
         """
         if not self.documents:
             raise ValueError("Dataset has not been loaded. Call `download()` to load the dataset.")
@@ -400,22 +401,18 @@ class Dataset:
         """
         Downloads the dataset and loads it into memory.
 
-        Parameters
-        ----------
-        force_download : bool, optional
-            Whether to force downloading the dataset even if it already exists locally (default is True).
+        Args:
+            force_download (bool, optional): Whether to force downloading the dataset even if it already exists locally. Defaults to True.
 
-        Returns
-        -------
-        list of Document
-            A list of Document instances loaded from the dataset.
+        Returns:
+            list[Document]: A list of Document instances loaded from the dataset.
 
-        Examples
-        --------
-        >>> dataset = Dataset(retriever='bm25', dataset_name='example_dataset', n_docs=500)
-        >>> documents = dataset.download()
-        >>> len(documents)
-        500
+        Example:
+            ```python
+            dataset = Dataset(retriever='bm25', dataset_name='example_dataset', n_docs=500)
+            documents = dataset.download()
+            print(len(documents))
+            ```
         """
         filepath= DownloadManger.download(self.retriever,self.dataset_name, force_download =force_download)
         self.documents= self.load_dataset(filepath, self.n_docs)
@@ -426,61 +423,51 @@ class Dataset:
         """
         Loads the dataset from a JSON file.
 
-        Parameters
-        ----------
-        filepath : str
-            The path to the JSON file containing the dataset.
-        n_docs : int, optional
-            The number of documents to load (default is 100).
+        Args:
+            filepath (str): The path to the JSON file containing the dataset.
+            n_docs (int, optional): The number of documents to load. Defaults to 100.
 
-        Returns
-        -------
-        list of Document
-            A list of Document instances loaded from the JSON file.
+        Returns:
+            list[Document]: A list of Document instances loaded from the JSON file.
 
-        Examples
-        --------
-        >>> filepath = 'example_dataset.json'
-        >>> documents = Dataset.load_dataset(filepath, n_docs=50)
-        >>> len(documents)
-        50
+        Example:
+            ```python
+            filepath = 'example_dataset.json'
+            documents = Dataset.load_dataset(filepath, n_docs=50)
+            print(len(documents))
+            ```
         """
         with open(filepath , encoding='utf-8') as file:
             data = json.load(file)
         data = [Document.from_dict(d,n_docs) for d in data]
 
-        """print(data[0].contexts[0])
-        asdsada"""
+        
         return data
     @classmethod
     def load_dataset_qa(cls, filepath: str) -> List[Document]:
         """
         Loads a QA dataset from a JSON or JSONL file. The dataset contains only questions, optionally answers, and optionally IDs.
 
-        Parameters
-        ----------
-        filepath : str
-            The path to the JSON or JSONL file containing the dataset.
+        Args:
+            filepath (str): The path to the JSON or JSONL file containing the dataset.
 
-        Returns
-        -------
-        List[Document]
-            A list of Document objects, each containing:
-            - question (Question object)
-            - answers (Answer object, if available)
-            - id (if available)
-            - contexts (empty list, since this is a QA-only file)
-        
-        Raises
-        ------
-        ValueError
-            If the file format is not supported (only .json and .jsonl are allowed) or if the required fields are missing.
-        
-        Examples
-        --------
-        >>> documents = Dataset.load_dataset_qa('path/to/qa_dataset.jsonl')
-        >>> print(documents[0])
-        Document(question=Question("What is the capital of France?"), answers=Answer(["Paris"]), contexts=[])
+        Returns:
+            List[Document]: A list of Document objects, each containing:
+                - `question` (Question): The question object.
+                - `answers` (Answer, optional): The answer object if available.
+                - `id` (int, optional): The identifier if available.
+                - `contexts` (list): An empty list, since this is a QA-only file.
+
+        Raises:
+            ValueError: If the file format is not supported (only .json and .jsonl are allowed) or if required fields are missing.
+
+        Example:
+            ```python
+            documents = Dataset.load_dataset_qa("path/to/qa_dataset.jsonl")
+            print(documents[0])
+            # Output:
+            # Document(question=Question("What is the capital of France?"), answers=Answer(["Paris"]), contexts=[])
+            ```
         """
         documents = []
 
@@ -528,16 +515,18 @@ class Dataset:
         """
         Saves the re-ranked documents in DPR format to a JSON or JSONL file.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of Document objects containing the questions, answers, and reordered contexts.
-        output_path : str
-            The path to the output file (must be .json or .jsonl).
+        Args:
+            output_path (str): The path to the output file (must be .json or .jsonl).
 
-        Returns
-        -------
-        None
+        Returns:
+            None
+
+        Example:
+            ```python
+            dataset = Dataset(retriever="bm25", dataset_name="example_dataset", n_docs=500)
+            dataset.download()
+            dataset.save_dataset("output.json")
+            ```
         """
         dpr_data = []
         for doc in self.documents:
@@ -564,22 +553,31 @@ class Dataset:
     @staticmethod
     def save_documents(documents: List[Document], output_path: str, save_reranked: bool = False, save_text: bool = False) -> None:
         """
-        Saves the list of Document objects in DPR format to a JSON or JSONL file.
+        Saves a list of Document objects in DPR format to a JSON or JSONL file.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of Document objects containing questions, answers, and contexts.
-        output_path : str
-            The path to save the DPR-formatted output (must be .json or .jsonl).
-        save_reranked : bool, optional
-            Whether to save re-ranked contexts (default is False).
-        save_text : bool, optional
-            Whether to save the full text of the contexts (default is False).
+        Args:
+            documents (List[Document]): A list of Document objects containing questions, answers, and contexts.
+            output_path (str): The path to save the DPR-formatted output (must be .json or .jsonl).
+            save_reranked (bool, optional): Whether to save re-ranked contexts. Defaults to False.
+            save_text (bool, optional): Whether to save the full text of the contexts. Defaults to False.
 
-        Returns
-        -------
-        None
+        Returns:
+            None
+
+        Example:
+            ```python
+            documents = [
+                Document(
+                    question=Question("What is the capital of France?"),
+                    answers=Answer(["Paris"]),
+                    contexts=[
+                        Context(score=0.9, has_answer=True, id=1, title="Paris", text="The capital of France is Paris."),
+                        Context(score=0.5, has_answer=False, id=2, title="Berlin", text="Berlin is the capital of Germany."),
+                    ],
+                )
+            ]
+            Dataset.save_documents(documents, "output.json", save_reranked=True, save_text=True)
+            ```
         """
         dpr_data = []
         for doc in documents:
@@ -608,46 +606,31 @@ class Dataset:
         """
         Returns the number of documents in the dataset.
 
-        Returns
-        -------
-        int
-            The number of documents in the dataset.
-
-        Examples
-        --------
-        >>> dataset = Dataset(retriever='bm25', dataset_name='example_dataset', n_docs=500)
-        >>> dataset.download()
-        >>> len(dataset)
-        500
+        Returns:
+            int: The number of documents in the dataset.
         """
         return len(self.documents)
     
     def __getitem__(self,idx) -> Document:
         """
-        Returns the document at the specified index.
+        Retrieves the document at the specified index.
 
-        Parameters
-        ----------
-        idx : int
-            The index of the document to retrieve.
+        Args:
+            idx (int): The index of the document to retrieve.
 
-        Returns
-        -------
-        Document
-            The Document instance at the specified index.
+        Returns:
+            Document: The Document instance at the specified index.
 
-        Raises
-        ------
-        ValueError
-            If the dataset has not been loaded.
+        Raises:
+            ValueError: If the dataset has not been loaded.
 
-        Examples
-        --------
-        >>> dataset = Dataset(retriever='bm25', dataset_name='example_dataset', n_docs=500)
-        >>> dataset.download()
-        >>> document = dataset[0]
-        >>> print(document.question)
-        Question: What is the capital of France?
+        Example:
+            ```python
+            dataset = Dataset(retriever="bm25", dataset_name="example_dataset", n_docs=500)
+            dataset.download()
+            document = dataset[0]
+            print(document.question)  # Output: Question: What is the capital of France?
+            ```
         """
         if not self.documents:
             raise ValueError("Dataset has not been loaded. Call `download()` to load the dataset.")
@@ -659,9 +642,10 @@ class Dataset:
         """
         Prints information about available datasets.
 
-        Examples
-        --------
-        >>> Dataset.avaiable_dataset()
+        Example:
+            ```python
+            Dataset.available_dataset()
+            ```
         """
         get_datasets_info()
 

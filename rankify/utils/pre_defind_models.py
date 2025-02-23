@@ -15,7 +15,7 @@ HF_PRE_DEFIND_MODELS ={
         'gpt2-medium':'openai-community/gpt2-medium',
         'gpt2-large':'openai-community/gpt2-large',
         'gpt2-xl':'openai-community/gpt2-xl',
-        "other":"other",
+        
     },
     'rankgpt-api':{
         'gpt-3.5':'gpt-3.5',
@@ -33,7 +33,7 @@ HF_PRE_DEFIND_MODELS ={
         'Qwen2.5-7B':"Qwen/Qwen2.5-7B",
         'Mistral-7B-Instruct-v0.2': 'mistralai/Mistral-7B-Instruct-v0.2',
         "Mistral-7B-Instruct-v0.3":"mistralai/Mistral-7B-Instruct-v0.3",
-        "other":"other",
+        
     },
 
     'flashrank':{
@@ -44,7 +44,7 @@ HF_PRE_DEFIND_MODELS ={
         "ce-esci-MiniLM-L12-v2": "ce-esci-MiniLM-L12-v2",
         "rank_zephyr_7b_v1_full": "rank_zephyr_7b_v1_full",
         "miniReranker_arabic_v1": "miniReranker_arabic_v1",
-        "other":"other",
+        
     },
     'flashrank-model-file':{
         "ms-marco-TinyBERT-L-2-v2": "flashrank-TinyBERT-L-2-v2.onnx",
@@ -54,7 +54,7 @@ HF_PRE_DEFIND_MODELS ={
         "ce-esci-MiniLM-L12-v2": "flashrank-ce-esci-MiniLM-L12-v2_Q.onnx",
         "rank_zephyr_7b_v1_full": "rank_zephyr_7b_v1_full.Q4_K_M.gguf",
         "miniReranker_arabic_v1": "miniReranker_arabic_v1.onnx",
-        "other":"other",
+        
     },
     'monot5':{
         "monot5-base-msmarco": "castorini/monot5-base-msmarco",
@@ -81,24 +81,24 @@ HF_PRE_DEFIND_MODELS ={
         "monoptt5-base": "unicamp-dl/monoptt5-base",
         "monoptt5-large": "unicamp-dl/monoptt5-large",
         "monoptt5-3b": "unicamp-dl/monoptt5-3b",
-        "other":"other",
+        
     },
     'rankt5':{
         'rankt5-base': 'Soyoung97/RankT5-base',
         'rankt5-large': 'Soyoung97/RankT5-large',
         'rankt5-3b': 'Soyoung97/RankT5-3b',
-        "other":"other",
+        
     },
     'listt5':{
         'listt5-base':'Soyoung97/ListT5-base',
         'listt5-3b': 'Soyoung97/ListT5-3b',
-        "other":"other",
+       
     },
     'inranker':{
         'inranker-small': 'unicamp-dl/InRanker-small',
         'inranker-base' :'unicamp-dl/InRanker-base',
         'inranker-3b':'unicamp-dl/InRanker-3B',
-        "other":"other",
+        
     },
     'apiranker':{
         "cohere":"cohere",
@@ -135,19 +135,19 @@ HF_PRE_DEFIND_MODELS ={
         "ms-marco-TinyBERT-L-2":"cross-encoder/ms-marco-TinyBERT-L-2",
         "msmarco-MiniLM-L12-en-de-v1":"cross-encoder/msmarco-MiniLM-L12-en-de-v1",
         "msmarco-MiniLM-L6-en-de-v1":"cross-encoder/msmarco-MiniLM-L6-en-de-v1",
-        "other":"other",
+        
     },
     'llm_layerwise_ranker':{
         "bge-multilingual-gemma2":"BAAI/bge-multilingual-gemma2",
         "bge-reranker-v2-gemma":"BAAI/bge-reranker-v2-gemma",
         "bge-reranker-v2-minicpm-layerwise":"BAAI/bge-reranker-v2-minicpm-layerwise",
         "bge-reranker-v2.5-gemma2-lightweight":"BAAI/bge-reranker-v2.5-gemma2-lightweight",
-        "other":"other",
+        
     },
     'first_ranker':{
         "First-Model":"rryisthebest/First_Model",
         "Llama-3-8B":"meta-llama/Meta-Llama-3-8B-Instruct",
-        "other":"other",
+        
     },
     'lit5dist':{
         "LiT5-Distill-base": "castorini/LiT5-Distill-base",
@@ -156,32 +156,32 @@ HF_PRE_DEFIND_MODELS ={
         "LiT5-Distill-base-v2":	"castorini/LiT5-Distill-base-v2",
         "LiT5-Distill-large-v2":	"castorini/LiT5-Distill-large-v2",
         "LiT5-Distill-xl-v2":	"castorini/LiT5-Distill-xl-v2",
-        "other":"other",
+        
     },
     'lit5score':{
         "LiT5-Score-base":	"castorini/LiT5-Score-base",
         "LiT5-Score-large":	"castorini/LiT5-Score-large",
         "LiT5-Score-xl":	"castorini/LiT5-Score-xl",
-        "other":"other",
+        
     },
     'vicuna_reranker':{
         "rank_vicuna_7b_v1": "castorini/rank_vicuna_7b_v1",
         "rank_vicuna_7b_v1_noda":	"castorini/rank_vicuna_7b_v1_noda",
         "rank_vicuna_7b_v1_fp16":	"castorini/rank_vicuna_7b_v1_fp16",
         "rank_vicuna_7b_v1_noda_fp16":	"castorini/rank_vicuna_7b_v1_noda_fp16",
-        "other":"other",
+        
     },
     'zephyr_reranker':{
         "rank_zephyr_7b_v1_full":"castorini/rank_zephyr_7b_v1_full",
-        "other":"other",
+        
     },
     'blender_reranker':{
         "PairRM":"llm-blender/PairRM",
-        "other":"other",
+        
     },
     'splade_reranker':{
         "splade-cocondenser":"naver/splade-cocondenser-ensembledistil",
-        "other":"other",
+       
     },
     'sentence_transformer_reranker': {
         "all-MiniLM-L6-v2":"all-MiniLM-L6-v2",
@@ -196,7 +196,7 @@ HF_PRE_DEFIND_MODELS ={
         "distilbert-multilingual-nli-stsb-quora-ranking":"sentence-transformers/distilbert-multilingual-nli-stsb-quora-ranking",
         "msmarco-bert-co-condensor":"sentence-transformers/msmarco-bert-co-condensor",
         "msmarco-roberta-base-v2":"sentence-transformers/msmarco-roberta-base-v2",
-        "other":"other",
+        
     },
     'colbert_ranker':{
         "Colbert": "colbert-ir/colbertv2.0",
@@ -208,7 +208,7 @@ HF_PRE_DEFIND_MODELS ={
         'ArabicColBERT-711k':'akhooli/arabic-colbertv2-711k-norm',
         'BengaliColBERT':'turjo4nis/colbertv2.0-bn',
         'mxbai-colbert-large-v1':'mixedbread-ai/mxbai-colbert-large-v1',
-        'other': 'other'
+        
     },
     'monobert':{
         "monobert-large": "castorini/monobert-large-msmarco"
@@ -231,7 +231,7 @@ HF_PRE_DEFIND_MODELS ={
         'llamav3.1-8b':'meta-llama/Meta-Llama-3.1-8B-Instruct',
         'llamav3.1-70b':'meta-llama/Llama-3.1-70B-Instruct',
         'Mistral-7B-Instruct-v0.2':'mistralai/Mistral-7B-Instruct-v0.2',
-        "other":"other",
+        
     }
 }
 
