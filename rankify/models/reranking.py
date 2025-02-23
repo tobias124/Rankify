@@ -60,9 +60,13 @@ class Reranking:
         >>> model = Reranking(method='listt5', model_name='listt5-base')
         >>> ranker = model.initialize()
         """
-        model_name= HF_PRE_DEFIND_MODELS[self.method][self.model]
+        
         #print(model_name)
-        #aaaaa
+        if self.model not in HF_PRE_DEFIND_MODELS[self.method]:
+            model_name= self.model
+        else:
+            model_name= HF_PRE_DEFIND_MODELS[self.method][self.model]
+
         if self.method in METHOD_MAP:
             return METHOD_MAP[self.method](method=self.method,model_name=model_name, api_key=self.api_key, **self.kwargs)
         else:

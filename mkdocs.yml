@@ -16,10 +16,10 @@ nav:
   - Getting Started: getting-started.md
   - Installation: installation.md
   - Usage: usage.md
-  #- Reference:
-      #- Dataset: api/dataset.md
-      #- Generator: api/generator.md
-      #- Metrics: api/metrics.md
-      #- Retrievers: api/retrievers.md
-      #- Utils: api/utils.md
+  - Reference:
+      - Dataset: api/dataset.md
+      - Generator: api/generator.md
+      - Metrics: api/metrics.md
+      - Retrievers: api/retrievers.md
+      - Utils: api/utils.md
   - License: license.md
