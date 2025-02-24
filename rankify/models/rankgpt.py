@@ -80,14 +80,19 @@ class RankGPT(BaseRanking):
         self.method = method
         self.window_size = kwargs.get("window_size", 4) 
         self.step = kwargs.get("step", 1)
+        self.endpoint = kwargs.get("endpoint", 1)
         self.api_key = api_key
         self.model = None
         self.tokenizer = None
         self.use_gpu = True
         self.use_bf16 = True
         if self.method == 'rankgpt-api':
-            self.model_name = URL[model_name]['model_name']
-            self.url = URL[model_name]['url']
+            if model_name in URL:
+                self.model_name = URL[model_name]['model_name']
+                self.url = URL[model_name]['url']
+            else:
+                self.model_name = model_name
+                self.url = self.endpoint
         else:
             #print(model_name)
             self.model_name = model_name
