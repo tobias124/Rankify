@@ -65,7 +65,7 @@ class APIRanker(BaseRanking):
         """
         self.model_name = URL[model_name]['model_name']
         self.api_key = api_key
-        self.api_provider = method.lower()
+        self.api_provider = model_name.lower()
         self.url = URL[model_name]['url']
         
         if not self.url:
@@ -172,13 +172,16 @@ class APIRanker(BaseRanking):
         # Create a list to hold the reordered contexts
         reordered_contexts = []
 
-
-        #print(results)
+        print(results, self.api_provider)
         # Map each result to a context
         for result in results:
             # Extract text and score
             
-            text = result.get("document", {}).get("text", "")
+            if self.api_provider == "voyage":
+                text = result.get("document", {})
+            else:
+                text = result.get("document", {}).get("text", "")
+            
             score = result.get(score_key, 0.0)
 
             # Find the matching context in the original list

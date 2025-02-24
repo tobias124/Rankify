@@ -2,7 +2,10 @@ site_name: Rankify Documentation
 site_url: https://github.com/DataScienceUIBK/Rankify
 theme:
   name: material
-
+markdown_extensions:
+  - toc:
+      permalink: true
+      separator: "_"
 plugins:
   - search
   - mkdocstrings:
@@ -10,7 +13,9 @@ plugins:
       handlers:
         python:
           options:
-            show_source: true
+            show_root_toc_entry: false  # This prevents module names from being added separately
+            show_source: false
+            heading_level: 2  # Ensure consistent heading levels
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
@@ -18,8 +23,20 @@ nav:
   - Usage: usage.md
   - Reference:
       - Dataset: api/dataset.md
-      - Generator: api/generator.md
       - Metrics: api/metrics.md
-      - Retrievers: api/retrievers.md
+      - Retrievers:
+          - Overview: api/retrievers/index.md
+          - BM25 Retriever: api/retrievers/bm25.md
+          - Dense Retriever: api/retrievers/dense.md
+          - BGB Retriever: api/retrievers/bgb.md
+      - Rerankers:
+          - Reranking: api/rerankings/reranking.md
+          - UPR: api/rerankings/upr.md
+          - FlashRank: api/rerankings/flashrank.md
+          - RankGPT: api/rerankings/rankgpt.md
+      - Generators:
+          - Overview: api/generators/index.md
+          - T5 Generator: api/generators/t5_generator.md
+          - GPT Generator: api/generators/gpt_generator.md
       - Utils: api/utils.md
   - License: license.md

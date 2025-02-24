@@ -1,3 +1,3 @@
-# Metrics API
+# Metrics
 
 ::: rankify.metrics.metrics

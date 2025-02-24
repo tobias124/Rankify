@@ -7,33 +7,26 @@ class Reranking:
     """
     A class for reranking documents using different ranking models.
 
-    Attributes
-    ----------
-    method : str
-        The name of the reranking method to be used.
-    model : str
-        The name of the model used for reranking.
-    api_key : str, optional
-        An optional API key for accessing remote models or services.
-    ranker : BaseRanking
-        An instance of a ranking model that will be used to perform the reranking.
+    Attributes:
+        method (str): The name of the reranking method to be used.
+        model (str): The name of the model used for reranking.
+        api_key (str, optional): An optional API key for accessing remote models or services.
+        ranker (BaseRanking): An instance of a ranking model used for reranking.
     """
     def __init__(self, method: str= None, model_name: str= None, api_key: str = None , **kwargs):
         """
         Initializes a Reranking instance.
 
-        Parameters
-        ----------
-        method : str, optional
-            The name of the reranking method to be used (default is None).
-        model_name : str, optional
-            The name of the model to be used for reranking (default is None).
-        api_key : str, optional
-            An optional API key for accessing remote models or services (default is None).
+        Args:
+            method (str, optional): The name of the reranking method to be used. Defaults to None.
+            model_name (str, optional): The name of the model to be used for reranking. Defaults to None.
+            api_key (str, optional): An optional API key for accessing remote models or services. Defaults to None.
+            **kwargs: Additional arguments passed to the reranking model.
 
-        Examples
-        --------
-        >>> model = Reranking(method='listt5', model_name='listt5-base')
+        Example:
+            ```python
+            model = Reranking(method="listt5", model_name="listt5-base")
+            ```
         """
         self.method = method
         self.model = model_name
@@ -45,23 +38,19 @@ class Reranking:
         """
         Initializes the ranking model based on the specified method and model name.
 
-        Returns
-        -------
-        BaseRanking
-            An instance of a ranking model.
+        Returns:
+            BaseRanking: An instance of a ranking model.
 
-        Raises
-        ------
-        ValueError
-            If the specified ranking method is not supported.
+        Raises:
+            ValueError: If the specified ranking method is not supported.
 
-        Examples
-        --------
-        >>> model = Reranking(method='listt5', model_name='listt5-base')
-        >>> ranker = model.initialize()
+        Example:
+            ```python
+            model = Reranking(method="listt5", model_name="listt5-base")
+            ranker = model.initialize()
+            ```
         """
         
-        #print(model_name)
         if self.model not in HF_PRE_DEFIND_MODELS[self.method]:
             model_name= self.model
         else:
@@ -76,26 +65,23 @@ class Reranking:
         """
         Reranks a list of documents using the specified ranking model.
 
-        Parameters
-        ----------
-        documents : list of Document
-            A list of Document instances that need to be reranked.
+        Args:
+            documents (list[Document]): A list of Document instances that need to be reranked.
 
-        Returns
-        -------
-        list of Document
-            The reranked list of Document instances.
+        Returns:
+            list[Document]: The reranked list of Document instances.
 
-        Examples
-        --------
-        >>> question = Question("When did Thomas Edison invent the light bulb?")
-        >>> answers = Answer(["1879"])
-        >>> contexts = [
-        ...     Context(text="Lightning strike at Seoul National University", id=1),
-        ...     Context(text="Thomas Edison invented the light bulb in 1879", id=5)
-        ... ]
-        >>> document = Document(question=question, answers=answers, contexts=contexts)
-        >>> model = Reranking(method='listt5', model_name='listt5-base')
-        >>> model.rank([document])
+        Example:
+            ```python
+            question = Question("When did Thomas Edison invent the light bulb?")
+            answers = Answer(["1879"])
+            contexts = [
+                Context(text="Lightning strike at Seoul National University", id=1),
+                Context(text="Thomas Edison invented the light bulb in 1879", id=5)
+            ]
+            document = Document(question=question, answers=answers, contexts=contexts)
+            model = Reranking(method="listt5", model_name="listt5-base")
+            model.rank([document])
+            ```
         """
         return self.ranker.rank(documents=documents)

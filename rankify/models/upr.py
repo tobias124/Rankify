@@ -19,6 +19,17 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 
 def set_random_seed(seed):
+    """
+    Sets the random seed for reproducibility.
+
+    Args:
+        seed (int): The seed value for random number generators.
+
+    Example:
+        ```python
+        set_random_seed(42)
+        ```
+    """
     random.seed(seed)
     numpy.seed(seed)
     torch.manual_seed(seed)
@@ -27,78 +38,58 @@ def set_random_seed(seed):
 
 class UPR(BaseRanking):
     """
-    A class implementing Unsupervised Passage Reranking (UPR) using models like GPT and T5.
+    Implements Unsupervised Passage Reranking (UPR) using models like GPT and T5.
 
-    This class follows the approach described in Sachan et al. `[1]`_ for unsupervised reranking
+    This class follows the approach described in UPR paper for unsupervised reranking
     of retrieved documents by leveraging question generation techniques. The model improves
     passage retrieval by estimating the likelihood of a query given a passage.
 
-    .. _[1]: https://arxiv.org/abs/2204.07496
-    
-    Attributes
-    ----------
-    model_name : str
-        The name of the model used for reranking.
-    method : str
-        The reranking method.
-    model : transformers.PreTrainedModel
-        The pre-trained model utilized for reranking.
-    tokenizer : transformers.PreTrainedTokenizer
-        The tokenizer associated with the model.
-    use_bf16 : bool
-        Whether to use bfloat16 precision for computations.
-    use_gpu : bool
-        Whether GPU acceleration is enabled.
-    batch_size : int
-        Batch size for processing contexts.
-    shard_size : int
-        Shard size for processing contexts in chunks.
-    include_eos_token : bool
-        Whether to include the end-of-sequence token during ranking.
-    verbalizer_head : str
-        Prefix to prepend before the passage during input construction.
-    verbalizer : str
-        A prompt instructing the model to generate a question based on the passage.
+    Attributes:
+        model_name (str): The name of the model used for reranking.
+        method (str): The reranking method.
+        model (transformers.PreTrainedModel): The pre-trained model utilized for reranking.
+        tokenizer (transformers.PreTrainedTokenizer): The tokenizer associated with the model.
+        use_bf16 (bool): Whether to use bfloat16 precision for computations.
+        use_gpu (bool): Whether GPU acceleration is enabled.
+        batch_size (int): Batch size for processing contexts.
+        shard_size (int): Shard size for processing contexts in chunks.
+        include_eos_token (bool): Whether to include the end-of-sequence token during ranking.
+        verbalizer_head (str): Prefix to prepend before the passage during input construction.
+        verbalizer (str): A prompt instructing the model to generate a question based on the passage.
 
-    References
-    ----------
-    .. [1] Devendra Singh Sachan et al. "Improving Passage Retrieval with Zero-Shot Question Generation." 
-       Proceedings of the 2022 Annual Conference of the Association for Computational Linguistics (ACL), 2022. 
-       Available at: https://arxiv.org/abs/2204.07496
-    
-    See Also
-    --------
-    :class:`BaseRanking` : Abstract base class for ranking models.
+    References:
+        Devendra Singh Sachan et al. "Improving Passage Retrieval with Zero-Shot Question Generation."
+        Proceedings of the 2022 Annual Conference of the Association for Computational Linguistics (ACL), 2022.
+        [Paper](https://arxiv.org/abs/2204.07496) 
     """
-    def __init__(self, method: str= None, model_name: str= 'google/t5-small-lm-adapt', api_key: str=None) -> None:
+    def __init__(self, method: str= None, model_name: str= 'google/t5-small-lm-adapt', api_key: str=None, **kwargs) -> None:
         """
         Initializes a UPR instance.
 
-        Parameters
-        ----------
-        method : str, optional
-            The name of the reranking method (default is None).
-        model_name : str, optional
-            The name of the model to be used for reranking (default is 'google/t5-small-lm-adapt').
-        api_key : str, optional
-            API key for remote model access (default is None).
+        Args:
+            method (str, optional): The name of the reranking method. Defaults to None.
+            model_name (str, optional): The name of the model to be used for reranking.
+                Defaults to `"google/t5-small-lm-adapt"`.
+            api_key (str, optional): API key for remote model access. Defaults to None.
+            **kwargs: Additional parameters for model configuration.
 
-        Examples
-        --------
-        >>> model = Reranking(method='upr', model_name='t5-base')
-        >>> model.rank([document])
+        Example:
+            ```python
+            model = Reranking(method="upr", model_name="t5-base")
+            model.rank([document])
+            ```
         """
         self.model_name = model_name
         self.method = method
-        self.model = None
+        self.model =  None
         self.tokenizer = None
-        self.use_bf16 = True
-        self.use_gpu = True
-        self.batch_size= 1
-        self.shard_size = 128
-        self.include_eos_token = True
-        self.verbalizer_head="Passage: "
-        self.verbalizer ="Please write a question based on this passage."
+        self.use_bf16 = kwargs.get("use_bf16", True) 
+        self.use_gpu = kwargs.get("use_gpu", True)  
+        self.batch_size= kwargs.get("batch_size", 1)  
+        self.shard_size = kwargs.get("shard_size", 128)   
+        self.include_eos_token = kwargs.get("include_eos_token", True)    
+        self.verbalizer_head= kwargs.get("verbalizer_head", "Passage: ")     
+        self.verbalizer = kwargs.get("verbalizer", "Please write a question based on this passage.") 
         self._load()
 
 
@@ -132,27 +123,22 @@ class UPR(BaseRanking):
         """
         Reranks contexts in the document using a T5 model.
 
-        Parameters
-        ----------
-        document : Document
-            The document containing contexts to be reranked.
-        model : T5ForConditionalGeneration
-            The pre-trained T5 model.
-        tokenizer : T5Tokenizer
-            The tokenizer associated with the T5 model.
-        verbalizer_head : str
-            Prefix to use before the passage during input construction.
-        verbalizer : str
-            A prompt that requests the model to generate a question based on the passage.
-        use_gpu : bool
-            Whether to use GPU for computations.
-        shard_size : int
-            Shard size for processing contexts in chunks.
+        Args:
+            document (Document): The document containing contexts to be reranked.
+            model (T5ForConditionalGeneration): The pre-trained T5 model.
+            tokenizer (T5Tokenizer): The tokenizer associated with the T5 model.
+            verbalizer_head (str): Prefix to use before the passage during input construction.
+            verbalizer (str): A prompt that requests the model to generate a question based on the passage.
+            use_gpu (bool): Whether to use GPU for computations.
+            shard_size (int): Shard size for processing contexts in chunks.
 
-        Returns
-        -------
-        list of Context
-            The reordered list of contexts based on their relevance.
+        Returns:
+            List[Document]: The reordered list of contexts based on their relevance.
+
+        Example:
+            ```python
+            reranked_contexts = UPR.rank_t5(document, model, tokenizer, "Passage:", "Generate a question.", True, 128)
+            ```
         """
         all_ids=[]
         has_answer_list=[]
@@ -221,29 +207,23 @@ class UPR(BaseRanking):
         """
         Reranks contexts in the document using a GPT model.
 
-        Parameters
-        ----------
-        document : Document
-            The document containing contexts to be reranked.
-        model : AutoModelForCausalLM
-            The pre-trained GPT model.
-        tokenizer : AutoTokenizer
-            The tokenizer associated with the GPT model.
-        verbalizer_head : str
-            Prefix to use before the passage during input construction.
-        verbalizer : str
-            A prompt that requests the model to generate a question based on the passage.
-        use_gpu : bool
-            Whether to use GPU for computations.
-        shard_size : int
-            Shard size for processing contexts in chunks.
-        include_eos_token : bool
-            Whether to include the end-of-sequence token during ranking.
+        Args:
+            document (Document): The document containing contexts to be reranked.
+            model (AutoModelForCausalLM): The pre-trained GPT model.
+            tokenizer (AutoTokenizer): The tokenizer associated with the GPT model.
+            verbalizer_head (str): Prefix to use before the passage during input construction.
+            verbalizer (str): A prompt that requests the model to generate a question based on the passage.
+            use_gpu (bool): Whether to use GPU for computations.
+            shard_size (int): Shard size for processing contexts in chunks.
+            include_eos_token (bool): Whether to include the end-of-sequence token during ranking.
 
-        Returns
-        -------
-        list of Context
-            The reordered list of contexts based on their relevance.
+        Returns:
+            List[Document]: The reordered list of contexts based on their relevance.
+
+        Example:
+            ```python
+            reranked_contexts = UPR.rank_gpt(document, model, tokenizer, "Passage:", "Generate a question.", True, 128, True)
+            ```
         """
         all_ids , all_labels = [], []
         has_answer_list = []
@@ -338,36 +318,21 @@ class UPR(BaseRanking):
         """
         Reranks the contexts in each document using the appropriate model (GPT or T5).
 
-        Parameters
-        ----------
-        documents : list of Document
-            A list of documents whose contexts need to be reranked.
+        Args:
+            documents (List[Document]): A list of documents whose contexts need to be reranked.
 
-        Returns
-        -------
-        list of Document
-            The reranked list of documents.
+        Returns:
+            List[Document]: The reranked list of documents.
 
-        Notes
-        -----
-        - Uses T5 for sequence-to-sequence reranking and GPT for generative reranking.
-        - Scores passages based on the probability of generating the input query.
+        Notes:
+            - Uses T5 for sequence-to-sequence reranking and GPT for generative reranking.
+            - Scores passages based on the probability of generating the input query.
 
-        References
-        ----------
-        .. [1] Devendra Singh Sachan et al. "Improving Passage Retrieval with Zero-Shot Question Generation." 
-        Proceedings of the 2022 Annual Conference of the Association for Computational Linguistics (ACL), 2022. 
-        Available at: https://arxiv.org/abs/2204.07496
-        
-        Examples
-        --------
-        Using T5 for reranking:
-        >>> model = Reranking(method='upr', model_name='t5-base')
-        >>> model.rank([document])
-
-        Using GPT for reranking:
-        >>> model = Reranking(method='upr', model_name='gpt2')
-        >>> model.rank([document])
+        Example:
+            ```python
+            model = Reranking(method="upr", model_name="t5-base")
+            model.rank([document])
+            ```
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             if 'gpt' in self.model_name:

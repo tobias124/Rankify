@@ -1,3 +1,3 @@
-# Dataset API
+# Dataset
 
 ::: rankify.dataset.dataset

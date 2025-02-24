@@ -28,8 +28,8 @@ HF_PRE_DEFIND_MODELS ={
     'rankgpt':{
         'llamav3.1-8b':'meta-llama/Meta-Llama-3.1-8B-Instruct',
         'llamav3.1-70b':'meta-llama/Llama-3.1-70B-Instruct',
-        'Llama-3.2-1B':"meta-llama/Llama-3.2-1B",
-        'Llama-3.2-3B':"meta-llama/Llama-3.2-3B",
+        'Llama-3.2-1B':"meta-llama/Llama-3.2-1B-Instruct",
+        'Llama-3.2-3B':"meta-llama/Llama-3.2-3B-Instruct",
         'Qwen2.5-7B':"Qwen/Qwen2.5-7B",
         'Mistral-7B-Instruct-v0.2': 'mistralai/Mistral-7B-Instruct-v0.2',
         "Mistral-7B-Instruct-v0.3":"mistralai/Mistral-7B-Instruct-v0.3",
@@ -237,6 +237,7 @@ HF_PRE_DEFIND_MODELS ={
 
 
 URL ={
+    'default': {'url': "https://api.openai.com/v1" , 'model_name': 'gpt-3.5-turbo-0125', 'class': OpenaiClient},
     'gpt-3.5': {'url': "https://api.openai.com/v1" , 'model_name': 'gpt-3.5-turbo-0125', 'class': OpenaiClient},
     'gpt-4':  {'url':'https://api.openai.com/v1', 'model_name': 'gpt-4o', 'class': OpenaiClient},
     'gpt-4-mini': {'url':'https://api.openai.com/v1', 'model_name':'gpt-4o-mini', 'class': OpenaiClient},
