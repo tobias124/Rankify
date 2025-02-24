@@ -1,3 +1,3 @@
-# Generator API
+# Generator
 
 ::: rankify.generator.generator

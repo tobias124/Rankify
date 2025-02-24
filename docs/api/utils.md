@@ -1,3 +1,3 @@
-# Utils API
+# Utils
 
 ::: rankify.utils
