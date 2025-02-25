@@ -30,6 +30,7 @@ nav:
           - Dense Retriever: api/retrievers/dense.md
           - BGB Retriever: api/retrievers/bgb.md
       - Rerankers:
+          - Base: api/rerankings/base.md
           - Reranking: api/rerankings/reranking.md
           - UPR: api/rerankings/upr.md
           - FlashRank: api/rerankings/flashrank.md
