@@ -101,7 +101,7 @@ HF_PRE_DEFIND_MODELS ={
         
     },
     'apiranker':{
-        "cohere":"cohere",
+        #"cohere":"cohere",
         "jina":"jina",
         "voyage":"voyage",
         "mixedbread.ai":"mixedbread.ai",
@@ -244,7 +244,7 @@ URL ={
     'llamav3.1-8b' : {'url':'https://api.together.xyz/v1', 'model_name':'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo', 'class':OpenaiClient },
     'llamav3.1-70b' :{'url': 'https://api.together.xyz/v1', 'model_name':'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo', 'class':OpenaiClient },
     'claude-3-5' :{'url': 'https://api.anthropic.com', 'model_name':'claude-3-5-sonnet-20241022', 'class': ClaudeClient},
-    "cohere": {'url': "https://api.cohere.ai/v2/rerank" , 'model_name':"rerank-english-v3.0"},
+    #"cohere": {'url': "https://api.cohere.ai/v2/rerank" , 'model_name':"rerank-english-v3.0"},
     "jina": {'url': "https://api.jina.ai/v1/rerank" , 'model_name':"jina-reranker-v1-base-en"},
     "voyage": {'url': "https://api.voyageai.com/v1/rerank" , 'model_name':"rerank-lite-1"},
     "mixedbread.ai": {'url': "https://api.mixedbread.ai/v1/reranking" , 'model_name':"mixedbread-ai/mxbai-rerank-large-v1"},
