@@ -15,101 +15,86 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class InContextReranker(BaseRanking):
     """
-    Implements In-Context Reranking (ICR) using Large Language Models (LLMs), specifically Mistral and Llama `[8]`_ `[9]`_ .
+    Implements **In-Context Reranking (ICR)** using **Large Language Models (LLMs)**, specifically **Mistral** and **Llama**.
 
-    .. _[8]: https://dl.acm.org/doi/10.1145/3626772.3657855
-    .. _[9]: https://github.com/OSU-NLP-Group/In-Context-Reranking/tree/main
 
-    This model reranks passages based on query-aware attention scores computed over multiple layers of the LLM.
-    It applies a sliding window strategy to process documents efficiently and supports different retrieval types:
-    - QA Mode: Answers a given question using retrieved contexts.
-    - IE Mode: Extracts information relevant to a query.
+    **ICR** reranks passages using query-aware **attention scores** computed across multiple LLM layers.  
+    It employs a **sliding window strategy** for efficient ranking and supports different retrieval types:
 
-    The scoring strategies include:
-    - `query_last`: Default method, considers the attention scores of the query tokens.
-    - `attention_sorting`: Sorts contexts by attention weights.
-    - `NA_only`: Estimates intrinsic bias of the model.
-    - `NA_calibration_no_agg`: Uses a neutral "N/A" query for bias correction.
-    - `masked_NA_calibration`: Default ICR method with token-level masking.
+    - **QA Mode**: Answers a given question using retrieved contexts.
+    - **IE Mode**: Extracts information relevant to a query.
 
-    References
-    ----------
-    .. [8] Chen et al. (2024): Attention in Large Language Models Yields Efficient Zero-Shot Re-Rankers.
-    
+    The available **scoring strategies** include:
+    - **`query_last`**: Default method, uses query token attention scores.
+    - **`attention_sorting`**: Ranks contexts based on attention weights.
+    - **`NA_only`**: Estimates the model's intrinsic bias.
+    - **`NA_calibration_no_agg`**: Uses a neutral `"N/A"` query for bias correction.
+    - **`masked_NA_calibration`**: Default ICR method with token-level masking.
 
-    Attributes
-    ----------
-    method : str, optional
-        The reranking method name.
-    model_name : str
-        Name of the LLM used for reranking.
-    tokenizer : AutoTokenizer
-        The tokenizer for text processing.
-    llm : torch.nn.Module
-        The pre-trained LLM model (Mistral or Llama).
-    prompt_template : str
-        Template for constructing query-context prompts.
-    scoring_strategy : str
-        The attention-based scoring strategy used for reranking.
-    retrieval_type : str
-        The retrieval type, either `"QA"` (question answering) or `"IE"` (information extraction).
-    sliding_window_size : int
-        Size of the sliding window for reranking.
-    sliding_window_stride : int
-        Step size for moving the sliding window.
-    reverse_doc_order : bool
-        Whether to reverse document order before reranking.
+    References:
+        - **Chen et al. (2024)** *Attention in Large Language Models Yields Efficient Zero-Shot Re-Rankers.*  
+          [Paper](https://dl.acm.org/doi/10.1145/3626772.3657855)
 
-    See Also
-    --------
-    Reranking : Main interface for reranking models, including `InContextReranker`.
+    Attributes:
+        method (str, optional): The reranking method name.
+        model_name (str): Name of the LLM used for reranking.
+        tokenizer (AutoTokenizer): The tokenizer for text processing.
+        llm (torch.nn.Module): The pre-trained LLM model (Mistral or Llama).
+        prompt_template (str): Template for constructing query-context prompts.
+        scoring_strategy (str): The attention-based scoring strategy used for reranking.
+        retrieval_type (str): The retrieval type, either `"QA"` (question answering) or `"IE"` (information extraction).
+        sliding_window_size (int): Size of the **sliding window** for reranking.
+        sliding_window_stride (int): Step size for moving the **sliding window**.
+        reverse_doc_order (bool): Whether to reverse document order before reranking.
 
-    Examples
-    --------
-    Basic usage:
+    See Also:
+        - `Reranking`: Main interface for reranking models, including `InContextReranker`.
 
-    >>> from rankify.dataset.dataset import Document, Question, Answer, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> question = Question("What are the symptoms of COVID-19?")
-    >>> answers = Answer(["COVID-19 symptoms include fever and cough."])
-    >>> contexts = [
-    >>>     Context(text="Fever and cough are common symptoms of COVID-19.", id=0),
-    >>>     Context(text="Headache is a rare symptom.", id=1),
-    >>>     Context(text="Fatigue and loss of taste are also common.", id=2),
-    >>> ]
-    >>> document = Document(question=question, answers=answers, contexts=contexts)
-    >>>
-    >>> # Initialize Reranking with InContextReranker
-    >>> model = Reranking(method='incontext_reranker', model_name='llamav3.1-8b')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question, Answer, Context
+        from rankify.models.reranking import Reranking
 
-    Notes
-    -----
-    - Requires a Mistral or Llama model.
-    - Uses sliding windows for efficient ranking.
-    - Supports attention-based scoring for zero-shot ranking.
+        question = Question("What are the symptoms of COVID-19?")
+        answers = Answer(["COVID-19 symptoms include fever and cough."])
+        contexts = [
+            Context(text="Fever and cough are common symptoms of COVID-19.", id=0),
+            Context(text="Headache is a rare symptom.", id=1),
+            Context(text="Fatigue and loss of taste are also common.", id=2),
+        ]
+        document = Document(question=question, answers=answers, contexts=contexts)
+
+        # Initialize Reranking with InContextReranker
+        model = Reranking(method='incontext_reranker', model_name='llamav3.1-8b')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
+
+    Notes:
+        - Requires a **Mistral** or **Llama** model.
+        - Uses **sliding windows** for efficient ranking.
+        - Supports **attention-based scoring** for **zero-shot ranking**.
     """
     def __init__(self, method=None, model_name=None, **kwargs):
         """
         Initializes the In-Context Reranker.
 
-        Parameters
-        ----------
-        method : str, optional
-            The reranking method name.
-        model_name : str
-            Name of the LLM model (e.g., `meta-llama/Meta-Llama-3.1-8B-Instruct`).
-        kwargs : dict
-            Additional customization parameters, including:
-            - `scoring_strategy`: Strategy for computing attention scores (`query_last`, `attention_sorting`, etc.).
-            - `retrieval_type`: Type of retrieval (`QA` or `IE`).
-            - `sliding_window_size`: Number of documents considered per window.
+        Args:
+            method (str, optional): The reranking method name.
+            model_name (str): Name of the LLM model (e.g., `"meta-llama/Meta-Llama-3.1-8B-Instruct"`).
+            **kwargs: Additional customization parameters, including:
+                - `scoring_strategy` (str): Strategy for computing attention scores (`"query_last"`, `"attention_sorting"`, etc.).
+                - `retrieval_type` (str): Type of retrieval (`"QA"` or `"IE"`).
+                - `sliding_window_size` (int): Number of documents considered per window.
+
+        Example:
+            ```python
+            model = InContextReranker(method='incontext_reranker', model_name='llamav3.1-8b')
+            ```
         """
         # Setup the base LLM
         self._base_llm_name =model_name
@@ -205,7 +190,21 @@ class InContextReranker(BaseRanking):
             self.sliding_window_stride = self.sliding_window_size
         
     def _setup_llm_prompts(self, prompt_template, base_llm_name):
-        
+        """
+        Configures the LLM prompt format based on the model type.
+
+        Args:
+            prompt_template (str): The prompt template type (`"instruct"`, `"simple"`, `"simple_instruct"`).
+            base_llm_name (str): The base model name.
+
+        Returns:
+            tuple: The `prompt_template`, `prompt_prefix`, and `prompt_suffix`.
+
+        Example:
+            ```python
+            prompt_template, prompt_prefix, prompt_suffix = model._setup_llm_prompts("instruct", "llamav3.1-8b")
+            ```
+        """
         if prompt_template == '':
             prompt_template='instruct' if any(x in base_llm_name.lower() for x in ['instruct']) else 'simple'
         else:
@@ -225,17 +224,18 @@ class InContextReranker(BaseRanking):
 
     def rank(self, documents: List[Document]) -> List[Document]:
         """
-        Reranks documents using the InContext Reranking method.
+        Reranks documents using **In-Context Reranking (ICR)**.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of Document instances containing query and contexts.
+        Args:
+            documents (List[Document]): A list of `Document` instances containing query and contexts.
 
-        Returns
-        -------
-        List[Document]
-            Documents with reordered contexts based on reranking.
+        Returns:
+            List[Document]: Documents with reordered contexts based on reranking.
+
+        Example:
+            ```python
+            reranked_docs = model.rank(documents)
+            ```
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             query = document.question.question
@@ -257,26 +257,23 @@ class InContextReranker(BaseRanking):
 
     def rerank(self, query, documents,  return_per_doc_results=False, order="desc"):
         """
-        Applies In-Context Reranking using a sliding window approach.
+        Applies **In-Context Reranking** using a **sliding window** approach.
 
-        Parameters
-        ----------
-        query : str
-            The query to rerank documents for.
-        documents : list of str
-            The list of documents to rerank.
-        return_per_doc_results : bool, optional
-            Whether to return detailed per-document scores.
-        order : str, optional
-            Sorting order (`"desc"` or `"asc"`).
+        Args:
+            query (str): The query for which documents need to be ranked.
+            documents (List[str]): List of document texts.
+            return_per_doc_results (bool, optional): Whether to return detailed per-document scores.
+            order (str, optional): Sorting order (`"desc"` or `"asc"`).
 
-        Returns
-        -------
-        tuple
-            A tuple containing sorted document IDs and their scores.
+        Returns:
+            tuple: A tuple containing sorted document IDs and their scores.
+
+        Example:
+            ```python
+            sorted_ids, scores = model.rerank("What is quantum computing?", documents)
+            ```
         """
-        # reverse the order of input documents to perform sliding window from the rear to the front of the list
-        # documents.reverse()
+        
         N_docs = len(documents)
 
         if self.sliding_window_size < 0:
@@ -333,21 +330,20 @@ class InContextReranker(BaseRanking):
 
     def get_sorted_docs(self, query, retrieval_doc_pool, return_per_doc_results=False, prompt_prefix='', order='desc'):
         """
-        Scores and sorts documents using attention-based scoring.
+        Scores and sorts documents using **attention-based scoring**.
 
-        Parameters
-        ----------
-        query : str
-            Query text.
-        docs : list
-            List of document texts.
-        order : str
-            Sort order ('desc' or 'asc').
+        Args:
+            query (str): The query text.
+            retrieval_doc_pool (List[str]): List of documents to be ranked.
+            order (str, optional): Sort order (`"desc"` or `"asc"`).
 
-        Returns
-        -------
-        tuple
-            Sorted document IDs and their scores.
+        Returns:
+            tuple: Sorted document IDs and their scores.
+
+        Example:
+            ```python
+            sorted_ids, scores = model.get_sorted_docs("What is climate change?", documents)
+            ```
         """
         kv_cache = None
         
@@ -474,7 +470,23 @@ class InContextReranker(BaseRanking):
             return_cache=False,
             kv_cache=None,
         ):
+        """
+        Computes **attention-based document scores**.
 
+        Args:
+            llm_input (str): The full LLM input prompt.
+            doc_tok_idx_spans (List[tuple]): Token spans for each document.
+            query_start_tok_idx (int): Start index of query tokens.
+            query_end_tok_idx (int): End index of query tokens.
+
+        Returns:
+            List[float]: Document relevance scores.
+
+        Example:
+            ```python
+            scores = model.score_documents(prompt, spans, 10, 20)
+            ```
+        """
         tokenized_input = self.tokenizer(llm_input,return_tensors='pt').to(self.llm.device)
         _input_ids = tokenized_input.input_ids[:, context_start_idx:]
         _query_indices = list(range(query_start_tok_idx-context_start_idx, query_end_tok_idx-context_start_idx+1))
@@ -556,9 +568,23 @@ class InContextReranker(BaseRanking):
         else:
             return doc_scores, per_doc_results
     def _prepare_input_for_document_retrieval(self, query, documents, system_prompt='', query_position='last'):
-        '''
-        Only tested with Mistral and Llama-3.1. Models using other tokenizers may need to modify this function.
-        '''
+        """
+        Constructs the **ICR prompt** with query and document contexts.
+
+        Args:
+            query (str): Query text.
+            documents (List[str]): List of documents.
+            system_prompt (str, optional): Custom system prompt.
+            query_position (str, optional): Query placement (`"first"` or `"last"`).
+
+        Returns:
+            tuple: The formatted prompt and document spans.
+
+        Example:
+            ```python
+            prompt, spans, query_start, query_end = model._prepare_input_for_document_retrieval("What is AI?", docs)
+            ```
+        """
         llm_prompt = ''
         document_span_intervals = []
         

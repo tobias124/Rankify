@@ -1,3 +1,3 @@
-# UPR Model
+# UPR Reranker
 
 ::: rankify.models.upr

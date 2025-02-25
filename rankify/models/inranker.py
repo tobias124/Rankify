@@ -11,96 +11,82 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class InRanker(BaseRanking):
     """
-    Implements InRanker `[10]`_, a distilled ranker for zero-shot information retrieval, based on Seq2Seq models.
+    Implements **InRanker**, a **distilled ranker** for **zero-shot information retrieval** based on **Seq2Seq models**.
 
-    .. _[10]: https://arxiv.org/abs/2401.06910
+    
 
-    InRanker ranks passages by estimating their relevance probability using a pre-trained language model.
-    It tokenizes the query-document pairs and predicts whether each document is relevant or not using a binary classification approach.
+    **InRanker** ranks passages by estimating their **relevance probability** using a **pre-trained language model**.  
+    It **tokenizes** query-document pairs and **predicts relevance** via **binary classification**.
 
-    The model assigns softmax scores between `"false"` and `"true"` tokens, where the `"true"` probability determines relevance.
+    The model assigns **softmax scores** between `"false"` and `"true"` tokens,  
+    where the `"true"` probability determines **document relevance**.
 
-    References
-    ----------
-    .. [10] Laitz et al. (2024): InRanker: Distilled Rankers for Zero-shot Information Retrieval.
+    References:
+        - **Laitz et al. (2024)**: *InRanker: Distilled Rankers for Zero-shot Information Retrieval*.  
+          [Paper](https://arxiv.org/abs/2401.06910)
 
-    Attributes
-    ----------
-    method : str, optional
-        The reranking method name.
-    model_name : str
-        Name of the pre-trained model.
-    api_key : str, optional
-        API key for authentication (if needed).
-    tokenizer : AutoTokenizer
-        Tokenizer for processing queries and documents.
-    model : AutoModelForSeq2SeqLM
-        The sequence-to-sequence model used for reranking.
-    precision : str
-        Model precision (`"bf16"`, `"fp16"`, or `"fp32"`).
-    device : str
-        The device used for computation (`"cuda"` or `"cpu"`).
-    batch_size : int
-        Number of query-document pairs processed in a batch.
-    max_length : int
-        Maximum length of tokenized sequences.
-    token_false_id : int
-        Token ID for `"false"` (indicating irrelevance).
-    token_true_id : int
-        Token ID for `"true"` (indicating relevance).
+    Attributes:
+        method (str, optional): The reranking method name.
+        model_name (str): Name of the pre-trained **Seq2Seq model**.
+        api_key (str, optional): API key for authentication (if needed).
+        tokenizer (AutoTokenizer): The tokenizer for processing queries and documents.
+        model (AutoModelForSeq2SeqLM): The **sequence-to-sequence model** used for reranking.
+        precision (str): Model precision (`"bf16"`, `"fp16"`, or `"fp32"`).
+        device (str): The device used for computation (`"cuda"` or `"cpu"`).
+        batch_size (int): Number of query-document pairs processed in a batch.
+        max_length (int): Maximum length of tokenized sequences.
+        token_false_id (int): Token ID for `"false"` (indicating irrelevance).
+        token_true_id (int): Token ID for `"true"` (indicating relevance).
 
-    See Also
-    --------
-    Reranking : Main interface for reranking models, including `InRanker`.
+    See Also:
+        - `Reranking`: Main interface for reranking models, including `InRanker`.
 
-    Examples
-    --------
-    Basic usage:
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question, Context
+        from rankify.models.reranking import Reranking
 
-    >>> from rankify.dataset.dataset import Document, Question, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> question = Question("What are the symptoms of COVID-19?")
-    >>> contexts = [
-    >>>     Context(text="Fever and cough are common symptoms of COVID-19.", id=0),
-    >>>     Context(text="Headache is a rare symptom.", id=1),
-    >>>     Context(text="Fatigue and loss of taste are also common.", id=2),
-    >>> ]
-    >>> document = Document(question=question, contexts=contexts)
-    >>>
-    >>> # Initialize Reranking with InRanker
-    >>> model = Reranking(method='inranker', model_name='inranker-small')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+        question = Question("What are the symptoms of COVID-19?")
+        contexts = [
+            Context(text="Fever and cough are common symptoms of COVID-19.", id=0),
+            Context(text="Headache is a rare symptom.", id=1),
+            Context(text="Fatigue and loss of taste are also common.", id=2),
+        ]
+        document = Document(question=question, contexts=contexts)
 
-    Notes
-    -----
-    - Uses a Seq2Seq binary classification approach (`"false"` vs `"true"`).
-    - Supports batch processing for efficiency.
-    - Works in zero-shot retrieval scenarios without fine-tuning.
+        # Initialize Reranking with InRanker
+        model = Reranking(method='inranker', model_name='inranker-small')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
+
+    Notes:
+        - Uses a **Seq2Seq binary classification** approach (`"false"` vs `"true"`).
+        - Supports **batch processing** for efficiency.
+        - Works in **zero-shot retrieval** scenarios without fine-tuning.
     """
     def __init__(self, method: str= None, model_name: str= None, api_key: str= None, **kwargs) ->None:
         """
-        Initializes InRanker for zero-shot document reranking.
+        Initializes **InRanker** for **zero-shot document reranking**.
 
-        Parameters
-        ----------
-        method : str, optional
-            The reranking method name.
-        model_name : str
-            Name of the pre-trained Seq2Seq model.
-        api_key : str, optional
-            API key for authentication (if needed).
-        kwargs : dict
-            Additional parameters, including:
-            - `precision`: `"bf16"`, `"fp16"`, or `"fp32"` for model precision.
-            - `device`: `"cuda"` or `"cpu"` (default: `"cuda"`).
-            - `batch_size`: Number of query-document pairs per batch (default: `32`).
-            - `max_length`: Maximum sequence length for tokenization (default: `512`).
+        Args:
+            method (str, optional): The reranking method name.
+            model_name (str): Name of the pre-trained **Seq2Seq model**.
+            api_key (str, optional): API key for authentication (if needed).
+            **kwargs: Additional parameters, including:
+                - `precision` (str): `"bf16"`, `"fp16"`, or `"fp32"` for model precision.
+                - `device` (str): `"cuda"` or `"cpu"` (default: `"cuda"`).
+                - `batch_size` (int): Number of query-document pairs per batch (default: `32`).
+                - `max_length` (int): Maximum sequence length for tokenization (default: `512`).
+
+        Example:
+            ```python
+            model = InRanker(method='inranker', model_name='inranker-small')
+            ```
         """
         model_args = {}
 
@@ -128,19 +114,20 @@ class InRanker(BaseRanking):
     
     def rank(self, documents: list[Document])-> List[Document]:
         """
-        Reranks documents using InRanker's **binary classification** approach.
+        Reranks documents using **InRanker's binary classification** approach.
 
-        Each document's contexts are scored based on the probability of being **relevant** (`"true"` token).
+        Each document's **contexts** are scored based on the probability of being **relevant** (`"true"` token).
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of Document instances to rerank.
+        Args:
+            documents (List[Document]): A list of `Document` instances to rerank.
 
-        Returns
-        -------
-        List[Document]
-            The reranked list of Document instances with updated `reorder_contexts`.
+        Returns:
+            List[Document]: The reranked list of `Document` instances with updated `reorder_contexts`.
+
+        Example:
+            ```python
+            reranked_docs = model.rank(documents)
+            ```
         """
         scores =[]
         logits = []
@@ -195,23 +182,22 @@ class InRanker(BaseRanking):
         """
         Performs **greedy decoding** to generate the next token logits.
 
-        Parameters
-        ----------
-        model : AutoModelForSeq2SeqLM
-            The pre-trained Seq2Seq model.
-        input_ids : torch.Tensor
-            The input token IDs.
-        length : int
-            The number of decoding steps.
-        attention_mask : torch.Tensor, optional
-            The attention mask for input sequences.
-        return_last_logits : bool, optional
-            Whether to return the last token's logits.
+        Args:
+            model (AutoModelForSeq2SeqLM): The **pre-trained Seq2Seq model**.
+            input_ids (torch.Tensor): The **input token IDs**.
+            length (int): The number of decoding steps.
+            attention_mask (torch.Tensor, optional): The **attention mask** for input sequences.
+            return_last_logits (bool, optional): Whether to return the last token's **logits**.
 
-        Returns
-        -------
-        tuple
-            Tuple containing decoded token IDs and last-step logits.
+        Returns:
+            tuple: A tuple containing:
+                - **decoded token IDs** (torch.Tensor)
+                - **last-step logits** (torch.Tensor)
+
+        Example:
+            ```python
+            decoded_ids, logits = model._greedy_decode(model, input_ids, length=1)
+            ```
         """
         decode_ids = torch.full(
             (input_ids.size(0),1),
@@ -241,19 +227,20 @@ class InRanker(BaseRanking):
     @staticmethod
     def _chunks(contexts: list[Context],batch_size: int):
         """
-        Splits a list of contexts into smaller batches.
+        Splits a **list of contexts** into **smaller batches**.
 
-        Parameters
-        ----------
-        contexts : List[Context]
-            The list of contexts to split.
-        batch_size : int
-            The batch size.
+        Args:
+            contexts (List[Context]): The list of **contexts** to split.
+            batch_size (int): The **batch size**.
 
-        Yields
-        ------
-        List[Context]
-            A batch of contexts.
+        Yields:
+            List[Context]: A **batch** of contexts.
+
+        Example:
+            ```python
+            for batch in model._chunks(contexts, batch_size=8):
+                process_batch(batch)
+            ```
         """
         for i in range(0, len(contexts), batch_size):
             yield contexts[i:i+batch_size]

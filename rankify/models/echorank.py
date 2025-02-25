@@ -8,90 +8,67 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class EchoRankReranker(BaseRanking):
     """
-    A reranking model implementing the EchoRank method `[5]`_ for budget-constrained text reranking
-    using large language models (LLMs). It employs a two-stage process:
+    Implements **EchoRank**, a reranking method designed for budget-constrained text reranking using Large Language Models (LLMs).
+
+    EchoRank uses a two-stage approach to balance reranking performance with computational cost:
     
-    .. _[5]: https://arxiv.org/abs/2402.10866
+    1. **Binary Classification Stage**: Determines whether each passage is relevant to the query.
+    2. **Pairwise Ranking Stage**: Directly compares relevant passages to refine rankings.
 
-    1. Binary Classification Stage: Determines if each passage is relevant to the query.
-    2. Pairwise Ranking Stage: Ranks relevant passages via direct comparisons.
+    This method is particularly suitable when computational or token budgets are limited.
 
-    EchoRank efficiently balances reranking performance and computational cost by limiting token usage.
+    Attributes:
+        method (str, optional): The reranking method name.
+        model_name (str): The Hugging Face pretrained model name (default: `"google/flan-t5-large"`).
+        type (str): Type of budget constraint applied (default: `"cheap"`).
+        budget_tokens (int): Total token budget allocated for reranking (default: `4000`).
+        budget_split_x (float): Fraction of token budget for the binary classification stage (default: `0.5`).
+        budget_split_y (float): Fraction of token budget for the pairwise ranking stage (default: `0.5`).
+        total_passages (int): Maximum number of passages processed per query (default: `50`).
+        device (str): Computational device (`"cuda"` or `"cpu"`).
+        model (transformers.Pipeline): Hugging Face pipeline for text-to-text generation.
 
-    References
-    ----------
-    .. [5] Rashid, Muhammad Shihab, Jannat Ara Meem, Yue Dong, and Vagelis Hristidis. "EcoRank: Budget-Constrained Text Re-ranking Using Large Language Models." arXiv preprint arXiv:2402.10866 (2024).
-    
-    Attributes
-    ----------
-    method : str, optional
-        The reranking method name.
-    model_name : str
-        The pretrained model name (default: `"google/flan-t5-large"`).
-    type : str
-        Type of budget constraint to apply (default: `"cheap"`).
-    budget_tokens : int
-        Total token budget for reranking (default: `4000`).
-    budget_split_x : float
-        Percentage of budget allocated to the binary classification stage (default: `0.5`).
-    budget_split_y : float
-        Percentage of budget allocated to the pairwise ranking stage (default: `0.5`).
-    total_passages : int
-        Maximum number of passages to process per query (default: `50`).
-    device : str
-        The device on which the model runs (`"cuda"` if available, otherwise `"cpu"`).
-    model : transformers.Pipeline
-        The Hugging Face pipeline for text-to-text generation used for reranking.
+    References:
+        - **Rashid et al.** *EcoRank: Budget-Constrained Text Re-ranking Using Large Language Models.*  
+          [Paper](https://arxiv.org/abs/2402.10866)
+        - [Original Implementation](https://github.com/shihabrashid-ucr/EcoRank/tree/main)
 
-    See Also
-    --------
-    Reranking : Main interface for reranking models, including `EchoRankReranker`.
+    See Also:
+        - `Reranking`: Main interface for reranking models, including `EchoRankReranker`.
 
-    Examples
-    --------
-    Basic usage with the `Reranking` interface:
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question, Answer, Context
+        from rankify.models.reranking import Reranking
 
-    >>> from rankify.dataset.dataset import Document, Question, Answer, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> question = Question("What is climate change?")
-    >>> answers = Answer(["Climate change refers to long-term shifts in temperatures and weather patterns."])
-    >>> contexts = [
-    >>>     Context(text="Climate change is mainly caused by human activities.", id=1),
-    >>>     Context(text="Deforestation contributes to global warming.", id=2),
-    >>>     Context(text="Polar bears are affected by melting ice caps.", id=3),
-    >>>     Context(text="The stock market fluctuates daily.", id=4),
-    >>> ]
-    >>> document = Document(question=question, answers=answers, contexts=contexts)
-    >>>
-    >>> # Initialize Reranking with EchoRankReranker
-    >>> model = Reranking(method='echorank', model_name='flan-t5-large')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+        question = Question("What is climate change?")
+        answers = Answer(["Climate change refers to long-term shifts in temperatures and weather patterns."])
+        contexts = [
+            Context(text="Climate change is mainly caused by human activities.", id=1),
+            Context(text="Deforestation contributes to global warming.", id=2),
+        ]
+        document = Document(question=question, answers=answers, contexts=contexts)
 
-    Notes
-    -----
-    - EchoRank is designed for budget-constrained ranking by limiting token usage.
-    - Integrates into the `Reranking` class, so use `Reranking` instead of `EchoRankReranker` directly.
-    - Uses two-stage ranking: binary filtering followed by pairwise comparisons.
-    - This class implement from the following link https://github.com/shihabrashid-ucr/EcoRank/tree/main.
+        model = Reranking(method='echorank', model_name='flan-t5-large')
+        model.rank([document])
+
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
     """
     def __init__(self, method=None, model_name=None, **kwargs):
         """
-        Initializes the EchoRank reranker.
+        Initializes the **EchoRankReranker** instance.
 
-        Parameters
-        ----------
-        method : str, optional
-            The reranking method name.
-        model_name : str, optional
-            The Hugging Face model name to use for reranking (default: `"google/flan-t5-large"`).
-        kwargs : dict
-            Additional parameters for token budget and model configurations.
+        Args:
+            method (str, optional): The reranking method name.
+            model_name (str, optional): Hugging Face pretrained model (default: `"google/flan-t5-large"`).
+            **kwargs: Additional keyword arguments for configuration (e.g., budget tokens, device).
+
+        Example:
+            ```python
+            model = EchoRankReranker(method='echorank', model_name='flan-t5-large')
+            ```
         """
         self.method = method
         self.model_name = model_name or kwargs.get("model_name", "google/flan-t5-large")
@@ -107,40 +84,39 @@ class EchoRankReranker(BaseRanking):
 
     def _get_binary_response(self, passage: str, query: str) -> str:
         """
-        Performs binary classification to determine if a passage is relevant to the query.
+        Determines binary relevance ("yes" or "no") of a passage relative to the query.
 
-        Parameters
-        ----------
-        passage : str
-            The passage to evaluate.
-        query : str
-            The query against which relevance is judged.
+        Args:
+            passage (str): The passage text.
+            query (str): The query text.
 
-        Returns
-        -------
-        str
-            "yes" or "no" response indicating relevance.
+        Returns:
+            str: "yes" or "no" indicating relevance.
+
+        Example:
+            ```python
+            response = model._get_binary_response(passage, query)
+            ```
         """
         prompt = f"Is the following passage related to the query?\npassage: {passage}\nquery: {query}\nAnswer in yes or no."
         return self.model(prompt)[0]["generated_text"].strip().lower()
 
     def _get_pairwise_response(self, query: str, passage_a: str, passage_b: str) -> str:
         """
-        Compares two passages and determines which is more relevant to the query.
+        Compares two passages and selects the one more relevant to the query.
 
-        Parameters
-        ----------
-        query : str
-            The query for comparison.
-        passage_a : str
-            The first passage.
-        passage_b : str
-            The second passage.
+        Args:
+            query (str): The query text.
+            passage_a (str): First passage.
+            passage_b (str): Second passage.
 
-        Returns
-        -------
-        str
-            "passage a" or "passage b" indicating the more relevant passage.
+        Returns:
+            str: "passage a" or "passage b" indicating which passage is more relevant.
+
+        Example:
+            ```python
+            better_passage = model._get_pairwise_response(query, passage_a, passage_b)
+            ```
         """
         prompt = f"""Given a query "{query}", which of the following two passages is more relevant to the query?
 Passage A: {passage_a}
@@ -150,22 +126,21 @@ Output Passage A or Passage B."""
 
     def rank(self, documents: List[Document]) -> List[Document]:
         """
-        Reranks the contexts within each document using the EchoRank method.
+        Reranks contexts within each document using the EchoRank two-stage process.
 
-        Parameters
-        ----------
-        documents : list of Document
-            A list of documents containing query and contexts.
+        Args:
+            documents (List[Document]): Documents containing queries and associated contexts.
 
-        Returns
-        -------
-        List[Document]
-            The documents with reordered contexts based on their scores.
+        Returns:
+            List[Document]: Documents updated with reordered contexts after EchoRank reranking.
 
-        Raises
-        ------
-        ValueError
-            If no contexts are provided in a document.
+        Raises:
+            ValueError: If any document lacks contexts for reranking.
+
+        Example:
+            ```python
+            reranked_docs = model.rank(documents)
+            ```
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             query = document.question.question
