@@ -25,52 +25,39 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 class ContrieverRetriever:
     """
-    Implements **Contriever** `[4]`_, an **unsupervised dense retrieval model** that leverages **FAISS indexing**
+    Implements **Contriever**, an **unsupervised dense retrieval model** that leverages **FAISS indexing**
     for efficient retrieval of relevant documents.
-
-    .. _[4]: https://arxiv.org/abs/2112.09118
 
     Contriever allows **dense passage retrieval** using **bi-encoder embeddings**, making it highly scalable for
     zero-shot and supervised document retrieval tasks.
 
-    References
-    ----------
-    .. [4] Izacard, G., & Grave, E. (2021). *Unsupervised Dense Information Retrieval with Contriever*.
-       [https://arxiv.org/abs/2112.09118](https://arxiv.org/abs/2112.09118)
+    References:
+        - **Izacard, G., & Grave, E. (2021)**: *Unsupervised Dense Information Retrieval with Contriever*.
+          [Paper](https://arxiv.org/abs/2112.09118)
 
-    Attributes
-    ----------
-    model_path : str
-        Path to the pre-trained **Contriever model**.
-    n_docs : int
-        Number of top-ranked documents retrieved for each query.
-    batch_size : int
-        Number of queries processed simultaneously for efficiency.
-    device : str
-        Computing device (e.g., `"cuda"` or `"cpu"`).
-    index_type : str
-        The type of index used (`"wiki"` or `"msmarco"`).
-    index : Indexer
-        FAISS index object used for efficient retrieval.
-    passages : dict
-        Dictionary mapping passage IDs to passage content.
-    passage_id_map : dict
-        Dictionary mapping numeric IDs to passage metadata.
-    tokenizer : Tokenizer
-        Tokenizer for processing queries.
-    model : torch.nn.Module
-        **Contriever model** used for encoding queries.
+    Attributes:
+        model_path (str): Path to the pre-trained **Contriever model**.
+        n_docs (int): Number of **top-ranked documents** retrieved for each query.
+        batch_size (int): Number of **queries processed simultaneously** for efficiency.
+        device (str): Computing device (e.g., `"cuda"` or `"cpu"`).
+        index_type (str): The type of index used (`"wiki"` or `"msmarco"`).
+        index (Indexer): **FAISS index object** used for efficient retrieval.
+        passages (dict): Dictionary mapping **passage IDs** to passage content.
+        passage_id_map (dict): Dictionary mapping **numeric IDs** to passage metadata.
+        tokenizer (Tokenizer): Tokenizer for processing queries.
+        model (torch.nn.Module): **Contriever model** used for encoding queries.
 
-    Examples
-    --------
-    Basic Usage:
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question
+        from rankify.retrievers.retriever import Retriever
 
-    >>> from rankify.dataset.dataset import Document, Question
-    >>> from rankify.retrievers.retriever import Retriever
-    >>> retriever = Retriever(method='contriever' , model="facebook/contriever-msmarco", n_docs=5, index_type="wiki")
-    >>> documents = [Document(question=Question("What is deep learning?"))]
-    >>> retrieved_documents = retriever.retrieve(documents)
-    >>> print(retrieved_documents[0].contexts[0].text)
+        retriever = Retriever(method='contriever', model="facebook/contriever-msmarco", n_docs=5, index_type="wiki")
+        documents = [Document(question=Question("What is deep learning?"))]
+
+        retrieved_documents = retriever.retrieve(documents)
+        print(retrieved_documents[0].contexts[0].text)
+        ```
     """
 
     
@@ -85,23 +72,15 @@ class ContrieverRetriever:
         """
         Initializes the **ContrieverRetriever**.
 
-        Parameters
-        ----------
-        model : str, optional
-            Path or name of the pre-trained Contriever model (default: `"facebook/contriever-msmarco"`).
-        n_docs : int, optional
-            Number of documents to retrieve per query (default: `100`).
-        batch_size : int, optional
-            Number of queries processed per batch for efficient embedding (default: `32`).
-        device : str, optional
-            Device to run the model on (`"cuda"` or `"cpu"`, default: `"cuda"`).
-        index_type : str, optional
-            The type of index to use (`"wiki"` or `"msmarco"`, default: `"wiki"`).
+        Args:
+            model (str, optional): Path or name of the pre-trained **Contriever model** (default: `"facebook/contriever-msmarco"`).
+            n_docs (int, optional): Number of **documents to retrieve** per query (default: `100`).
+            batch_size (int, optional): Number of **queries processed per batch** for efficient embedding (default: `32`).
+            device (str, optional): Device to run the model on (`"cuda"` or `"cpu"`, default: `"cuda"`).
+            index_type (str, optional): The type of index to use (`"wiki"` or `"msmarco"`, default: `"wiki"`).
 
-        Raises
-        ------
-        ValueError
-            If the specified `index_type` is not supported.
+        Raises:
+            ValueError: If the specified **index type** is not supported.
         """
         self.model_path = model
         self.n_docs = n_docs
@@ -178,19 +157,23 @@ class ContrieverRetriever:
 
     def clean_filename(self,url):
         """
-        Extracts the file name from a URL, removing query parameters like '?download=true'.
+        Extracts the **file name** from a URL, removing query parameters.
+
+        Args:
+            url (str): The URL containing the file name.
+
+        Returns:
+            str: The **cleaned file name**.
         """
         parsed_url = urlparse(url)
         return os.path.basename(parsed_url.path)  # Only take the path portion, excluding query params
 
     def _load_index(self) -> Indexer:
         """
-        Loads the FAISS index using the Contriever utility.
-        
-        Returns
-        -------
-        Indexer
-            The loaded FAISS index.
+        Loads the **FAISS index** using the **Contriever utility**.
+
+        Returns:
+            Indexer: The loaded **FAISS index**.
         """
         index = Indexer(vector_sz=768 , n_subquantizers=0,n_bits=8)  # Update vector size if necessary
         index_folder = os.path.join(self.EMBEDDINGS_DIR, self.index_type)
@@ -211,8 +194,14 @@ class ContrieverRetriever:
     
     
     def _index_encoded_data(self, index, embedding_files, indexing_batch_size=1000000):
-        
-        #print(passages_embeddings)
+        """
+        Loads and indexes **encoded passage embeddings** into FAISS.
+
+        Args:
+            index (Indexer): The FAISS **index** to store the embeddings.
+            embedding_files (List[str]): List of **files containing precomputed embeddings**.
+            indexing_batch_size (int, optional): **Batch size for indexing** (default: `1000000`).
+        """
         allids = []
         allembeddings = np.array([])
         for i, file_path in enumerate(embedding_files):
@@ -242,15 +231,11 @@ class ContrieverRetriever:
         """
         Embeds queries using the **Contriever model**.
 
-        Parameters
-        ----------
-        queries : List[str]
-            List of queries.
+        Args:
+            queries (List[str]): List of **query texts**.
 
-        Returns
-        -------
-        np.ndarray
-            Query embeddings.
+        Returns:
+            np.ndarray: **Query embeddings**.
         """
         self.model.eval()
         embeddings = []
@@ -277,15 +262,11 @@ class ContrieverRetriever:
         """
         Retrieves **passages** for each **document**.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of query documents.
+        Args:
+            documents (List[Document]): A list of **query documents**.
 
-        Returns
-        -------
-        List[Document]
-            Documents with retrieved **contexts**.
+        Returns:
+            List[Document]: Documents with retrieved **contexts**.
         """
         queries = [doc.question.question.replace("?","") for doc in documents]
         query_embeddings = self._embed_queries(queries)

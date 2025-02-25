@@ -12,69 +12,61 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class RankT5(BaseRanking):
     """
-    Implements **MonoRankT5** `[20]`_, a **T5-based re-ranking method** that fine-tunes **T5** with ranking losses.
+    Implements **MonoRankT5**, a **T5-based re-ranking method** that fine-tunes **T5** with ranking losses.
 
-    .. _[20]: https://arxiv.org/abs/2210.10634
 
-    This method **supports both MonoT5 and RankT5** re-ranking models. **MonoT5** applies a **binary classification loss**
-    to determine query-document relevance, while **RankT5** uses ranking losses to improve ranking effectiveness.
+    RankT5 supports both **MonoT5** and **RankT5** re-ranking models:
+    
+    - **MonoT5** applies a **binary classification loss** to determine query-document relevance.
+    - **RankT5** uses **ranking losses** to improve ranking effectiveness.
 
-    References
-    ----------
-    .. [20] Zhuang, H. et al. (2023). RankT5: Fine-Tuning T5 for Text Ranking with Ranking Losses.
+    References:
+        - **Zhuang, H. et al. (2023)**: *RankT5: Fine-Tuning T5 for Text Ranking with Ranking Losses*.
+          [Paper](https://arxiv.org/abs/2210.10634)
 
-    Attributes
-    ----------
-    method : str
-        The ranking method (`'monot5'` or `'rankt5'`).
-    model_name : str
-        The name of the **T5 model**.
-    model : T5ForConditionalGeneration
-        The **T5 model** for ranking.
-    tokenizer : T5Tokenizer
-        The tokenizer for encoding input texts.
-    max_input_length : int
-        Maximum sequence length for input encoding.
-    batch_size : int
-        The batch size for processing documents.
+    Attributes:
+        method (str): The ranking method (`"monot5"` or `"rankt5"`).
+        model_name (str): The name of the **T5 model**.
+        model (T5ForConditionalGeneration): The **T5 model** for ranking.
+        tokenizer (T5Tokenizer): The tokenizer for encoding input texts.
+        max_input_length (int): Maximum sequence length for input encoding.
+        batch_size (int): The batch size for processing documents.
 
-    Examples
-    --------
-    Basic Usage:
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question, Context
+        from rankify.models.reranking import Reranking
 
-    >>> from rankify.dataset.dataset import Document, Question, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> # Define a query and contexts
-    >>> question = Question("What is the impact of climate change?")
-    >>> contexts = [
-    >>>     Context(text="Climate change causes rising sea levels and extreme weather.", id=0),
-    >>>     Context(text="The stock market fluctuates due to various economic factors.", id=1),
-    >>>     Context(text="Global warming contributes to increased wildfires and heatwaves.", id=2),
-    >>> ]
-    >>> document = Document(question=question, contexts=contexts)
-    >>>
-    >>> # Initialize MonoRankT5
-    >>> model = Reranking(method='rankt5', model_name='rankt5-base')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+        # Define a query and contexts
+        question = Question("What is the impact of climate change?")
+        contexts = [
+            Context(text="Climate change causes rising sea levels and extreme weather.", id=0),
+            Context(text="The stock market fluctuates due to various economic factors.", id=1),
+            Context(text="Global warming contributes to increased wildfires and heatwaves.", id=2),
+        ]
+        document = Document(question=question, contexts=contexts)
+
+        # Initialize MonoRankT5
+        model = Reranking(method='rankt5', model_name='rankt5-base')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
     """
     def __init__(self, method: str = None, model_name: str = 'castorini/monot5-base-msmarco', api_key: str = None):
         """
         Initializes the **MonoRankT5** class.
 
-        Parameters
-        ----------
-        method : str
-            The ranking method (`'monot5'` or `'rankt5'`).
-        model_name : str
-            The name of the **T5 model**.
-        api_key : str, optional
-            Not used, included for framework consistency.
+        Args:
+            method (str): The ranking method (`"monot5"` or `"rankt5"`).
+            model_name (str): The name of the **T5 model**.
+            api_key (str, optional): Not used, included for framework consistency.
+
+        Raises:
+            ValueError: If the `method` is not `"monot5"` or `"rankt5"`.
         """
         self.method = method
         self.model_name = model_name
@@ -89,10 +81,8 @@ class RankT5(BaseRanking):
         """
         Loads the pre-trained **T5 model** and tokenizer.
 
-        Returns
-        -------
-        Tuple[T5ForConditionalGeneration, T5Tokenizer]
-            The loaded model and tokenizer.
+        Returns:
+            Tuple[T5ForConditionalGeneration, T5Tokenizer]: The loaded model and tokenizer.
         """
         print("Loading T5 model and tokenizer...")
         model = T5ForConditionalGeneration.from_pretrained(self.model_name).to('cuda')
@@ -105,15 +95,11 @@ class RankT5(BaseRanking):
         """
         Runs inference using the **T5 model**.
 
-        Parameters
-        ----------
-        input_tensors : dict
-            The input tensors for model inference.
+        Args:
+            input_tensors (dict): The input tensors for model inference.
 
-        Returns
-        -------
-        dict
-            The model outputs.
+        Returns:
+            dict: The model outputs.
         """
         with torch.no_grad():
             output = self.model.generate(
@@ -128,15 +114,11 @@ class RankT5(BaseRanking):
         """
         Reranks the passages for each document using **T5-based re-ranking**.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            List of documents containing queries and passages.
+        Args:
+            documents (List[Document]): List of documents containing queries and passages.
 
-        Returns
-        -------
-        List[Document]
-            The documents with updated `reorder_contexts`.
+        Returns:
+            List[Document]: The documents with updated `reorder_contexts`.
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             query = document.question.question
@@ -192,17 +174,12 @@ class RankT5(BaseRanking):
         """
         Groups a list into chunks of size **n**.
 
-        Parameters
-        ----------
-        lst : list
-            The list to be chunked.
-        n : int, optional
-            The chunk size (default is `5`).
+        Args:
+            lst (list): The list to be chunked.
+            n (int, optional): The chunk size (default is `5`).
 
-        Yields
-        ------
-        list
-            A chunk of `n` elements.
+        Yields:
+            list: A chunk of `n` elements.
         """
         for i in range(0, len(lst), n):
             yield lst[i:i + n]

@@ -13,50 +13,40 @@ tokenizer = AutoTokenizer.from_pretrained("facebook/dpr-question_encoder-multise
 
 class DenseRetriever:
     """
-    Implements **Dense Passage Retrieval (DPR)** `[5]`_, **ANCE** `[6]`_, and **BPR** `[7]`_ using FAISS indexes 
-    for efficient document retrieval. These models leverage dense vector representations to find semantically relevant 
+    Implements **Dense Passage Retrieval (DPR)**, **ANCE**, and **BPR** using **FAISS indexes** 
+    for efficient document retrieval. These models leverage **dense vector representations** to find **semantically relevant** 
     passages.
 
-    .. _[5]: https://arxiv.org/abs/2004.04906
-    .. _[6]: https://arxiv.org/abs/2007.00808
-    .. _[7]: https://arxiv.org/abs/2106.00882
+    References:
+        - **Karpukhin et al. (2020)**: *Dense Passage Retrieval for Open-Domain Question Answering*.
+          [Paper](https://arxiv.org/abs/2004.04906)
+        - **Xiong et al. (2020)**: *Approximate Nearest Neighbor Negative Contrastive Learning for Dense Text Retrieval (ANCE)*.
+          [Paper](https://arxiv.org/abs/2007.00808)
+        - **Ni et al. (2021)**: *Efficient Passage Retrieval with Hashing for Open-domain Question Answering*.
+          [Paper](https://arxiv.org/abs/2106.00882)
 
-    References
-    ----------
-    .. [5] Karpukhin, V., et al. (2020). *Dense Passage Retrieval for Open-Domain Question Answering*.
-           [https://arxiv.org/abs/2004.04906](https://arxiv.org/abs/2004.04906)
-    .. [6] Xiong, L., et al. (2020). *Approximate Nearest Neighbor Negative Contrastive Learning for Dense Text Retrieval (ANCE)*.
-           [https://arxiv.org/abs/2007.00808](https://arxiv.org/abs/2007.00808)
-    .. [7] Ni, J., et al. (2021). *Efficient Passage Retrieval with Hashing for Open-domain Question Answering*.
-           [https://arxiv.org/abs/2106.00882](https://arxiv.org/abs/2106.00882)
+    Attributes:
+        model (str): The **retriever type** (`"dpr-multi"`, `"dpr-single"`, `"ance-multi"`, `"bpr-single"`).
+        index_type (str): The **index type** (`"wiki"` or `"msmarco"`).
+        n_docs (int): Number of **documents retrieved per query**.
+        batch_size (int): Number of **queries processed in a batch**.
+        threads (int): Number of **parallel threads** for retrieval.
+        tokenizer (SimpleTokenizer): **Tokenizer** for answer matching.
+        searcher (FaissSearcher): **FAISS searcher** for document retrieval.
 
-    Attributes
-    ----------
-    model : str
-        The type of retriever (`"dpr-multi"`, `"dpr-single"`, `"ance-multi"`, `"bpr-single"`).
-    index_type : str
-        Dataset type (`"wiki"` or `"msmarco"`).
-    n_docs : int
-        Number of documents retrieved per query.
-    batch_size : int
-        Number of queries processed in a batch.
-    threads : int
-        Number of parallel threads for retrieval.
-    tokenizer : SimpleTokenizer
-        Tokenizer for answer matching.
-    searcher : FaissSearcher
-        FAISS searcher for document retrieval.
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question
+        from rankify.retrievers.retriever import Retriever
 
-    Examples
-    --------
-    Basic Usage:
+        retriever = Retriever(method='dpr', model="dpr-multi", index_type="wiki", n_docs=5)
 
-    >>> from rankify.dataset.dataset import Document, Question
-    >>> from rankify.retrievers.retriever import Retriever
-    >>> retriever = Retriever(method='dpr', model="dpr-multi", index_type="wiki", n_docs=5)
-    >>> documents = [Document(question=Question("What is artificial intelligence?"))]
-    >>> retrieved_documents = retriever.retrieve(documents)
-    >>> print(retrieved_documents[0].contexts[0].text)
+        documents = [Document(question=Question("What is artificial intelligence?"))]
+
+        retrieved_documents = retriever.retrieve(documents)
+
+        print(retrieved_documents[0].contexts[0].text)
+        ```
     """
 
     MSMARCO_CORPUS_URL = "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/msmarco-passage-corpus/msmarco-passage-corpus.tsv?download=true"
@@ -89,20 +79,18 @@ class DenseRetriever:
 
     def __init__(self, model: str = "dpr-multi", index_type: str = "wiki", n_docs: int = 10, batch_size: int = 36, threads: int = 30):
         """
-        Initializes the DPR retriever with batch processing for efficiency.
+        Initializes the **DenseRetriever** for batch processing.
 
-        Parameters
-        ----------
-        model : str
-            Type of retriever (e.g., "dpr-multi").
-        index_type : str
-            Dataset type ("wiki" or "msmarco").
-        n_docs : int
-            Number of documents to retrieve per query.
-        batch_size : int
-            Batch size for processing queries.
-        threads : int
-            Number of threads for batch search.
+        Args:
+            model (str, optional): The **retriever type** (`"dpr-multi"`, `"dpr-single"`, `"ance-multi"`, `"bpr-single"`). Defaults to `"dpr-multi"`.
+            index_type (str, optional): The **index type** (`"wiki"` or `"msmarco"`). Defaults to `"wiki"`.
+            n_docs (int, optional): Number of **documents to retrieve per query**. Defaults to `10`.
+            batch_size (int, optional): Number of **queries to process in a batch**. Defaults to `36`.
+            threads (int, optional): Number of **parallel threads** for retrieval. Defaults to `30`.
+
+        Raises:
+            ValueError: If the `model` is **not supported**.
+            ValueError: If the `index_type` is **not available** for the selected model.
         """
         if model not in self.DENSE_INDEX_MAP:
             raise ValueError(f"Unsupported retriever model: {model}")
@@ -123,12 +111,10 @@ class DenseRetriever:
             self._load_msmarco_corpus()
     def _initialize_searcher(self):
         """
-        Initializes the FaissSearcher for the given model and index type.
+        Initializes the FAISS searcher for document retrieval.
 
-        Returns
-        -------
-        FaissSearcher
-            Initialized FaissSearcher.
+        Returns:
+            FaissSearcher: A **FAISS searcher** instance.
         """
         index_url_or_prebuilt = self.DENSE_INDEX_MAP[self.model][self.index_type]
 
@@ -152,6 +138,18 @@ class DenseRetriever:
     def _load_msmarco_corpus(self):
         """
         Downloads and loads the MSMARCO passage corpus into memory.
+
+        This function checks whether the **MSMARCO passage corpus** exists locally. If not, 
+        it downloads the corpus file and stores it in the cache directory. It then loads 
+        the corpus into memory as a dictionary, mapping `doc_id` to passage **text** and **title**.
+
+        Notes:
+            - The MSMARCO corpus is a **tab-separated file** (TSV) with three columns: `doc_id`, `text`, `title`.
+            - This method is only required when using the `"msmarco"` index.
+
+        Raises:
+            Exception: If the file format is incorrect or an issue occurs during parsing.
+
         """
         corpus_file = os.path.join(self.CACHE_DIR , "msmarco-passage-corpus.tsv")
         if not os.path.exists(corpus_file):
@@ -166,7 +164,17 @@ class DenseRetriever:
                 self.corpus[doc_id] = {"text": text, "title": title}
     def _download_file(self, url, save_path):
         """
-        Downloads a file from the specified URL to the given path.
+        Downloads a file from the specified URL and saves it to the given path.
+
+        This function streams the file in chunks to avoid memory overflow and displays 
+        a progress bar using `tqdm`.
+
+        Args:
+            url (str): The **URL** of the file to be downloaded.
+            save_path (str): The **local file path** where the downloaded file will be saved.
+
+        Raises:
+            requests.exceptions.RequestException: If the download fails due to a network issue.
         """
         print(f"Downloading {os.path.basename(save_path)}...")
         response = requests.get(url, stream=True)
@@ -178,12 +186,18 @@ class DenseRetriever:
         """
         Downloads and extracts a ZIP file from a given URL.
 
-        Parameters
-        ----------
-        url : str
-            URL of the ZIP file.
-        destination : str
-            Destination directory.
+        This method:
+            - Downloads a **ZIP archive** to a temporary location.
+            - Extracts its contents to the specified **destination directory**.
+            - Removes the ZIP file to save disk space.
+
+        Args:
+            url (str): The **URL** of the ZIP file to download.
+            destination (str): The **local directory** where the extracted files will be stored.
+
+        Raises:
+            zipfile.BadZipFile: If the ZIP file is corrupt or cannot be extracted.
+            requests.exceptions.RequestException: If the download fails.
         """
         # Ensure destination directory exists (only once here)
         os.makedirs(destination, exist_ok=True)
@@ -209,6 +223,15 @@ class DenseRetriever:
 
 
     def retrieve(self, documents: List[Document]) -> List[Document]:
+        """
+        Retrieves **relevant contexts** for a list of **documents**.
+
+        Args:
+            documents (List[Document]): A **list of queries** as `Document` instances.
+
+        Returns:
+            List[Document]: Documents **updated** with retrieved `Context` instances.
+        """
         queries = [doc.question.question for doc in documents]
         #batch_results = self.searcher.batch_search(queries, [str(i) for i in range(len(queries))], k=self.n_docs, threads=self.threads)
         batch_results = self._batch_search(queries, [str(i) for i in range(len(queries))])
@@ -248,19 +271,14 @@ class DenseRetriever:
 
     def _batch_search(self, queries, qids):
         """
-        Performs batch search using Pyserini's batch_search method.
+        Performs batch search using **Pyserini's FAISS retriever**.
 
-        Parameters
-        ----------
-        queries : List[str]
-            List of query strings.
-        qids : List[str]
-            List of corresponding query IDs.
+        Args:
+            queries (List[str]): **List of query strings**.
+            qids (List[str]): **List of corresponding query IDs**.
 
-        Returns
-        -------
-        dict
-            A dictionary where the keys are query IDs and the values are the retrieved hits.
+        Returns:
+            dict: **Dictionary** mapping query IDs to retrieved documents.
         """
         batch_results = {}
         batch_qids, batch_queries = [], []

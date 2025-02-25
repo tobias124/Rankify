@@ -11,72 +11,54 @@ from rankify.utils.pre_defind_models import INDEX_TYPE
 
 class BM25Retriever:
     """
-    Implements **BM25** `[2]`_ , a **probabilistic ranking model** for retrieving documents from large-scale corpora.
-
-    .. _[2]: https://www.nowpublishers.com/article/Details/INR-019
+    Implements **BM25**, a **probabilistic ranking model** for retrieving documents from large-scale corpora.
 
     BM25, based on the **Probabilistic Relevance Framework**, ranks documents based on their relevance to a given query. 
     This retriever utilizes **Pyserini's LuceneSearcher** for efficient batch-based retrieval.
 
-    References
-    ----------
-    .. [2] Robertson, S. & Zaragoza, H. (2009). *The Probabilistic Relevance Framework: BM25 and Beyond*.
-       Foundations and Trends® in Information Retrieval, 3(4), 333-389. 
-       DOI: [https://www.nowpublishers.com/article/Details/INR-019](https://www.nowpublishers.com/article/Details/INR-019)
+    References:
+        - **Robertson & Zaragoza (2009)**: *The Probabilistic Relevance Framework: BM25 and Beyond*.  
+          [paper](https://www.nowpublishers.com/article/Details/INR-019)
 
-    Attributes
-    ----------
-    n_docs : int
-        Number of top documents to retrieve for each query.
-    batch_size : int
-        Number of queries processed in a single batch for efficiency.
-    threads : int
-        Number of parallel threads used for retrieval.
-    index_type : str
-        The type of index (`wiki` or `msmarco`) used for retrieval.
-    index_url : str
-        URL to download the prebuilt BM25 index.
-    index_folder : str
-        Path where the BM25 index is stored.
-    index_path : str
-        Path to the Lucene index used by Pyserini.
-    title_map_path : str
-        Path to a JSON file mapping passage IDs to titles.
-    searcher : LuceneSearcher
-        Pyserini-based search engine for BM25 retrieval.
-    pid2title : dict
-        Dictionary mapping document IDs to their titles.
-    
-    Examples
-    --------
-    Basic Usage:
+    Attributes:
+        n_docs (int): Number of top documents to retrieve per query.
+        batch_size (int): Number of queries processed in a single batch for efficiency.
+        threads (int): Number of parallel threads used for retrieval.
+        index_type (str): The type of index (`"wiki"` or `"msmarco"`) used for retrieval.
+        index_url (str): URL to download the prebuilt BM25 index.
+        index_folder (str): Path where the BM25 index is stored.
+        index_path (str): Path to the Lucene index used by Pyserini.
+        title_map_path (str): Path to a JSON file mapping passage IDs to titles.
+        searcher (LuceneSearcher): Pyserini-based search engine for BM25 retrieval.
+        pid2title (dict): Dictionary mapping document IDs to their titles.
 
-    >>> from rankify.dataset.dataset import Document, Question
-    >>> from rankify.retrievers.retriever import Retriever
-    >>> retriever = Retriever(model="bm25", n_docs=5, index_type="wiki")
-    >>> documents = [Document(question=Question("Who discovered gravity?"))]
-    >>> retrieved_documents = retriever.retrieve(documents)
-    >>> print(retrieved_documents[0].contexts[0].text)
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question
+        from rankify.retrievers.retriever import Retriever
+        
+        retriever = Retriever(model="bm25", n_docs=5, index_type="wiki")
+        
+        documents = [Document(question=Question("Who discovered gravity?"))]
+        
+        retrieved_documents = retriever.retrieve(documents)
+        
+        print(retrieved_documents[0].contexts[0].text)
+        ```
     """
     def __init__(self,model="bm25", n_docs: int = 10, batch_size: int = 36, threads: int = 30 , index_type: str = 'wiki') -> None:
         """
         Initializes the BM25 retriever.
 
-        Parameters
-        ----------
-        n_docs : int, optional
-            Number of top documents to retrieve per query (default is 10).
-        batch_size : int, optional
-            Number of queries processed in a single batch (default is 36).
-        threads : int, optional
-            Number of parallel threads used for retrieval (default is 30).
-        index_type : str, optional
-            Type of index to use (`wiki` or `msmarco`) (default is "wiki").
-        
-        Raises
-        ------
-        ValueError
-            If the specified index type is not supported.
+        Args:
+            model (str, optional): The retrieval model name (`"bm25"`). Defaults to `"bm25"`.
+            n_docs (int, optional): Number of **top documents** to retrieve per query. Defaults to `10`.
+            batch_size (int, optional): Number of **queries** processed in a batch. Defaults to `36`.
+            threads (int, optional): Number of **parallel threads** for retrieval. Defaults to `30`.
+            index_type (str, optional): Type of **index** to use (`"wiki"` or `"msmarco"`). Defaults to `"wiki"`.
+
+        Raises:
+            ValueError: If the `index_type` is **not supported**.
         """
         self.n_docs = n_docs
         self.batch_size = batch_size
@@ -104,15 +86,13 @@ class BM25Retriever:
 
     def _ensure_index_downloaded(self) -> None:
         """
-        Ensures that the BM25 index and associated files are downloaded and extracted.
+        Ensures that the BM25 index and associated files are **downloaded and extracted**.
 
         If the index does not exist locally, it downloads and extracts the index from the 
         specified URL.
 
-        Raises
-        ------
-        RuntimeError
-            If the index download fails.
+        Raises:
+            RuntimeError: If the index **download fails**.
         """
         if not os.path.exists(self.index_path):
             os.makedirs(self.index_folder, exist_ok=True)
@@ -128,17 +108,13 @@ class BM25Retriever:
             os.remove(zip_path)
     def retrieve__(self, documents: List[Document]) -> List[Document]:
         """
-        Retrieves relevant contexts for each document in the input list using BM25.
+        Retrieves **relevant contexts** for each document in the input list using BM25.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of `Document` objects containing queries and expected answers.
+        Args:
+            documents (List[Document]): A **list of queries** as `Document` instances.
 
-        Returns
-        -------
-        List[Document]
-            The input `Document` objects updated with retrieved contexts.
+        Returns:
+            List[Document]: Documents **updated** with retrieved `Context` instances.
         """
         print(f"Retrieving {len(documents)} documents one at a time...")
 
@@ -177,30 +153,13 @@ class BM25Retriever:
         return documents
     def retrieve(self, documents: List[Document]) -> List[Document]:
         """
-        Performs batch search using Pyserini's LuceneSearcher.
+        Retrieves **relevant contexts** for each document in the input list using BM25.
 
-        Parameters
-        ----------
-        queries : List[str]
-            List of queries to search.
-        qids : List[str]
-            List of unique query IDs.
-        k : int
-            Number of documents to retrieve per query.
-        batch_size : int
-            Number of queries processed per batch.
-        threads : int
-            Number of threads to use for query processing.
+        Args:
+            documents (List[Document]): A **list of queries** as `Document` instances.
 
-        Returns
-        -------
-        dict
-            Dictionary mapping query IDs to search results.
-        
-        Raises
-        ------
-        RuntimeError
-            If batch search fails for any query.
+        Returns:
+            List[Document]: Documents **updated** with retrieved `Context` instances.
         """
         # Extract the question text and unique IDs
         question_texts = [doc.question.question for doc in documents]  # Extract plain string questions
@@ -241,7 +200,17 @@ class BM25Retriever:
 
     def _batch_search(self, queries: List[str], qids: List[str], k: int, batch_size: int, threads: int):
         """
-        Performs batch search using Pyserini's batch_search method.
+        Performs **batch search** using **Pyserini's LuceneSearcher**.
+
+        Args:
+            queries (List[str]): **List of query strings**.
+            qids (List[str]): **List of corresponding query IDs**.
+            k (int): **Number of documents** to retrieve per query.
+            batch_size (int): **Batch size** for processing queries.
+            threads (int): **Number of parallel threads**.
+
+        Returns:
+            dict: **Dictionary** mapping query IDs to retrieved documents.
         """
         batch_results = {}
         for start in tqdm(range(0, len(queries), batch_size), desc="Batch search"):

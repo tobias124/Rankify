@@ -25,10 +25,12 @@ nav:
       - Dataset: api/dataset.md
       - Metrics: api/metrics.md
       - Retrievers:
-          - Overview: api/retrievers/index.md
+          - Retriever: api/retrievers/retriever.md
           - BM25 Retriever: api/retrievers/bm25.md
           - Dense Retriever: api/retrievers/dense.md
-          - BGB Retriever: api/retrievers/bgb.md
+          - BGE Retriever: api/retrievers/bge.md
+          - Colbert Retriever: api/retrievers/colbert.md
+          - Contriever Retriever: api/retrievers/contriever.md
       - Rerankers:
           - Base: api/rerankings/base.md
           - Reranking: api/rerankings/reranking.md
@@ -59,5 +61,4 @@ nav:
           - Overview: api/generators/index.md
           - T5 Generator: api/generators/t5_generator.md
           - GPT Generator: api/generators/gpt_generator.md
-      - Utils: api/utils.md
   - License: license.md

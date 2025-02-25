@@ -19,64 +19,54 @@ def splade_max_pooling(logits, attention_mask):
 
 class SpladeReranker(BaseRanking):
     """
-    Implements **SpladeReranker** `[26]`_ `[27]`_ , a **sparse lexical and expansion model**
+    Implements **SpladeReranker**, a **sparse lexical and expansion model**
     for first-stage ranking using **masked language models (MLMs).**
 
-    .. _[26]: https://arxiv.org/abs/2107.05720
-    .. _[27]: https://arxiv.org/abs/2109.10086
+
 
     SPLADE employs **sparse representations** of queries and documents,
     performing lexical matching while **expanding terms** in an interpretable way.
 
-    References
-    ----------
-    .. [26] Formal et al. (2021). SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking.
-    .. [27] Formal et al. (2021). SPLADE v2: Sparse Lexical and Expansion Model for Information Retrieval.
+    References:
+        - **Formal et al. (2021)**: *SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking*. [Paper](https://arxiv.org/abs/2107.05720)
+        - **Formal et al. (2021)**: *SPLADE v2: Sparse Lexical and Expansion Model for Information Retrieval*. [Paper](https://arxiv.org/abs/2109.10086)
 
-    Attributes
-    ----------
-    method : str
-        The name of the reranking method.
-    model_name : str
-        The name or path to the **SPLADE** model.
-    device : str
-        The device (CPU/GPU) used for inference.
-    query_max_length : int
-        The maximum token length for **queries**.
-    document_max_length : int
-        The maximum token length for **documents**.
-    batch_size : int
-        The batch size for document encoding.
-    model : AutoModelForMaskedLM
-        The **Masked Language Model (MLM)** used for sparse representation.
-    tokenizer : AutoTokenizer
-        The tokenizer for encoding query and document texts.
+    Attributes:
+        method (str): The name of the reranking method.
+        model_name (str): The name or path to the **SPLADE** model.
+        device (str): The device (CPU/GPU) used for inference.
+        query_max_length (int): The maximum token length for **queries**.
+        document_max_length (int): The maximum token length for **documents**.
+        batch_size (int): The batch size for document encoding.
+        model (AutoModelForMaskedLM): The **Masked Language Model (MLM)** used for sparse representation.
+        tokenizer (AutoTokenizer): The tokenizer for encoding query and document texts.
 
-    Examples
-    --------
-    Basic Usage:
+    Examples:
+        **Basic Usage:**
+        ```python
+        from rankify.dataset.dataset import Document, Question, Context
+        from rankify.models.reranking import Reranking
 
-    >>> from rankify.dataset.dataset import Document, Question, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> # Define a query and contexts
-    >>> question = Question("What are the advantages of renewable energy?")
-    >>> contexts = [
-    >>>     Context(text="Renewable energy reduces carbon emissions and is sustainable.", id=0),
-    >>>     Context(text="Fossil fuels have been the primary source of energy for centuries.", id=1),
-    >>>     Context(text="Solar and wind power are prominent forms of renewable energy.", id=2),
-    >>> ]
-    >>> document = Document(question=question, contexts=contexts)
-    >>>
-    >>> # Initialize SPLADE Reranker
-    >>> model = Reranking(method='splade', model_name='splade-cocondenser')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+        # Define a query and contexts
+        question = Question("What are the advantages of renewable energy?")
+        contexts = [
+            Context(text="Renewable energy reduces carbon emissions and is sustainable.", id=0),
+            Context(text="Fossil fuels have been the primary source of energy for centuries.", id=1),
+            Context(text="Solar and wind power are prominent forms of renewable energy.", id=2),
+        ]
+        document = Document(question=question, contexts=contexts)
+
+        # Initialize SPLADE Reranker
+        model = Reranking(method='splade', model_name='splade-cocondenser')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
     """
+
     def __init__(
         self,
         method: str = None,
@@ -86,19 +76,15 @@ class SpladeReranker(BaseRanking):
         """
         Initializes **SPLADE Reranker** for reranking tasks.
 
-        Parameters
-        ----------
-        method : str
-            The name of the reranking method.
-        model_name : str
-            The name or path to the **SPLADE** model.
-        kwargs : dict
-            Additional keyword arguments for customization:
-            - device: str (default="auto") - computation device.
-            - use_fp16: bool (default=True) - whether to use **FP16** inference.
-            - batch_size: int (default=16) - batch size for document encoding.
-            - query_max_length: int (default=512) - max token length for **queries**.
-            - document_max_length: int (default=512) - max token length for **documents**.
+        Args:
+            method (str): The name of the reranking method.
+            model_name (str): The name or path to the **SPLADE** model.
+            **kwargs: Additional parameters:
+                - device (str, optional): Computation device (`"auto"`, `"cuda"`, `"cpu"`). Default is `"auto"`.
+                - use_fp16 (bool, optional): Whether to use **FP16** inference. Default is `True`.
+                - batch_size (int, optional): Batch size for document encoding. Default is `16`.
+                - query_max_length (int, optional): Maximum token length for **queries**. Default is `512`.
+                - document_max_length (int, optional): Maximum token length for **documents**. Default is `512`.
         """
         super().__init__(method)
         self.device = self._detect_device(kwargs.get("device", "auto"))
@@ -117,15 +103,11 @@ class SpladeReranker(BaseRanking):
         """
         Reranks a list of **Document** instances using the **SPLADE** model.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of `Document` instances to rerank.
+        Args:
+            documents (List[Document]): A list of `Document` instances to rerank.
 
-        Returns
-        -------
-        List[Document]
-            The documents with updated `reorder_contexts`.
+        Returns:
+            List[Document]: The documents with updated `reorder_contexts`.
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             document = self._rerank_document(document)
@@ -135,15 +117,11 @@ class SpladeReranker(BaseRanking):
         """
         Reranks a single document's contexts using the **SPLADE** model.
 
-        Parameters
-        ----------
-        document : Document
-            A **Document** instance to rerank.
+        Args:
+            document (Document): A **Document** instance to rerank.
 
-        Returns
-        -------
-        Document
-            The reranked **Document** with updated `reorder_contexts`.
+        Returns:
+            Document: The reranked **Document** with updated `reorder_contexts`.
         """
         query = document.question.question  # Extract query text
         contexts = document.contexts
@@ -169,17 +147,12 @@ class SpladeReranker(BaseRanking):
         """
         Compute **SPLADE-style** sparse embeddings for a list of texts.
 
-        Parameters
-        ----------
-        texts : List[str]
-            A list of **texts** to compute embeddings for.
-        max_length : int
-            The **maximum length** for tokenization.
+        Args:
+            texts (List[str]): A list of **texts** to compute embeddings for.
+            max_length (int): The **maximum length** for tokenization.
 
-        Returns
-        -------
-        torch.Tensor
-            Sparse **document representations**.
+        Returns:
+            torch.Tensor: Sparse **document representations**.
         """
         tokens = self.tokenizer(
             texts,
@@ -199,17 +172,12 @@ class SpladeReranker(BaseRanking):
         """
         Computes relevance scores between a **query** and **documents**.
 
-        Parameters
-        ----------
-        query : str
-            The **query** text.
-        documents : List[str]
-            A list of **document texts**.
+        Args:
+            query (str): The **query** text.
+            documents (List[str]): A list of **document texts**.
 
-        Returns
-        -------
-        List[float]
-            Relevance scores for each document.
+        Returns:
+            List[float]: Relevance scores for each document.
         """
         # Compute query embedding
         query_emb = self._compute_vector([query], max_length=self.query_max_length)[0]
@@ -234,15 +202,11 @@ class SpladeReranker(BaseRanking):
         """
         Detects the appropriate device for computation.
 
-        Parameters
-        ----------
-        device : str
-            Desired device ("auto", "cuda", or "cpu").
+        Args:
+            device (str): Desired device (`"auto"`, `"cuda"`, or `"cpu"`).
 
-        Returns
-        -------
-        str
-            The detected device.
+        Returns:
+            str: The detected device.
         """
         if device == "auto":
             return "cuda" if torch.cuda.is_available() else "cpu"

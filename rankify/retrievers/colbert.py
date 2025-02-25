@@ -18,7 +18,7 @@ import subprocess
 
 class ColBERTRetriever:
     """
-    Implements **ColBERT** `[3]`_, a **late interaction** retrieval model that efficiently scores and ranks 
+    Implements **ColBERT** `[3]_`, a **late interaction** retrieval model that efficiently scores and ranks 
     passages based on **token-wise interactions**.
 
     .. _[3]: https://arxiv.org/abs/2004.12832
@@ -26,65 +26,50 @@ class ColBERTRetriever:
     ColBERT enables **scalable and efficient document retrieval** by using **compressed representations** 
     and **approximate nearest neighbor search**. This retriever leverages Pyserini's ColBERT implementation.
 
-    References
-    ----------
-    .. [3] Khattab, O. & Zaharia, M. (2020). *ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT*.
-       Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval.
-       DOI: [https://arxiv.org/abs/2004.12832](https://arxiv.org/abs/2004.12832)
+    References:
+        - **Khattab, O. & Zaharia, M. (2020)**: *ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT*.
+          [Paper](https://arxiv.org/abs/2004.12832)
 
-    Attributes
-    ----------
-    model : str
-        Path or name of the ColBERT model to be used.
-    index_type : str
-        The type of index (`wiki` or `msmarco`) used for retrieval.
-    n_docs : int
-        Number of top documents to retrieve for each query.
-    tokenizer : SimpleTokenizer
-        Tokenizer for processing queries and answers.
-    index_config : dict
-        Configuration dictionary containing the index details.
-    passages_url : str
-        URL from which the passage dataset can be downloaded.
-    passages_file : str
-        Path to the local passage dataset file.
-    searcher : Searcher
-        ColBERT search engine initialized for retrieval.
-    passages : dict
-        Dictionary mapping passage IDs to their corresponding text and titles.
+    Attributes:
+        model (str): Path or identifier for the **ColBERT model**.
+        index_type (str): The type of index (`wiki` or `msmarco`) used for retrieval.
+        n_docs (int): Number of **top documents** to retrieve per query.
+        tokenizer (SimpleTokenizer): Tokenizer for processing queries and answers.
+        index_config (dict): Configuration dictionary containing **index details**.
+        passages_url (str): URL from which the **passage dataset** can be downloaded.
+        passages_file (str): Path to the **local passage dataset file**.
+        searcher (Searcher): **ColBERT search engine** initialized for retrieval.
+        passages (dict): Dictionary mapping **passage IDs** to their **text and titles**.
 
-    Examples
-    --------
-    Basic Usage:
+    Examples:
+        **Basic Usage:**
+        ```python
+        from rankify.dataset.dataset import Document, Question
+        from rankify.retrievers.retriever import Retriever
 
-    >>> from rankify.dataset.dataset import Document, Question
-    >>> from rankify.retrievers.retriever import Retriever
-    >>> retriever = Retriever(method='colbert' , model="colbert-ir/colbertv2.0", n_docs=5, index_type="wiki")
-    >>> documents = [Document(question=Question("Who wrote Hamlet?"))]
-    >>> retrieved_documents = retriever.retrieve(documents)
-    >>> print(retrieved_documents[0].contexts[0].text)
+        retriever = Retriever(method='colbert', model="colbert-ir/colbertv2.0", n_docs=5, index_type="wiki")
+        documents = [Document(question=Question("Who wrote Hamlet?"))]
+
+        retrieved_documents = retriever.retrieve(documents)
+        print(retrieved_documents[0].contexts[0].text)
+        ```
     """
     CACHE_DIR = os.environ.get("RERANKING_CACHE_DIR", "./cache")
 
     def __init__(self, model: str ="colbert-ir/colbertv2.0" , index_type: str = "wiki", n_docs: int = 10, batch_size=64):
         """
-        Initializes the ColBERTRetriever.
+        Initializes the **ColBERTRetriever**.
 
-        Parameters
-        ----------
-        model : str, optional
-            Path or identifier for the ColBERT model (default is `"colbert-ir/colbertv2.0"`).
-        index_type : str, optional
-            Type of index (`wiki` or `msmarco`) used for retrieval (default is `"wiki"`).
-        n_docs : int, optional
-            Number of top documents to retrieve per query (default is 10).
-        batch_size : int, optional
-            Number of queries processed in a single batch (default is 64).
+        Args:
+            model (str, optional): Path or **identifier for the ColBERT model** 
+                (default: `"colbert-ir/colbertv2.0"`).
+            index_type (str, optional): **Type of index** (`wiki` or `msmarco`) used for retrieval 
+                (default: `"wiki"`).
+            n_docs (int, optional): **Number of top documents** to retrieve per query (default: `10`).
+            batch_size (int, optional): **Number of queries processed in a single batch** (default: `64`).
 
-        Raises
-        ------
-        ValueError
-            If the specified index type is not supported.
+        Raises:
+            ValueError: If the specified **index type** is not supported.
         """
         self.model = model
         self.index_type = index_type
@@ -108,29 +93,23 @@ class ColBERTRetriever:
                 self.passages[pid] = {"text": text, "title": title}
     def extract_filename_from_url(self, url):
         """
-        Extracts the filename from a given URL, ignoring query parameters.
+        Extracts the **filename** from a given **URL**, ignoring query parameters.
 
-        Parameters
-        ----------
-        url : str
-            The URL to extract the filename from.
+        Args:
+            url (str): The **URL** to extract the filename from.
 
-        Returns
-        -------
-        str
-            The cleaned filename.
+        Returns:
+            str: The **cleaned filename**.
         """
         parsed_url = urlparse(url)
         filename = os.path.basename(parsed_url.path)  # Extract the path without query parameters
         return filename
     def _ensure_index_and_passages_downloaded(self):
         """
-        Ensures that the necessary ColBERT index and passage datasets are downloaded and extracted.
+        Ensures that the **ColBERT index** and **passage datasets** are **downloaded and extracted**.
 
-        Raises
-        ------
-        RuntimeError
-            If the index download or extraction fails.
+        Raises:
+            RuntimeError: If the **index download** or **extraction** fails.
         """
         index_folder = os.path.join(self.CACHE_DIR, "index", "colbert")
         os.makedirs(index_folder, exist_ok=True)
@@ -165,14 +144,11 @@ class ColBERTRetriever:
 
     def _download_file(self, url, save_path):
         """
-        Downloads a file from the specified URL.
+        Downloads a file from the **specified URL**.
 
-        Parameters
-        ----------
-        url : str
-            URL of the file to download.
-        save_path : str
-            Local path to save the downloaded file.
+        Args:
+            url (str): URL of the **file to download**.
+            save_path (str): Local path to **save the downloaded file**.
         """
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         response = requests.get(url, stream=True)
@@ -182,12 +158,10 @@ class ColBERTRetriever:
 
     def _extract_zip_files(self, folder):
         """
-        Extracts ZIP files from the specified folder.
+        Extracts **ZIP files** from the specified folder.
 
-        Parameters
-        ----------
-        folder : str
-            The folder containing ZIP files.
+        Args:
+            folder (str): The **folder** containing ZIP files.
         """
         zip_files = [f for f in os.listdir(folder) if f.endswith(".zip")]
         for zip_file in zip_files:
@@ -195,7 +169,7 @@ class ColBERTRetriever:
                 zip_ref.extractall(folder)
     def _extract_multi_part_zip(self, folder):
         """
-        Extracts multi-part ZIP files by combining and decompressing them.
+        Extracts **multi-part ZIP files** by **combining** and **decompressing** them.
         """
         zip_parts = sorted([f for f in os.listdir(folder) if f.startswith("wiki.zip.")], key=lambda x: int(x.split('.')[-1]))
         combined_zip_path = os.path.join(folder, "combined.zip")
@@ -222,7 +196,7 @@ class ColBERTRetriever:
 
     def _initialize_searcher(self):
         """
-        Initializes the ColBERT search engine.
+        Initializes the **ColBERT search engine** for document retrieval.
         """
         #print(self.index_config['passages_url'])
         #self.co
@@ -238,17 +212,13 @@ class ColBERTRetriever:
 
     def retrieve(self, documents: List[Document]) -> List[Document]:
         """
-        Retrieves relevant contexts for each document in the input list.
+        Retrieves **relevant contexts** for each **document** in the input list.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of Document objects containing queries.
+        Args:
+            documents (List[Document]): A list of **Document** objects containing queries.
 
-        Returns
-        -------
-        List[Document]
-            Documents with updated contexts after retrieval.
+        Returns:
+            List[Document]: Documents with updated **contexts** after retrieval.
         """
         # Iterate over each document and perform retrieval
         for i, document in enumerate(tqdm(documents, desc="Processing documents", unit="doc")):
