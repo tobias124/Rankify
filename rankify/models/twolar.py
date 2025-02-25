@@ -10,76 +10,62 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class TWOLAR(BaseRanking):
     """
-    Implements **TWOLAR** `[35]`_ , a **two-step LLM-augmented distillation method** for passage reranking.
+    Implements **TWOLAR**, a **two-step LLM-augmented distillation method** for passage reranking.
 
-    .. _[35]: https://arxiv.org/abs/2403.17759
 
-    TWOLAR improves passage ranking **via a distillation method** that first generates an LLM-augmented score 
-    and then refines it using a learned ranking model. 
 
-    References
-    ----------
-    .. [35] Baldelli et al. (2024). TWOLAR: A TWO-step LLM-Augmented Distillation Method for Passage Reranking.
+    TWOLAR enhances passage ranking by using a **two-step distillation approach**. It first generates 
+    an **LLM-augmented score** and then **refines it** using a trained ranking model.
 
-    Attributes
-    ----------
-    method : str
-        The reranking method name.
-    model_name : str
-        The name or path of the **TWOLAR** pretrained model.
-    device : torch.device
-        The computation device (**CPU/GPU**).
-    tokenizer : AutoTokenizer
-        The tokenizer for encoding queries and passages.
-    model : AutoModelForSeq2SeqLM
-        The **TWOLAR** reranking model.
-    batch_size : int
-        The batch size for inference.
-    max_length : int
-        The **maximum sequence length** for encoding passages.
-    score_strategy : str
-        The strategy used to compute ranking scores.
+    References:
+        - **Baldelli et al. (2024)**: *TWOLAR: A TWO-step LLM-Augmented Distillation Method for Passage Reranking*.
+          [Paper](https://arxiv.org/abs/2403.17759)
 
-    Examples
-    --------
-    Basic Usage:
+    Attributes:
+        method (str): The **reranking method name**.
+        model_name (str): The **name or path** of the pre-trained **TWOLAR** model.
+        device (torch.device): The computation device (**CPU/GPU**).
+        tokenizer (AutoTokenizer): The tokenizer for encoding **queries and passages**.
+        model (AutoModelForSeq2SeqLM): The **TWOLAR** reranking model.
+        batch_size (int): The **batch size** for inference.
+        max_length (int): The **maximum sequence length** for encoding passages.
+        score_strategy (str): The **scoring strategy** for ranking.
 
-    >>> from rankify.dataset.dataset import Document, Question, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> # Define a query and contexts
-    >>> question = Question("What are the effects of climate change?")
-    >>> contexts = [
-    >>>     Context(text="Climate change leads to rising sea levels and extreme weather.", id=0),
-    >>>     Context(text="Renewable energy helps reduce carbon emissions.", id=1),
-    >>>     Context(text="Deforestation accelerates global warming.", id=2),
-    >>> ]
-    >>> document = Document(question=question, contexts=contexts)
-    >>>
-    >>> # Initialize TWOLAR reranker
-    >>> model = Reranking(method='twolar', model_name='twolar-xl')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+    Examples:
+        **Basic Usage:**
+        ```python
+        from rankify.dataset.dataset import Document, Question, Context
+        from rankify.models.reranking import Reranking
+
+        # Define a query and contexts
+        question = Question("What are the effects of climate change?")
+        contexts = [
+            Context(text="Climate change leads to rising sea levels and extreme weather.", id=0),
+            Context(text="Renewable energy helps reduce carbon emissions.", id=1),
+            Context(text="Deforestation accelerates global warming.", id=2),
+        ]
+        document = Document(question=question, contexts=contexts)
+
+        # Initialize TWOLAR reranker
+        model = Reranking(method='twolar', model_name='twolar-xl')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
     """
 
     def __init__(self, method: str = None, model_name: str = None, api_key: str = None, **kwargs):
         """
         Initializes **TWOLAR** for reranking tasks.
 
-        Parameters
-        ----------
-        method : str, optional
-            The reranking method name.
-        model_name : str, optional
-            The name of the pretrained **TWOLAR** model.
-        api_key : str, optional
-            API key if required (default: None).
-        kwargs : dict
-            Additional parameters such as `batch_size`, `max_length`, and `score_strategy`.
+        Args:
+            method (str, optional): The **reranking method name**.
+            model_name (str, optional): The **name of the pre-trained TWOLAR model**.
+            api_key (str, optional): API key if required (**default: None**).
+            **kwargs: Additional parameters such as `batch_size`, `max_length`, and `score_strategy`.
         """
         self.method = method
         self.model_name = model_name or "Dundalia/TWOLAR-xl"
@@ -98,15 +84,11 @@ class TWOLAR(BaseRanking):
         """
         Reranks a list of **Document** instances using **TWOLAR**.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of **Document** instances to rerank.
+        Args:
+            documents (List[Document]): A list of **Document** instances to rerank.
 
-        Returns
-        -------
-        List[Document]
-            The reranked list of **Documents** with updated `reorder_contexts`.
+        Returns:
+            List[Document]: The reranked list of **Documents** with updated `reorder_contexts`.
         """
 
         for document in tqdm(documents, desc="Reranking Documents"):
@@ -136,19 +118,14 @@ class TWOLAR(BaseRanking):
 
     def _prepare_inputs(self, query: str, contexts: List[str]):
         """
-        Prepares the inputs for the model in **TWOLAR** format.
+        Prepares input features for the **TWOLAR model**.
 
-        Parameters
-        ----------
-        query : str
-            The query text.
-        contexts : List[str]
-            A list of passage texts.
+        Args:
+            query (str): The **query text**.
+            contexts (List[str]): A list of **context passages**.
 
-        Returns
-        -------
-        dict
-            Tokenized input features for the model.
+        Returns:
+            Dict[str, torch.Tensor]: Tokenized input features for the model.
         """
         inputs = [f"Query: {query} Document: {ctx} Relevant: " for ctx in contexts]
         features = self.tokenizer(
@@ -170,17 +147,13 @@ class TWOLAR(BaseRanking):
 
     def _inference(self, features):
         """
-        Performs inference on the given input features and returns logits.
+        Runs inference on the **TWOLAR model** to compute passage scores.
 
-        Parameters
-        ----------
-        features : dict
-            Tokenized input features.
+        Args:
+            features (Dict[str, torch.Tensor]): Tokenized input features.
 
-        Returns
-        -------
-        torch.Tensor
-            Logits from the model.
+        Returns:
+            torch.Tensor: Logits from the model.
         """
         with torch.no_grad():
             output = self.model(

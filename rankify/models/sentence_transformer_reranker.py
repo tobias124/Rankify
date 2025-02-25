@@ -8,67 +8,51 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class SentenceTransformerReranker(BaseRanking):
     """
-    Implements **SentenceTransformerReranker** `[21]`_ `[22]`_ `[23]`_ `[24]`_ `[25]`_ , a **dense retrieval reranking approach**
-    that uses **Sentence Transformers** for encoding queries and passages.
+    Implements **SentenceTransformerReranker**, 
+    a **dense retrieval reranking approach** using **Sentence Transformers** for encoding queries and passages.
 
-    .. _[21]: https://arxiv.org/abs/2112.07899
-    .. _[22]: https://arxiv.org/abs/2002.10957
-    .. _[23]: https://arxiv.org/abs/2108.08877
-    .. _[24]: https://arxiv.org/abs/2108.05540
-    .. _[25]: https://arxiv.org/abs/1908.10084
-
-    This method **leverages large dual encoders**, **distilled self-attention**, and **corpus-aware pre-training**
+    This method **leverages dual encoders**, **distilled self-attention**, and **corpus-aware pre-training**
     to enhance retrieval quality. It supports **Sentence-BERT (SBERT) embeddings**, **MiniLM**, and **Sentence-T5** for ranking.
 
-    References
-    ----------
-    .. [21] Ni et al. (2021). Large Dual Encoders are Generalizable Retrievers.
-    .. [22] Wang et al. (2020). MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression.
-    .. [23] Ni et al. (2021). Sentence-T5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models.
-    .. [24] Gao & Callan (2021). Unsupervised Corpus Aware Language Model Pre-training for Dense Passage Retrieval.
-    .. [25] Reimers (2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks.
+    References:
+        - **Ni et al. (2021)**: *Large Dual Encoders are Generalizable Retrievers*. [Paper](https://arxiv.org/abs/2112.07899)
+        - **Wang et al. (2020)**: *MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression*. [Paper](https://arxiv.org/abs/2002.10957)
+        - **Ni et al. (2021)**: *Sentence-T5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models*. [Paper](https://arxiv.org/abs/2108.08877)
+        - **Gao & Callan (2021)**: *Unsupervised Corpus Aware Language Model Pre-training for Dense Passage Retrieval*.  [Paper](https://arxiv.org/abs/2108.05540)
+        - **Reimers (2019)**: *Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*.  [Paper](https://arxiv.org/abs/1908.10084)
 
-    Attributes
-    ----------
-    method : str
-        The name of the reranking method.
-    model_name : str
-        The name or path of the **Sentence Transformer** model.
-    device : str
-        The device (CPU/GPU) used for inference.
-    query_prefix : str
-        Prefix to prepend to query texts.
-    document_prefix : str
-        Prefix to prepend to document texts.
-    normalize_embeddings : bool
-        Whether to **normalize embeddings** before computing similarity.
-    model : SentenceTransformer
-        The **Sentence Transformer** model used for reranking.
+    Attributes:
+        method (str): The name of the reranking method.
+        model_name (str): The name or path of the **Sentence Transformer** model.
+        device (str): The device (CPU/GPU) used for inference.
+        query_prefix (str): Prefix to prepend to query texts.
+        document_prefix (str): Prefix to prepend to document texts.
+        normalize_embeddings (bool): Whether to **normalize embeddings** before computing similarity.
+        model (SentenceTransformer): The **Sentence Transformer** model used for reranking.
 
-    Examples
-    --------
-    Basic Usage:
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question, Context
+        from rankify.models.reranking import Reranking
 
-    >>> from rankify.dataset.dataset import Document, Question, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> # Define a query and contexts
-    >>> question = Question("What are the benefits of machine learning?")
-    >>> contexts = [
-    >>>     Context(text="Machine learning improves decision-making and automation.", id=0),
-    >>>     Context(text="Quantum computing explores new paradigms in computation.", id=1),
-    >>>     Context(text="Deep learning allows neural networks to learn from large data.", id=2),
-    >>> ]
-    >>> document = Document(question=question, contexts=contexts)
-    >>>
-    >>> # Initialize SentenceTransformerReranker
-    >>> model = Reranking(method='sentence_transformer_reranker', model_name='all-MiniLM-L6-v2')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+        # Define a query and contexts
+        question = Question("What are the benefits of machine learning?")
+        contexts = [
+            Context(text="Machine learning improves decision-making and automation.", id=0),
+            Context(text="Quantum computing explores new paradigms in computation.", id=1),
+            Context(text="Deep learning allows neural networks to learn from large data.", id=2),
+        ]
+        document = Document(question=question, contexts=contexts)
+
+        # Initialize SentenceTransformerReranker
+        model = Reranking(method='sentence_transformer_reranker', model_name='all-MiniLM-L6-v2')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
     """
     def __init__(
         self,
@@ -79,20 +63,16 @@ class SentenceTransformerReranker(BaseRanking):
         """
         Initializes **Sentence Transformer Reranker** for reranking tasks.
 
-        Parameters
-        ----------
-        method : str
-            The name of the reranking method.
-        model_name : str
-            The name or path to the **Sentence Transformer** model.
-        kwargs : dict
-            Additional keyword arguments for customization:
-            - device: str (default="auto") - computation device.
-            - query_prefix: str (default="") - prefix for query texts.
-            - document_prefix: str (default="") - prefix for document texts.
-            - use_fp16: bool (default=True) - whether to use **FP16** inference.
-            - normalize_embeddings: bool (default=True) - whether to **normalize embeddings**.
-            - max_seq_length: int (default=512) - maximum tokenization length.
+        Args:
+            method (str): The name of the reranking method.
+            model_name (str): The name or path to the **Sentence Transformer** model.
+            **kwargs: Additional parameters:
+                - device (str, optional): The computation device (`"auto"`, `"cuda"`, `"cpu"`). Default is `"auto"`.
+                - query_prefix (str, optional): Prefix for query texts.
+                - document_prefix (str, optional): Prefix for document texts.
+                - use_fp16 (bool, optional): Whether to use **FP16** inference (default: `True`).
+                - normalize_embeddings (bool, optional): Whether to **normalize embeddings** (default: `True`).
+                - max_seq_length (int, optional): Maximum tokenization length (default: `512`).
         """
         super().__init__(method)
         self.device = self._detect_device(kwargs.get("device", "auto"))
@@ -113,15 +93,11 @@ class SentenceTransformerReranker(BaseRanking):
         """
         Reranks a list of **Document** instances based on **Sentence Transformer** similarity.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of `Document` instances to rerank.
+        Args:
+            documents (List[Document]): A list of `Document` instances to rerank.
 
-        Returns
-        -------
-        List[Document]
-            The documents with updated `reorder_contexts`.
+        Returns:
+            List[Document]: The documents with updated `reorder_contexts`.
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             document = self._rerank_document(document)
@@ -131,15 +107,11 @@ class SentenceTransformerReranker(BaseRanking):
         """
         Reranks a single document's contexts using the **Sentence Transformer** model.
 
-        Parameters
-        ----------
-        document : Document
-            A **Document** instance to rerank.
+        Args:
+            document (Document): A **Document** instance to rerank.
 
-        Returns
-        -------
-        Document
-            The reranked **Document** with updated `reorder_contexts`.
+        Returns:
+            Document: The reranked **Document** with updated `reorder_contexts`.
         """
         query = document.question.question  # Extract query text
         contexts = document.contexts
@@ -164,19 +136,14 @@ class SentenceTransformerReranker(BaseRanking):
 
     def _rerank(self, query: str, documents: List[str]) -> List[float]:
         """
-        Computes similarity scores between query and documents.
+        Computes similarity scores between a query and documents.
 
-        Parameters
-        ----------
-        query : str
-            The **query** text.
-        documents : List[str]
-            A list of **document texts**.
+        Args:
+            query (str): The **query** text.
+            documents (List[str]): A list of **document texts**.
 
-        Returns
-        -------
-        List[float]
-            Similarity scores for each document.
+        Returns:
+            List[float]: Similarity scores for each document.
         """
         # Add prefixes to query and documents
         query_text = self.query_prefix + query
@@ -203,15 +170,11 @@ class SentenceTransformerReranker(BaseRanking):
         """
         Detects the appropriate device for computation.
 
-        Parameters
-        ----------
-        device : str
-            Desired device ("auto", "cuda", or "cpu").
+        Args:
+            device (str): Desired device (`"auto"`, `"cuda"`, or `"cpu"`).
 
-        Returns
-        -------
-        str
-            The detected device.
+        Returns:
+            str: The detected device.
         """
         if device == "auto":
             return "cuda" if torch.cuda.is_available() else "cpu"
