@@ -11,83 +11,55 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class ColBERTReranker(BaseRanking):
     """
-    A reranking model that leverages the ColBERT (Contextualized Late Interaction over BERT) `[3]`_ `[4]`_ model to reorder document contexts based on semantic relevance.
+    A reranking model that leverages **ColBERT (Contextualized Late Interaction over BERT)** to reorder document contexts based on semantic relevance.
 
-    .. _[3]: https://arxiv.org/abs/2004.12832
+    ColBERT introduces a **late interaction mechanism** that efficiently compares query and document token embeddings to determine ranking scores.
 
-    .. _[4]: https://aclanthology.org/2022.naacl-main.272/
+    Attributes:
+        method (str, optional): The reranking method name.
+        model_name (str): The pretrained ColBERT model to be used for reranking.
+        api_key (str, optional): API key for external services (not used in this model).
+        device (str): The device on which the model runs (`cuda` if available, otherwise `cpu`).
+        batch_size (int): The batch size for encoding documents and queries (default: 32).
+        normalize (bool): Whether to normalize embeddings for cosine similarity computation (default: True).
+        query_token (str): Special token used to distinguish query embeddings (default: `[unused0]`).
+        document_token (str): Special token used to distinguish document embeddings (default: `[unused1]`).
+        tokenizer (transformers.PreTrainedTokenizer): The tokenizer used to process queries and contexts.
+        model (ColBERTModel): The ColBERT model for generating contextual embeddings.
+        query_max_length (int): The maximum token length for queries (default: 32).
+        doc_max_length (int): The maximum token length for documents (determined by model constraints).
 
-    ColBERT introduces a late interaction mechanism that efficiently compares query and document token embeddings to determine ranking scores.
+    References:
+        - **Khattab, Omar, and Matei Zaharia.** *ColBERT: Efficient and effective passage search via contextualized late interaction over BERT.*  
+          [Paper](https://arxiv.org/abs/2004.12832)
+        - **Santhanam, Keshav, et al.** *Colbertv2: Effective and efficient retrieval via lightweight late interaction.*  
+          [Paper](https://aclanthology.org/2022.naacl-main.272/)
 
-    References
-    ----------
-    .. [3] Khattab, Omar, and Matei Zaharia. "ColBERT: Efficient and effective passage search via contextualized late interaction over BERT." arXiv preprint arXiv:2004.12832 (2020).
-    
-    .. [4] Santhanam, Keshav, Omar Khattab, Jon Saad-Falcon, Christopher Potts, and Matei Zaharia. "Colbertv2: Effective and efficient retrieval via lightweight late interaction." arXiv preprint arXiv:2112.01488 (2021).
-    
-    Attributes
-    ----------
-    method : str, optional
-        The reranking method name.
-    model_name : str
-        The pretrained ColBERT model to be used for reranking.
-    api_key : str, optional
-        API key for external services (not used in this model).
-    device : str
-        The device on which the model runs (`cuda` if available, otherwise `cpu`).
-    batch_size : int
-        The batch size for encoding documents and queries (default: 32).
-    normalize : bool
-        Whether to normalize embeddings for cosine similarity computation (default: True).
-    query_token : str
-        Special token used to distinguish query embeddings (default: `[unused0]`).
-    document_token : str
-        Special token used to distinguish document embeddings (default: `[unused1]`).
-    tokenizer : transformers.PreTrainedTokenizer
-        The tokenizer used to process queries and contexts.
-    model : ColBERTModel
-        The ColBERT model for generating contextual embeddings.
-    query_max_length : int
-        The maximum token length for queries (default: 32).
-    doc_max_length : int
-        The maximum token length for documents (determined by model constraints).
+    See Also:
+        - `Reranking`: Main interface for reranking models, including `ColBERTReranker`.
 
-    See Also
-    --------
-    Reranking : Main interface for reranking models, including `ColBERTReranker`.
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question, Answer, Context
+        from rankify.models.reranking import Reranking
+        
+        question = Question("When did Thomas Edison invent the light bulb?")
+        answers = Answer(["1879"])
+        contexts = [
+            Context(text="Lightning strike at Seoul National University", id=1),
+            Context(text="Thomas Edison invented the light bulb in 1879", id=4),
+        ]
+        document = Document(question=question, answers=answers, contexts=contexts)
 
-    Examples
-    --------
-    Basic usage with the `Reranking` interface:
+        # Initialize Reranking with ColBERTReranker
+        model = Reranking(method='colbert_ranker', model_name='Colbert')
+        model.rank([document])
 
-    >>> from rankify.dataset.dataset import Document, Question, Answer, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> question = Question("When did Thomas Edison invent the light bulb?")
-    >>> answers = Answer(["1879"])
-    >>> contexts = [
-    >>>     Context(text="Lightning strike at Seoul National University", id=1),
-    >>>     Context(text="Thomas Edison tried to invent a device for cars but failed", id=2),
-    >>>     Context(text="Coffee is good for diet", id=3),
-    >>>     Context(text="Thomas Edison invented the light bulb in 1879", id=4),
-    >>>     Context(text="Thomas Edison worked with electricity", id=5),
-    >>> ]
-    >>> document = Document(question=question, answers=answers, contexts=contexts)
-    >>>
-    >>> # Initialize Reranking with ColBERTReranker
-    >>> model = Reranking(method='colbert_ranker', model_name='Colbert')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
-
-    Notes
-    -----
-    - ColBERT employs late interaction to efficiently compare query and passage embeddings.
-    - The model supports batch processing for efficient reranking.
-    - The reranker is integrated into the `Reranking` class, meaning users should instantiate `Reranking` instead of `ColBERTReranker` directly.
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
     """
     def __init__(
         self,
@@ -95,7 +67,21 @@ class ColBERTReranker(BaseRanking):
         model_name: str = None,
         api_key: str = None,
         **kwargs,
-    ):
+    ):        
+        """
+        Initializes a **ColBERTReranker** instance.
+
+        Args:
+            method (str, optional): The reranking method name.
+            model_name (str): The pretrained ColBERT model.
+            api_key (str, optional): API key (not used).
+            **kwargs: Additional parameters.
+
+        Example:
+            ```python
+            model = ColBERTReranker(method='colbert_ranker', model_name='Colbert')
+            ```
+        """
         self.method = method
         self.model_name = model_name
         self.api_key = api_key
@@ -118,17 +104,18 @@ class ColBERTReranker(BaseRanking):
 
     def rank(self, documents: List[Document]) -> List[Document]:
         """
-        Reranks each document's contexts using ColBERT scoring and updates `reorder_contexts`.
+        Reranks each document's contexts using **ColBERT scoring** and updates `reorder_contexts`.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of Document instances to rerank.
+        Args:
+            documents (List[Document]): A list of Document instances to rerank.
 
-        Returns
-        -------
-        List[Document]
-            Documents with updated `reorder_contexts` after reranking.
+        Returns:
+            List[Document]: Documents with updated `reorder_contexts`.
+
+        Example:
+            ```python
+            reranked_documents = model.rank(documents)
+            ```
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             query = document.question.question
@@ -145,19 +132,14 @@ class ColBERTReranker(BaseRanking):
     @torch.inference_mode()
     def _colbert_rank(self, query: str, contexts: List[str]) -> List[float]:
         """
-        Computes relevance scores for a query and its associated contexts.
+        Computes **relevance scores** for a query and its associated contexts.
 
-        Parameters
-        ----------
-        query : str
-            The query string.
-        contexts : List[str]
-            A list of context strings.
+        Args:
+            query (str): The query string.
+            contexts (List[str]): A list of context strings.
 
-        Returns
-        -------
-        List[float]
-            Relevance scores for each context.
+        Returns:
+            List[float]: Relevance scores for each context.
         """
         query_encoding = self._query_encode([query])
         documents_encoding = self._document_encode(contexts)
@@ -176,13 +158,28 @@ class ColBERTReranker(BaseRanking):
         return scores
 
     def _query_encode(self, query: list[str]):
+        """
+        Encodes the query using **ColBERT tokenization**.
+
+        Args:
+            query (List[str]): List containing a single query.
+
+        Returns:
+            Dict[str, torch.Tensor]: Tokenized query encoding.
+        """
         return self._encode(
             query, self.query_token_id, max_length=self.doc_max_length, is_query=True
         )
 
     def _document_encode(self, documents: list[str]):
         """
-        Encodes document passages while ensuring alignment with model constraints.
+        Encodes document passages while ensuring alignment with **ColBERT constraints**.
+
+        Args:
+            documents (List[str]): List of document texts.
+
+        Returns:
+            Dict[str, torch.Tensor]: Tokenized document encoding.
         """
         tokenized_doc_lengths = [
             len(
@@ -212,7 +209,16 @@ class ColBERTReranker(BaseRanking):
         is_query: bool = False,
     ):
         """
-        Tokenizes and encodes text while inserting ColBERT-specific tokens.
+        Tokenizes and encodes text while inserting **ColBERT-specific tokens**.
+
+        Args:
+            texts (List[str]): List of input texts.
+            insert_token_id (int): Special token ID for ColBERT.
+            max_length (int): Maximum sequence length.
+            is_query (bool, optional): Whether encoding is for a query.
+
+        Returns:
+            Dict[str, torch.Tensor]: Tokenized and padded encoding.
         """
         encoding = self.tokenizer(
             texts,
@@ -266,7 +272,13 @@ class ColBERTReranker(BaseRanking):
 
     def _to_embs(self, encoding) -> torch.Tensor:
         """
-        Converts tokenized inputs into embeddings using ColBERT.
+        Converts tokenized inputs into **ColBERT embeddings**.
+
+        Args:
+            encoding (Dict[str, torch.Tensor]): Tokenized input encoding.
+
+        Returns:
+            torch.Tensor: ColBERT embeddings.
         """
         with torch.inference_mode():
             batched_embs = []

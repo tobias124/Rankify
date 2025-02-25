@@ -1,3 +1,3 @@
-# FlashRank Model
+# Flash Reranker 
 
 ::: rankify.models.flashrank

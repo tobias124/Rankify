@@ -35,6 +35,26 @@ nav:
           - UPR: api/rerankings/upr.md
           - FlashRank: api/rerankings/flashrank.md
           - RankGPT: api/rerankings/rankgpt.md
+          - Blender Reranker: api/rerankings/blender.md
+          - ColBERT Reranker: api/rerankings/colbert_ranker.md
+          - EchoRank: api/rerankings/echo_rank.md
+          - First Reranker: api/rerankings/first_ranker.md
+          - Incontext Reranker: api/rerankings/incontext_reranker.md
+          - InRank Reranker: api/rerankings/inrank.md
+          - Listt5 Reranker: api/rerankings/listt5.md
+          - Lit5 Reranker: api/rerankings/lit5.md
+          - LLM Layerwise Reranker: api/rerankings/llm_layerwise_ranker.md
+          - LLM2vec Reranker: api/rerankings/llm2vec_reranker.md
+          - Monobert Reranker: api/rerankings/monobert.md
+          - Monot5 Reranker: api/rerankings/monot5.md
+          - Rank Fid Reranker: api/rerankings/rank_fid.md
+          - Rankt5 Reranker: api/rerankings/rankt5.md
+          - Sentence Transformer Reranker: api/rerankings/sentence_transformer_reranker.md
+          - splade Reranker: api/rerankings/splade_reranker.md
+          - Transformer Reranker: api/rerankings/transformer_reranker.md
+          - twolar Reranker: api/rerankings/twolar.md
+          - Vicuna Reranker: api/rerankings/vicuna_reranker.md
+          - Zephyr Reranker: api/rerankings/zephyr_reranker.md
       - Generators:
           - Overview: api/generators/index.md
           - T5 Generator: api/generators/t5_generator.md

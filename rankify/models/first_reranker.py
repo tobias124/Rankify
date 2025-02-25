@@ -9,97 +9,83 @@ from tqdm import tqdm  # Import tqdm for progress tracking
     
 class FirstModelReranker(BaseRanking):
     """
-    Implements FIRST: Faster Improved Listwise Reranking with Single Token Decoding `[6]`_.
+    Implements **FIRST: Faster Improved Listwise Reranking with Single Token Decoding**.
 
-    .. _[6]: https://arxiv.org/abs/2406.15657
+    
 
-    FIRST is a listwise reranking model that uses an optimized window-based decoding approach
-    to efficiently rank passages with single-token predictions rather than full-text decoding.
+    **FIRST** is a listwise reranking model that employs a **window-based decoding approach** 
+    to efficiently rank passages using **single-token predictions** instead of full-text generation.
 
-    This method allows scalable and efficient reranking, significantly improving speed and accuracy
-    while maintaining high retrieval effectiveness.
+    This **scalable and efficient reranking method** improves ranking speed and accuracy while 
+    maintaining high retrieval effectiveness.
 
-    References
-    ----------
-    .. [6] Gangi Reddy, R., Doo, J., Xu, Y., Sultan, M. A., Swain, D., Sil, A., & Ji, H. (2024). FIRST: Faster Improved Listwise Reranking with Single Token Decoding. Proceedings of EMNLP 2024, pages 8642–8652.
+    Attributes:
+        method (str, optional): The reranking method name.
+        model_name (str): The name of the model used for reranking.
+        api_key (str, optional): API key for accessing remote models (if applicable).
+        context_size (int): Maximum input length for the reranking model (default: `4096` tokens).
+        top_k (int): Number of **top-ranked passages** retained after reranking (default: `20`).
+        window_size (int): Size of the **sliding window** used in listwise ranking (default: `9`).
+        step_size (int): Step size for moving the **ranking window** (default: `9`).
+        use_logits (bool): Whether to use **logits-based scoring** (default: `False`).
+        use_alpha (bool): Whether to apply **adaptive alpha scaling** in ranking (default: `False`).
+        batched (bool): Whether to use **batched ranking** for efficiency (default: `False`).
+        device (str): Computing device (`"cuda"` if available, otherwise `"cpu"`).
+        agent (RankListwiseOSLLM): The ranking model instance used for passage ranking.
 
-    Attributes
-    ----------
-    method : str, optional
-        The reranking method name.
-    model_name : str
-        The name of the model used for reranking.
-    api_key : str, optional
-        API key for accessing remote models (if applicable).
-    context_size : int
-        Maximum input length for the reranking model (default: `4096` tokens).
-    top_k : int
-        Number of top-ranked passages to retain after reranking (default: `20`).
-    window_size : int
-        Window size for the **sliding window decoding approach** (default: `9`).
-    step_size : int
-        Step size for moving the window during listwise ranking (default: `9`).
-    use_logits : bool
-        Whether to use **logits-based scoring** instead of rank ordering (default: `False`).
-    use_alpha : bool
-        Whether to apply **adaptive alpha scaling** in ranking (default: `False`).
-    batched : bool
-        Whether to use **batched ranking** for efficiency (default: `False`).
-    device : str
-        The computing device (`"cuda"` if available, otherwise `"cpu"`).
-    agent : RankListwiseOSLLM
-        The ranking model instance used for passage ranking.
+    References:
+        - **Gangi Reddy et al.** *FIRST: Faster Improved Listwise Reranking with Single Token Decoding*  
+          [Paper](https://arxiv.org/abs/2406.15657)
 
-    See Also
-    --------
-    Reranking : Main interface for reranking models, including `FirstModelReranker`.
+    See Also:
+        - `Reranking`: Main interface for reranking models, including `FirstModelReranker`.
 
-    Examples
-    --------
-    Basic usage with the `Reranking` class:
+    Examples:
+        **Basic usage with the `Reranking` class:**
+        ```python
+        from rankify.dataset.dataset import Document, Question, Answer, Context
+        from rankify.models.reranking import Reranking
 
-    >>> from rankify.dataset.dataset import Document, Question, Answer, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> question = Question("Who invented the first light bulb?")
-    >>> answers = Answer(["Thomas Edison is credited with inventing the first practical light bulb."])
-    >>> contexts = [
-    >>>     Context(text="Nikola Tesla contributed to AC electricity.", id=0),
-    >>>     Context(text="Thomas Edison patented the first practical light bulb.", id=1),
-    >>>     Context(text="Light bulbs use tungsten filaments.", id=2),
-    >>>     Context(text="The Wright brothers invented the airplane.", id=3),
-    >>> ]
-    >>> document = Document(question=question, answers=answers, contexts=contexts)
-    >>>
-    >>> # Initialize Reranking with FirstModelReranker
-    >>> model = Reranking(method='first_ranker', model_name='base')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+        question = Question("Who invented the first light bulb?")
+        answers = Answer(["Thomas Edison is credited with inventing the first practical light bulb."])
+        contexts = [
+            Context(text="Nikola Tesla contributed to AC electricity.", id=0),
+            Context(text="Thomas Edison patented the first practical light bulb.", id=1),
+            Context(text="Light bulbs use tungsten filaments.", id=2),
+            Context(text="The Wright brothers invented the airplane.", id=3),
+        ]
+        document = Document(question=question, answers=answers, contexts=contexts)
 
-    Notes
-    -----
-    - FIRST uses a windowed approach to process large query-document pairs efficiently.
-    - Integrates into the `Reranking` class, so use `Reranking` instead of `FirstModelReranker` directly.
-    - Uses single-token decoding for fast and effective ranking.
+        # Initialize Reranking with FirstModelReranker
+        model = Reranking(method='first_ranker', model_name='base')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
+
+    Notes:
+        - **FIRST** uses a **windowed approach** to efficiently process large query-document pairs.
+        - Integrated into the `Reranking` class, meaning users should use `Reranking` instead of `FirstModelReranker` directly.
+        - Uses **single-token decoding** to achieve **fast and effective ranking**.
     """
+
     def __init__(self, method: str = None, model_name: str = None, api_key: str = None, **kwargs):
         """
         Initializes the FIRST model reranker.
 
-        Parameters
-        ----------
-        method : str, optional
-            The reranking method name.
-        model_name : str
-            The name of the reranking model to be used.
-        api_key : str, optional
-            API key for remote access (if applicable).
-        kwargs : dict
-            Additional parameters for model configuration.
+        Args:
+            method (str, optional): The reranking method name.
+            model_name (str): The name of the reranking model.
+            api_key (str, optional): API key for remote access (if applicable).
+            **kwargs: Additional parameters for model configuration.
+
+        Example:
+            ```python
+            model = FirstModelReranker(method='first_ranker', model_name='base')
+            ```
         """
         self.method = method
         self.model_name = model_name
@@ -116,12 +102,15 @@ class FirstModelReranker(BaseRanking):
 
     def _initialize_agent(self):
         """
-        Initializes the RankListwiseOSLLM agent for reranking with the specified model and parameters.
+        Initializes the **RankListwiseOSLLM** agent for reranking with the specified model and parameters.
 
-        Returns
-        -------
-        RankListwiseOSLLM
-            A listwise reranking model instance.
+        Returns:
+            RankListwiseOSLLM: A listwise reranking model instance.
+
+        Example:
+            ```python
+            agent = model._initialize_agent()
+            ```
         """
         return RankListwiseOSLLM(
             model=self.model_name,
@@ -139,22 +128,21 @@ class FirstModelReranker(BaseRanking):
 
     def rank(self, documents: List[Document]) -> List[Document]:
         """
-        Reranks a list of documents using the FIRST reranking model.
+        Reranks a list of documents using the **FIRST reranking model**.
 
-        Parameters
-        ----------
-        documents : list of Document
-            A list of Document instances to rerank.
+        Args:
+            documents (List[Document]): A list of `Document` instances to rerank.
 
-        Returns
-        -------
-        list of Document
-            Documents with updated `reorder_contexts` after reranking.
+        Returns:
+            List[Document]: Documents with updated `reorder_contexts` after reranking.
 
-        Raises
-        ------
-        ValueError
-            If no contexts are provided for reranking.
+        Raises:
+            ValueError: If no contexts are provided for reranking.
+
+        Example:
+            ```python
+            reranked_docs = model.rank(documents)
+            ```
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             self._rerank_document(document)
@@ -162,23 +150,23 @@ class FirstModelReranker(BaseRanking):
 
     def _rerank_document(self, document: Document):
         """
-        Applies the FIRST reranking model to reorder the document contexts.
+        Applies the **FIRST reranking model** to reorder the document contexts.
 
-        Parameters
-        ----------
-        document : Document
-            A Document instance to be reranked.
+        Args:
+            document (Document): A `Document` instance to be reranked.
 
-        Returns
-        -------
-        None
-            Updates `document.reorder_contexts` in place.
+        Returns:
+            None: Updates `document.reorder_contexts` in place.
+
+        Example:
+            ```python
+            model._rerank_document(document)
+            ```
         """
         result = Result(
             query=document.question.question,
             hits=[{"docid": ctx.id, "content": ctx.text , "rank":  0, 'score':0} for ctx in document.contexts]
         )
-        #print(result)
         # Perform reranking using `FirstReranker`
         reranker = FirstReranker(agent=self.agent)
         reranked_result = reranker.rerank(
