@@ -10,73 +10,58 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class MonoBERT(BaseRanking):
     """
-    Implements MonoBERT Reranking `[16]`_, a BERT-based multi-stage ranking approach
-    for improving document retrieval in information retrieval tasks.
-
-    .. _[16]: https://arxiv.org/abs/1910.14424
-
-    This method uses a pretrained MonoBERT model to score query-passage relevance 
-    and reorder retrieved documents based on learned representations.
-
-    References
-    ----------
-    .. [16] Nogueira et al. (2019): Multi-stage Document Ranking with BERT.
+    Implements **MonoBERT Reranking**, a **BERT-based multi-stage ranking approach**
+    for **improving document retrieval** in information retrieval tasks.
 
 
-    Attributes
-    ----------
-    method : str
-        The name of the reranking method.
-    model_name : str
-        The name of the pre-trained MonoBERT model used for reranking.
-    device : torch.device
-        The device (CPU/GPU) on which the model runs.
-    use_amp : bool
-        Whether to use **Automatic Mixed Precision (AMP)** for faster inference.
-    model : AutoModelForSequenceClassification
-        The pretrained MonoBERT model for reranking.
-    tokenizer : AutoTokenizer
-        The tokenizer for MonoBERT.
+    MonoBERT **re-ranks retrieved documents** based on query-passage **relevance scores** using a **pretrained BERT model**.
 
-    Examples
-    --------
-    Basic Usage:
+    References:
+        - **Nogueira et al. (2019)**: *Multi-stage Document Ranking with BERT*.
+          [Paper](https://arxiv.org/abs/1910.14424)
 
-    >>> from rankify.dataset.dataset import Document, Question, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> # Define a query and contexts
-    >>> question = Question("What are the health benefits of green tea?")
-    >>> contexts = [
-    >>>     Context(text="Green tea contains antioxidants that promote heart health.", id=0),
-    >>>     Context(text="Excessive caffeine intake can cause insomnia.", id=1),
-    >>>     Context(text="Green tea consumption is linked to improved metabolism.", id=2),
-    >>> ]
-    >>> document = Document(question=question, contexts=contexts)
-    >>>
-    >>> # Initialize MonoBERT Reranker
-    >>> model = Reranking(method='monobert', model_name='monobert-large')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
-    """    
+    Attributes:
+        method (str): The **name of the reranking method**.
+        model_name (str): The **name of the pre-trained MonoBERT model** used for reranking.
+        device (torch.device): The **device (CPU/GPU)** on which the model runs.
+        use_amp (bool): Whether to use **Automatic Mixed Precision (AMP)** for **faster inference**.
+        model (AutoModelForSequenceClassification): The **pretrained MonoBERT model** for reranking.
+        tokenizer (AutoTokenizer): The **tokenizer** for MonoBERT.
+
+    Examples:
+        ```python
+        from rankify.dataset.dataset import Document, Question, Context
+        from rankify.models.reranking import Reranking
+
+        # Define a query and contexts
+        question = Question("What are the health benefits of green tea?")
+        contexts = [
+            Context(text="Green tea contains antioxidants that promote heart health.", id=0),
+            Context(text="Excessive caffeine intake can cause insomnia.", id=1),
+            Context(text="Green tea consumption is linked to improved metabolism.", id=2),
+        ]
+        document = Document(question=question, contexts=contexts)
+
+        # Initialize MonoBERT Reranker
+        model = Reranking(method='monobert', model_name='monobert-large')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
+    """ 
     def __init__(self, method: str = None, model_name: str = None, api_key: str = None, **kwargs):
         """
-        Initializes MonoBERT for reranking tasks.
+        Initializes **MonoBERT** for reranking tasks.
 
-        Parameters
-        ----------
-        method : str, optional
-            The reranking method name.
-        model_name : str, optional
-            The name of the pretrained MonoBERT model (default: `"castorini/monobert-large-msmarco"`).
-        api_key : str, optional
-            Not used here but maintained for framework consistency.
-        kwargs : dict
-            Additional parameters such as `use_amp` for mixed precision inference.
+        Args:
+            method (str, optional): The **reranking method name**.
+            model_name (str, optional): The **name of the pretrained MonoBERT model** 
+                (default: `"castorini/monobert-large-msmarco"`).
+            api_key (str, optional): **Not used**, but included for framework consistency.
+            kwargs (dict): Additional parameters such as `use_amp` for **mixed precision inference**.
         """
         self.method = method
         self.model_name = model_name or "castorini/monobert-large-msmarco"
@@ -88,17 +73,13 @@ class MonoBERT(BaseRanking):
     @staticmethod
     def get_model(pretrained_model_name_or_path: str) -> AutoModelForSequenceClassification:
         """
-        Loads the MonoBERT model.
+        Loads the **MonoBERT model**.
 
-        Parameters
-        ----------
-        pretrained_model_name_or_path : str
-            Path to the pretrained MonoBERT model.
+        Args:
+            pretrained_model_name_or_path (str): Path to the **pretrained MonoBERT model**.
 
-        Returns
-        -------
-        AutoModelForSequenceClassification
-            The MonoBERT model.
+        Returns:
+            AutoModelForSequenceClassification: The **MonoBERT model**.
         """
         return AutoModelForSequenceClassification.from_pretrained(pretrained_model_name_or_path).to(
             torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -107,34 +88,26 @@ class MonoBERT(BaseRanking):
     @staticmethod
     def get_tokenizer(pretrained_model_name_or_path: str = "bert-large-uncased") -> AutoTokenizer:
         """
-        Loads the tokenizer for MonoBERT.
+        Loads the **tokenizer** for MonoBERT.
 
-        Parameters
-        ----------
-        pretrained_model_name_or_path : str
-            Path to the pretrained tokenizer.
+        Args:
+            pretrained_model_name_or_path (str): Path to the **pretrained tokenizer**.
 
-        Returns
-        -------
-        AutoTokenizer
-            The tokenizer.
+        Returns:
+            AutoTokenizer: The **MonoBERT tokenizer**.
         """
         return AutoTokenizer.from_pretrained(pretrained_model_name_or_path, use_fast=False)
 
     @torch.no_grad()
     def rank(self, documents: List[Document]) -> List[Document]:
         """
-        Reranks each document's contexts using MonoBERT and updates `reorder_contexts`.
+        Reranks each document's **contexts** using **MonoBERT** and updates `reorder_contexts`.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of `Document` instances to rerank.
+        Args:
+            documents (List[Document]): A list of **Document** instances to rerank.
 
-        Returns
-        -------
-        List[Document]
-            Documents with updated `reorder_contexts` after reranking.
+        Returns:
+            List[Document]: Documents with updated **`reorder_contexts`** after reranking.
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             query = document.question.question

@@ -13,62 +13,53 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class RankFiDDistill(ListwiseRankLLM):
     """
-    Implements **RankFiDDistill** `[18]`_, a **listwise ranking approach** leveraging 
+    Implements **RankFiDDistill**, a **listwise ranking approach** leveraging 
     **Fusion-in-Decoder (FiD)** for effective **retriever-reader knowledge distillation**.
 
-    .. _[18]: https://arxiv.org/abs/2012.04584
 
-    This method **uses a FiD-based model** to score query-passage relevance 
-    and **reorder retrieved documents** based on learned representations.
 
-    References
-    ----------
-    .. [18] Izacard, G. & Grave, E. (2020). Distilling Knowledge from Reader to Retriever for Question Answering.
- 
+    RankFiDDistill utilizes **Fusion-in-Decoder (FiD)** for **reranking retrieved passages** 
+    using **multi-document cross-attention**. The model is optimized for **ranking efficiency** 
+    and **distilling knowledge** from reader-based models.
 
-    Attributes
-    ----------
-    model : str
-        The name or path of the pre-trained **RankFiDDistill** model.
-    context_size : int
-        The **maximum number of passages** used for ranking.
-    prompt_mode : PromptMode
-        Defines the **prompt template** for FiD.
-    num_few_shot_examples : int
-        Number of **few-shot examples** for ranking.
-    window_size : int
-        The **window size** for ranking multiple documents at a time.
-    step_size : int
-        The **step size** for sliding window ranking.
-    precision : str
-        Precision mode (`float32`, `bfloat16`, `float16`).
-    device : str
-        The device to use (`cuda` or `cpu`).
-    
-    Examples
-    --------
-    Basic Usage:
+    References:
+        - **Izacard, G. & Grave, E. (2020)**: *Distilling Knowledge from Reader to Retriever for Question Answering*.
+          [Paper](https://arxiv.org/abs/2012.04584)
 
-    >>> from rankify.dataset.dataset import Document, Question, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> # Define a query and contexts
-    >>> question = Question("What are the effects of climate change?")
-    >>> contexts = [
-    >>>     Context(text="Climate change leads to rising sea levels.", id=0),
-    >>>     Context(text="Artificial intelligence is transforming industries.", id=1),
-    >>>     Context(text="Global temperatures are increasing due to CO2 emissions.", id=2),
-    >>> ]
-    >>> document = Document(question=question, contexts=contexts)
-    >>>
-    >>> # Initialize RankFiDScore Reranker
-    >>> model = Reranking(method='lit5dist', model_name='LiT5-Distill-base')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+    Attributes:
+        model (str): The **name or path** of the pre-trained **RankFiDDistill** model.
+        context_size (int): The **maximum number of passages** used for ranking.
+        prompt_mode (PromptMode): Defines the **prompt template** for FiD.
+        num_few_shot_examples (int): Number of **few-shot examples** for ranking.
+        window_size (int): The **window size** for ranking multiple documents at a time.
+        step_size (int): The **step size** for sliding window ranking.
+        precision (str): Precision mode (`"float32"`, `"bfloat16"`, `"float16"`).
+        device (str): The device to use (`"cuda"` or `"cpu"`).
+        batched (bool): Whether to **enable batch processing**.
+
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question, Context
+        from rankify.models.reranking import Reranking
+
+        # Define a query and contexts
+        question = Question("What are the effects of climate change?")
+        contexts = [
+            Context(text="Climate change leads to rising sea levels.", id=0),
+            Context(text="Artificial intelligence is transforming industries.", id=1),
+            Context(text="Global temperatures are increasing due to CO2 emissions.", id=2),
+        ]
+        document = Document(question=question, contexts=contexts)
+
+        # Initialize RankFiDDistill Reranker
+        model = Reranking(method='lit5dist', model_name='LiT5-Distill-base')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
     """
     def _post_init(self):
         self._to_precision(self._precision)
@@ -102,26 +93,16 @@ class RankFiDDistill(ListwiseRankLLM):
         """
         Initializes RankFiDDistill for reranking.
 
-        Parameters
-        ----------
-        model : str
-            Path or name of the **RankFiDDistill** model.
-        context_size : int, optional
-            Number of passages to use for ranking.
-        prompt_mode : PromptMode, optional
-            Defines the **FiD prompt mode**.
-        num_few_shot_examples : int, optional
-            Number of **few-shot examples** used for ranking.
-        window_size : int, optional
-            Defines the **window size** for ranking.
-        step_size : int, optional
-            Defines the **step size** for sliding window ranking.
-        precision : str, optional
-            Precision format (`float32`, `bfloat16`, `float16`).
-        device : str, optional
-            The device for computation (`cuda` or `cpu`).
-        batched : bool, optional
-            Whether to use **batch processing**.
+        Args:
+            model (str): Path or name of the **RankFiDDistill** model.
+            context_size (int, optional): Number of passages used for ranking.
+            prompt_mode (PromptMode, optional): Defines the **FiD prompt mode**.
+            num_few_shot_examples (int, optional): Number of **few-shot examples** used for ranking.
+            window_size (int, optional): Defines the **window size** for ranking.
+            step_size (int, optional): Defines the **step size** for sliding window ranking.
+            precision (str, optional): Precision format (`"float32"`, `"bfloat16"`, `"float16"`).
+            device (str, optional): The device for computation (`"cuda"` or `"cpu"`).
+            batched (bool, optional): Whether to use **batch processing**.
         """
         super().__init__(
             model=model,
@@ -202,23 +183,15 @@ class RankFiDDistill(ListwiseRankLLM):
         """
         Reranks documents in batch using RankFiDDistill.
 
-        Parameters
-        ----------
-        requests : List[Request]
-            List of requests containing queries and candidate passages.
-        rank_start : int, optional
-            The starting rank index.
-        rank_end : int, optional
-            The ending rank index.
-        shuffle_candidates : bool, optional
-            Whether to shuffle candidate passages before ranking.
-        logging : bool, optional
-            Enable logging for debugging.
+        Args:
+            requests (List[Request]): List of **query and candidate passages** for ranking.
+            rank_start (int, optional): The **starting rank index**.
+            rank_end (int, optional): The **ending rank index**.
+            shuffle_candidates (bool, optional): Whether to **shuffle candidates** before ranking.
+            logging (bool, optional): Enable logging for debugging.
 
-        Returns
-        -------
-        List[Result]
-            The reranked documents.
+        Returns:
+            List[Result]: **Ranked list of documents**.
         """
         top_k_retrieve: int = kwargs.get("top_k_retrieve", 100)
 
@@ -298,15 +271,11 @@ class RankFiDDistill(ListwiseRankLLM):
         """
         Runs RankFiDDistill to generate ranking predictions.
 
-        Parameters
-        ----------
-        prompts : List[Dict[str, str]]
-            List of query-context pairs formatted for FiD ranking.
+        Args:
+            prompts (List[Dict[str, str]]): **List of query-context pairs** formatted for FiD ranking.
 
-        Returns
-        -------
-        Tuple[str, int]
-            Ranked list of passages.
+        Returns:
+            Tuple[str, int]: **Ranked list of passages**.
         """
 
         return self._run_llm_by_length_unified(
@@ -401,61 +370,52 @@ class RankFiDDistill(ListwiseRankLLM):
 
 class RankFiDScore(ListwiseRankLLM):
     """
-    Implements **RankFiDScore** `[18]`_, a **listwise ranking approach** leveraging 
+    Implements **RankFiDScore** `[18]_`, a **listwise ranking approach** leveraging 
     **Fusion-in-Decoder (FiD)** with **cross-attention scoring** for accurate ranking.
 
     .. _[18]: https://arxiv.org/abs/2012.04584
 
-    This method **uses a FiD-based model** to assess query-passage relevance 
-    and **reorder retrieved documents** based on learned cross-attention representations.
+    RankFiDScore utilizes **Fusion-in-Decoder (FiD) models** optimized for **zero-shot listwise ranking** 
+    by leveraging **cross-attention weights** for precise **passage relevance estimation**.
 
-    References
-    ----------
-    .. [18] Izacard, G. & Grave, E. (2020). Distilling Knowledge from Reader to Retriever for Question Answering.
+    References:
+        - **Izacard, G. & Grave, E. (2020)**: *Distilling Knowledge from Reader to Retriever for Question Answering*.
+          [Paper](https://arxiv.org/abs/2012.04584)
 
-    Attributes
-    ----------
-    model : str
-        The name or path of the pre-trained **RankFiDScore** model.
-    context_size : int
-        The **maximum number of passages** used for ranking.
-    prompt_mode : PromptMode
-        Defines the **prompt template** for FiD.
-    num_few_shot_examples : int
-        Number of **few-shot examples** for ranking.
-    window_size : int
-        The **window size** for ranking multiple documents at a time.
-    step_size : int
-        The **step size** for sliding window ranking.
-    precision : str
-        Precision mode (`float32`, `bfloat16`, `float16`).
-    device : str
-        The device to use (`cuda` or `cpu`).
+    Attributes:
+        model (str): The **name or path** of the pre-trained **RankFiDScore** model.
+        context_size (int): The **maximum number of passages** used for ranking.
+        prompt_mode (PromptMode): Defines the **prompt template** for FiD.
+        num_few_shot_examples (int): Number of **few-shot examples** for ranking.
+        window_size (int): The **window size** for ranking multiple documents at a time.
+        step_size (int): The **step size** for sliding window ranking.
+        precision (str): Precision mode (`"float32"`, `"bfloat16"`, `"float16"`).
+        device (str): The device to use (`"cuda"` or `"cpu"`).
 
-    Examples
-    --------
-    Basic Usage:
+    Examples:
+        **Basic Usage:**
+        ```python
+        from rankify.dataset.dataset import Document, Question, Context
+        from rankify.models.reranking import Reranking
 
-    >>> from rankify.dataset.dataset import Document, Question, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> # Define a query and contexts
-    >>> question = Question("What are the effects of climate change?")
-    >>> contexts = [
-    >>>     Context(text="Climate change leads to rising sea levels.", id=0),
-    >>>     Context(text="Artificial intelligence is transforming industries.", id=1),
-    >>>     Context(text="Global temperatures are increasing due to CO2 emissions.", id=2),
-    >>> ]
-    >>> document = Document(question=question, contexts=contexts)
-    >>>
-    >>> # Initialize RankFiDScore Reranker
-    >>> model = Reranking(method='lit5score', model_name='LiT5-Score-base')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+        # Define a query and contexts
+        question = Question("What are the effects of climate change?")
+        contexts = [
+            Context(text="Climate change leads to rising sea levels.", id=0),
+            Context(text="Artificial intelligence is transforming industries.", id=1),
+            Context(text="Global temperatures are increasing due to CO2 emissions.", id=2),
+        ]
+        document = Document(question=question, contexts=contexts)
+
+        # Initialize RankFiDScore Reranker
+        model = Reranking(method='lit5score', model_name='LiT5-Score-base')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
     """
     def _post_init(self):
         # set the overwrite forward cross attention
@@ -491,27 +451,18 @@ class RankFiDScore(ListwiseRankLLM):
         """
         Initializes RankFiDScore for reranking.
 
-        Parameters
-        ----------
-        model : str
-            Path or name of the **RankFiDScore** model.
-        context_size : int, optional
-            Number of passages to use for ranking.
-        prompt_mode : PromptMode, optional
-            Defines the **FiD prompt mode**.
-        num_few_shot_examples : int, optional
-            Number of **few-shot examples** used for ranking.
-        window_size : int, optional
-            Defines the **window size** for ranking.
-        step_size : int, optional
-            Defines the **step size** for sliding window ranking.
-        precision : str, optional
-            Precision format (`float32`, `bfloat16`, `float16`).
-        device : str, optional
-            The device for computation (`cuda` or `cpu`).
-        batched : bool, optional
-            Whether to use **batch processing**.
+        Args:
+            model (str): Path or name of the **RankFiDScore** model.
+            context_size (int, optional): Number of passages to use for ranking.
+            prompt_mode (PromptMode, optional): Defines the **FiD prompt mode**.
+            num_few_shot_examples (int, optional): Number of **few-shot examples** used for ranking.
+            window_size (int, optional): Defines the **window size** for ranking.
+            step_size (int, optional): Defines the **step size** for sliding window ranking.
+            precision (str, optional): Precision format (`"float32"`, `"bfloat16"`, `"float16"`).
+            device (str, optional): The device for computation (`"cuda"` or `"cpu"`).
+            batched (bool, optional): Whether to use **batch processing**.
         """
+
         super().__init__(
             model=model,
             context_size=context_size,
@@ -621,23 +572,15 @@ class RankFiDScore(ListwiseRankLLM):
         """
         Reranks documents in batch using RankFiDScore.
 
-        Parameters
-        ----------
-        requests : List[Request]
-            List of requests containing queries and candidate passages.
-        rank_start : int, optional
-            The starting rank index.
-        rank_end : int, optional
-            The ending rank index.
-        shuffle_candidates : bool, optional
-            Whether to shuffle candidate passages before ranking.
-        logging : bool, optional
-            Enable logging for debugging.
+        Args:
+            requests (List[Request]): List of requests containing queries and candidate passages.
+            rank_start (int, optional): The starting rank index.
+            rank_end (int, optional): The ending rank index.
+            shuffle_candidates (bool, optional): Whether to shuffle candidate passages before ranking.
+            logging (bool, optional): Enable logging for debugging.
 
-        Returns
-        -------
-        List[Result]
-            The reranked documents.
+        Returns:
+            List[Result]: The reranked documents.
         """
         top_k_retrieve: int = kwargs.get("top_k_retrieve", 100)
 
@@ -715,19 +658,14 @@ class RankFiDScore(ListwiseRankLLM):
         return [self.create_prompt(result, rank_start, rank_end) for result in results]
 
     def run_llm(self, prompts: List[Dict[str, str]], **kwargs) -> Tuple[str, int]:
-        # get arbitrary query (they should be the same)
         """
         Runs RankFiDScore to generate ranking predictions.
 
-        Parameters
-        ----------
-        prompts : List[Dict[str, str]]
-            List of query-context pairs formatted for FiD ranking.
+        Args:
+            prompts (List[Dict[str, str]]): **List of query-context pairs** formatted for FiD ranking.
 
-        Returns
-        -------
-        Tuple[str, int]
-            Ranked list of passages.
+        Returns:
+            Tuple[str, int]: **Ranked list of passages**.
         """
         return self._run_llm_by_length_unified(
             [[(x["query"], x["text"]) for x in prompts]]
@@ -737,7 +675,16 @@ class RankFiDScore(ListwiseRankLLM):
         self, result: Result, rank_start: int, rank_end: int, use_alpha: bool= False
     ) -> Tuple[List[Dict[str, str]], int]:
         """
-        Create a prompt based on the result and given ranking range.
+        Creates a **prompt** based on the result and the specified **ranking range**.
+
+        Args:
+            result (Result): The result object containing **query and candidate passages**.
+            rank_start (int): The **starting rank index**.
+            rank_end (int): The **ending rank index**.
+            use_alpha (bool, optional): Whether to **apply alpha weighting**.
+
+        Returns:
+            Tuple[List[Dict[str, str]], int]: A **list of formatted prompts** and their **token count**.
         """
         query = result.query["text"]
         results = []
@@ -761,12 +708,39 @@ class RankFiDScore(ListwiseRankLLM):
         return results, sum_token
 
     def get_num_tokens(self, prompt: str) -> int:
+        """
+        Computes the number of tokens in a given **prompt string**.
+
+        Args:
+            prompt (str): The input prompt text.
+
+        Returns:
+            int: The number of tokens in the **prompt**.
+        """
         return len(self._tokenizer.encode(prompt))
 
     def cost_per_1k_token(self, input_token: bool) -> float:
+        """
+        Returns the estimated **cost per 1,000 tokens**.
+
+        Args:
+            input_token (bool): Whether to compute for **input tokens**.
+
+        Returns:
+            float: The cost per **1,000 tokens**.
+        """
         return 0.0
 
     def num_output_tokens(self, current_window_size: Optional[int] = None) -> int:
+        """
+        Computes the **number of output tokens** for the current **window size**.
+
+        Args:
+            current_window_size (Optional[int], optional): The **size of the current ranking window**.
+
+        Returns:
+            int: The estimated **output token count**.
+        """
         if current_window_size is None:
             current_window_size = self._window_size
         if (
@@ -796,16 +770,11 @@ class RankFiDScore(ListwiseRankLLM):
         """
         Formats passages for the RankFiDScore prompt.
 
-        Parameters
-        ----------
-        query : str
-            The search query.
-        passage : str
-            The passage text.
+        Args:
+            query (str): The search query.
+            passage (str): The passage text.
 
-        Returns
-        -------
-        str
-            The formatted passage.
+        Returns:
+            str: The formatted passage in **RankFiDScore format**.
         """
         return f"question: {query} context: {passage}"
