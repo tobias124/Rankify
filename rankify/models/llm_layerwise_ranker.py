@@ -9,67 +9,52 @@ from tqdm import tqdm  # Import tqdm for progress tracking
 
 class LLMLayerWiseRanker(BaseRanking):
     """
-    Implements LLM Layer-Wise Reranking `[13]`_  `[14]`_, a zero-shot ranking approach using large language models (LLMs).
-
-    .. _[13]: https://arxiv.org/abs/2312.15503
-
-    .. _[14]: https://arxiv.org/abs/2402.03216
+    Implements **LLM Layer-Wise Reranking**, a **zero-shot ranking approach** using large language models (LLMs).
 
 
-    This method performs layer-wise scoring of query-passage pairs, leveraging self-knowledge distillation to 
-    enhance ranking performance across multiple granularities.
+    This method performs **layer-wise scoring** of query-passage pairs, leveraging **self-knowledge distillation** to 
+    enhance ranking performance across **multiple granularities**.
 
-    References
-    ----------
-    .. [13]  Li et al. (2023): Making Large Language Models A Better Foundation For Dense Retrieval.
-    .. [14]  Chen et al. (2024): BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation.
+    References:
+        - **Li et al. (2023)**: *Making Large Language Models A Better Foundation For Dense Retrieval*.
+          [Paper](https://arxiv.org/abs/2312.15503)
+        - **Chen et al. (2024)**: *BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation*.
+          [Paper](https://arxiv.org/abs/2402.03216)
 
+    Attributes:
+        model_name (str): The **name of the pre-trained model** used for reranking.
+        max_sequence_length (int): The **maximum token length** of the input sequence (default: `512`).
+        device (torch.device): The **device (CPU/GPU)** on which the model runs.
+        dtype (torch.dtype): The **tensor data type** for model inference.
+        batch_size (int): The **batch size** for processing query-passage pairs.
+        tokenizer (AutoTokenizer): **Tokenizer** for the model.
+        model (AutoModelForCausalLM): The **transformer-based LLM model** for reranking.
+        prompt (str): The **default prompt template** used for ranking.
+        params (dict): **Model-specific configuration parameters**.
 
-    Attributes
-    ----------
-    model_name : str
-        The name of the pre-trained model used for reranking.
-    max_sequence_length : int
-        The maximum token length of the input sequence (default: `512`).
-    device : torch.device
-        The device (CPU/GPU) on which the model runs.
-    dtype : torch.dtype
-        The tensor data type for model inference.
-    batch_size : int
-        The batch size for processing query-passage pairs.
-    tokenizer : transformers.AutoTokenizer
-        Tokenizer for the model.
-    model : transformers.AutoModelForCausalLM
-        The transformer-based LLM model for reranking.
-    prompt : str
-        The default prompt template used for ranking.
-    params : dict
-        Model-specific configuration parameters.
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question, Context
+        from rankify.models.reranking import Reranking
 
-    Examples
-    --------
-    Basic usage:
+        # Define a query and contexts
+        question = Question("What are the effects of climate change?")
+        contexts = [
+            Context(text="Rising temperatures are causing ice caps to melt.", id=0),
+            Context(text="Many species face extinction due to habitat loss.", id=1),
+            Context(text="Ocean acidification is increasing.", id=2),
+        ]
+        document = Document(question=question, contexts=contexts)
 
-    >>> from rankify.dataset.dataset import Document, Question, Context
-    >>> from rankify.models.reranking import Reranking
-    >>>
-    >>> # Define a query and contexts
-    >>> question = Question("What are the effects of climate change?")
-    >>> contexts = [
-    >>>     Context(text="Rising temperatures are causing ice caps to melt.", id=0),
-    >>>     Context(text="Many species face extinction due to habitat loss.", id=1),
-    >>>     Context(text="Ocean acidification is increasing.", id=2),
-    >>> ]
-    >>> document = Document(question=question, contexts=contexts)
-    >>>
-    >>> # Initialize LLM Layer-Wise Ranker
-    >>> model = Reranking(method='llm_layerwise_ranker', model_name='bge-multilingual-gemma2')
-    >>> model.rank([document])
-    >>>
-    >>> # Print reordered contexts
-    >>> print("Reordered Contexts:")
-    >>> for context in document.reorder_contexts:
-    >>>     print(context.text)
+        # Initialize LLM Layer-Wise Ranker
+        model = Reranking(method='llm_layerwise_ranker', model_name='bge-multilingual-gemma2')
+        model.rank([document])
+
+        # Print reordered contexts
+        print("Reordered Contexts:")
+        for context in document.reorder_contexts:
+            print(context.text)
+        ```
     """
     
     # Class-level constants
@@ -92,20 +77,14 @@ class LLMLayerWiseRanker(BaseRanking):
 
     def __init__(
         self, method = None, model_name = None, api_key = None, **kwargs):
-
         """
-        Initializes the LLM Layer-Wise Ranker.
+        Initializes the **LLM Layer-Wise Ranker**.
 
-        Parameters
-        ----------
-        method : str, optional
-            The name of the ranking method.
-        model_name : str, optional
-            The name of the pre-trained model (default: `"BAAI/bge-reranker-v2.5-gemma2-lightweight"`).
-        api_key : str, optional
-            API key for authentication (if needed).
-        kwargs : dict
-            Additional configuration arguments (e.g., `max_sequence_length`, `batch_size`, `device`, `dtype`).
+        Args:
+            method (str, optional): The **reranking method name**.
+            model_name (str, optional): The **name of the pre-trained model** (default: `"BAAI/bge-reranker-v2.5-gemma2-lightweight"`).
+            api_key (str, optional): API key for **authentication** (if needed).
+            kwargs (dict): Additional configuration arguments (e.g., `max_sequence_length`, `batch_size`, `device`, `dtype`).
         """
         
         max_sequence_length= kwargs.get("max_sequence_length", 512)
@@ -183,17 +162,13 @@ class LLMLayerWiseRanker(BaseRanking):
     @torch.no_grad()
     def rank(self, documents: List[Document]) -> List[Document]:
         """
-        Ranks the contexts within each document based on their relevance to the document's query.
+        Reranks each document's **contexts** using the **LLM Layer-Wise Ranking approach**.
 
-        Parameters
-        ----------
-        documents : list of Document
-            The documents whose contexts need to be ranked.
+        Args:
+            documents (List[Document]): A list of **Document** instances containing contexts to rerank.
 
-        Returns
-        -------
-        list of Document
-            The documents with reordered contexts.
+        Returns:
+            List[Document]: The reranked list of **Document** instances with updated `reorder_contexts`.
         """
         for doc in tqdm(documents, desc="Reranking Documents"):
             query = doc.question.question
@@ -223,19 +198,14 @@ class LLMLayerWiseRanker(BaseRanking):
     @torch.no_grad()
     def score(self, query: str, doc: str) -> float:
         """
-        Scores a single query-document pair.
+        Scores a **single query-document pair**.
 
-        Parameters
-        ----------
-        query : str
-            The query string.
-        doc : str
-            The document to be scored.
+        Args:
+            query (str): The **query string**.
+            doc (str): The **document** to be scored.
 
-        Returns
-        -------
-        float
-            The relevance score.
+        Returns:
+            float: The **relevance score** for the document.
         """
         inputs = self._get_inputs([(query, doc)], max_sequence_length=self.max_sequence_length)
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
