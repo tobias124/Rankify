@@ -1,125 +1,190 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    .md-main__inner .md-grid {
-        padding: 0;
-        margin: 0;
-    }
 
-    .content-container {
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-    }
-    
-    .hero {
-        text-align: center;
-        padding: 4rem 2rem;
-        margin: 0;
-        background-color: #f5f6f77a;
-        color: white;
-    }
-    
-    .hero-logo {
-        max-width: 15rem;
-        height: auto;
-        margin: 0 auto;
-    }
-    
-    .hero-subtitle {
-        font-size: 1.2rem;
-        margin: 1.5rem 0;
-        color: #e2e8f0;
-    }
-    
-    .cta-button {
-        display: inline-block;
-        padding: 0.75rem 1.5rem;
-        background-color: transparent;
-        color: black;
-        text-decoration: none;
-        border-radius: 0.375rem;
-        font-weight: 600;
-        border: 2px solid black;
-        transition: all 0.3s ease;
-    }
-    
-    .cta-button:hover {
-        background-color: white;
-        color: black;
-        border: 2px solid white;
-    }
-    
-    .features-section {
-        padding: 4rem 2rem;
-    }
-    
-    .features-title {
-        text-align: center;
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 3rem;
-        color: #1a202c;
-    }
-    
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 3rem;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-    
-    .feature-card {
-        text-align: center;
-        padding: 1.5rem;
-    }
-    
-    .feature-image {
-        width: 10rem;
-        height: auto;
-        margin: 0 auto 1.5rem;
-    }
-    
-    .feature-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: #2d3748;
-    }
-    
-    .feature-description {
-        color: #4a5568;
-        line-height: 1.5;
-    }
-    
-    @media (max-width: 768px) {
-        .hero {
-            padding: 3rem 1rem;
-        }
-        
-        .hero-logo {
-            max-width: 10rem;
-        }
-        
-        .features-grid {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
-        
-        .feature-card {
-            padding: 1rem;
-        }
-    }
+<style>
+/* ---------- GENERAL ---------- */
+:root {
+    --rankify-primary: #00ffc8;
+    --rankify-dark-bg: #121212;
+    --rankify-text-light: #e0e0e0;
+    --rankify-accent: #ff0099;
+}
+
+.md-main__inner .md-content {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------- SPLIT SCREEN LAYOUT ---------- */
+.hero-container {
+    display: flex;
+    height: 90vh;
+    background-color: var(--rankify-dark-bg);
+    color: var(--rankify-text-light);
+}
+
+/* LEFT SIDE - TERMINAL */
+.terminal-container {
+    flex: 1;
+    background-color: #1e1e1e;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "Courier New", monospace;
+    border-right: 3px solid var(--rankify-primary);
+}
+
+.terminal {
+    width: 90%;
+    max-width: 600px;
+    background-color: #000;
+    padding: 1rem;
+    border-radius: 8px;
+    color: var(--rankify-primary);
+    font-size: 1.2rem;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 15px rgba(0, 255, 200, 0.4);
+}
+
+.cursor {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* RIGHT SIDE - FEATURES */
+.features-container {
+    flex: 1;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+}
+
+.feature-icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+    color: var(--rankify-accent);
+}
+
+.feature-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* CTA BUTTONS */
+.cta-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 1rem;
+}
+
+.cta-button {
+    background-color: var(--rankify-accent);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.cta-button:hover {
+    transform: scale(1.1);
+}
+
+/* Animation on Scroll */
+.reveal {
+    opacity: 1;
+    transform: translateY(0);
+}
 </style>
 
-<div class="content-container">
-    <div class="hero">
-        <img src="{{ 'assets/rankify-crop.png' | url }}" alt="Rankify Logo" class="hero-logo">
-        <p class="hero-subtitle"> Retrieval, Re-Ranking, and Retrieval-Augmented Generation </p>
-        <a href="{{ 'quick-start/getting-started-1' | url }}" class="cta-button">Get Started with Rankify</a>
+<div class="hero-container">
+    <!-- LEFT: TERMINAL SIMULATION -->
+    <div class="terminal-container">
+        <div class="terminal" id="terminal">
+            $ rankify retrieve --query "Best research papers on LLMs" <span class="cursor">|</span>
+        </div>
     </div>
 
+    <!-- RIGHT: FEATURES -->
+    <div class="features-container">
+        <div class="feature">
+            <span class="material-icons feature-icon">search</span>
+            <p class="feature-text">State-of-the-art Retrieval & Reranking</p>
+        </div>
+        <div class="feature">
+            <span class="material-icons feature-icon">bolt</span>
+            <p class="feature-text">Lightning-fast Execution</p>
+        </div>
+        <div class="feature">
+            <span class="material-icons feature-icon">code</span>
+            <p class="feature-text">Fully Modular & Extensible</p>
+        </div>
+        <div class="feature">
+            <span class="material-icons feature-icon">storage</span>
+            <p class="feature-text">Pre-indexed Datasets Ready-to-use</p>
+        </div>
+    </div>
 </div>
+
+<!-- CTA Floating Buttons -->
+<div class="cta-buttons">
+    <a href="{{ 'getting-started' | url }}" class="cta-button">🚀 Get Started</a>
+    <a href="https://github.com/DataScienceUIBK/Rankify" class="cta-button">⭐ GitHub</a>
+</div>
+
+<script>
+/* Terminal Animation */
+const commands = [
+    "$ rankify retrieve --query \"Best research papers on LLMs\"",
+    "$ rankify rerank --method RankGPT",
+    "$ rankify generate --context \"Top NLP techniques in 2024\"",
+    "$ rankify evaluate --dataset msmarco",
+];
+let cmdIndex = 0;
+const terminalElement = document.getElementById("terminal");
+
+function updateTerminal() {
+    terminalElement.innerHTML = commands[cmdIndex] + ' <span class="cursor">|</span>';
+    cmdIndex = (cmdIndex + 1) % commands.length;
+}
+
+setInterval(updateTerminal, 3000);
+
+/* Feature Animation */
+const features = document.querySelectorAll(".feature");
+
+function revealOnScroll() {
+    features.forEach((feature, index) => {
+        if (feature.getBoundingClientRect().top < window.innerHeight - 100) {
+            feature.classList.add("reveal");
+        }
+    });
+}
+
+window.addEventListener("scroll", revealOnScroll);
+</script>
+
 {% endblock %}
