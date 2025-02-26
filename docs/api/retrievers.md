@@ -1,3 +1,0 @@
-# Retrievers
-
-::: rankify.retrievers

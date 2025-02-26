@@ -12,62 +12,53 @@ from rankify.dataset.dataset import Document
 import transformers
 class FiDGenerator(BaseGenerator):
     """
-    **FiD (Fusion-in-Decoder) Generator `[1]`_ ** for Open-Domain Question Answering.
+    **FiD (Fusion-in-Decoder) Generator** for Open-Domain Question Answering.
 
-    .. _[1]: https://arxiv.org/abs/2007.01282
 
-    This class implements **Fusion-in-Decoder (FiD) model** for **retrieval-augmented generation (RAG)**.
-    It combines **multiple retrieved passages** to generate **context-aware answers**.
+    **Fusion-in-Decoder (FiD)** is a **retrieval-augmented generation (RAG) model** that 
+    aggregates information from **multiple retrieved passages** to generate context-aware answers.
 
-    Attributes
-    ----------
-    device : str
-        Device used for inference (`'cuda'` or `'cpu'`).
-    model_path : str
-        Path to the downloaded and extracted model.
-    tokenizer : transformers.T5Tokenizer
-        T5 tokenizer for text encoding.
-    model : FiDT5
-        Pretrained FiD model for text generation.
-    max_length : int
-        Maximum length of the generated output (default: 50 tokens).
+    Attributes:
+        device (str): Device used for inference (`'cuda'` or `'cpu'`).
+        model_path (str): Path to the downloaded and extracted model.
+        tokenizer (transformers.T5Tokenizer): T5 tokenizer for text encoding.
+        model (FiDT5): Pretrained FiD model for text generation.
+        max_length (int): Maximum length of the generated output (default: 50 tokens).
 
-    Methods
-    -------
-    generate(documents: List[Document]) -> List[str]
-        Generates answers for input queries using retrieved passages.
+    References:
+        - **Izacard & Grave** *Leveraging Passage Retrieval with Generative Models for Open-Domain QA*  
+          [Paper](https://arxiv.org/abs/2007.01282)
 
-    Raises
-    ------
-    ValueError
-        If an unsupported model name is provided.
+    See Also:
+        - `BaseGenerator`: Parent class for FiDGenerator.
+        - `RAG-based QA Models`: FiD falls under retrieval-augmented generation.
 
-    References
-    ----------
-    .. [1] Izacard, Gautier, and Edouard Grave. 
-      ["Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering"](https://arxiv.org/abs/2007.01282).
-      *arXiv preprint arXiv:2007.01282 (2020).*
+    Example:
+        ```python
+        from rankify.generator.generator import Generator
+        from rankify.dataset.dataset import Document, Question, Answer, Context
 
-    Examples
-    --------
-    **Basic Usage:**
-    
-    >>> from rankify.generator.generator import Generator
-    >>> from rankify.dataset.dataset import Document, Question, Answer, Context
-    >>> generator = Generator(method="fid", model_name="nq_reader_base")
-    >>> documents = [
-    ...     Document(
-    ...         question=Question("Who discovered gravity?"),
-    ...         answers=Answer(["Isaac Newton"]),
-    ...         contexts=[
-    ...             Context(title="Gravity", text="Isaac Newton formulated the laws of gravity.", score=1.0)
-    ...         ]
-    ...     )
-    ... ]
-    >>> generated_answers = generator.generate(documents)
-    >>> print(generated_answers[0])
-    'Isaac Newton discovered gravity in the late 17th century.'
+        generator = Generator(method="fid", model_name="nq_reader_base")
+        documents = [
+            Document(
+                question=Question("Who discovered gravity?"),
+                answers=Answer(["Isaac Newton"]),
+                contexts=[
+                    Context(title="Gravity", text="Isaac Newton formulated the laws of gravity.", score=1.0)
+                ]
+            )
+        ]
+
+        generated_answers = generator.generate(documents)
+        print(generated_answers[0])  # 'Isaac Newton discovered gravity in the late 17th century.'
+        ```
+
+    Notes:
+        - FiD **combines multiple passages** to generate better responses.
+        - It integrates **seamlessly** with the `Generator` class.
+        - Uses **retrieval-augmented generation (RAG)** techniques for QA.
     """
+
 
     MODEL_URLS = {
         "nq_reader_base": "https://dl.fbaipublicfiles.com/FiD/pretrained_models/nq_reader_base.tar.gz",
@@ -82,14 +73,15 @@ class FiDGenerator(BaseGenerator):
         """
         Initializes the FiD Generator.
 
-        Parameters
-        ----------
-        method : str
-            The generator type (`"fid"`).
-        model_name : str
-            The specific FiD model to use (e.g., `"nq_reader_base"`).
-        kwargs : dict
-            Additional parameters for model configuration.
+        Args:
+            method (str): The generator type (`"fid"`).
+            model_name (str): The specific FiD model to use (e.g., `"nq_reader_base"`).
+            **kwargs: Additional parameters for model configuration.
+
+        Example:
+            ```python
+            generator = FiDGenerator(method="fid", model_name="nq_reader_base")
+            ```
         """
         super().__init__(method, model_name)
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -101,15 +93,16 @@ class FiDGenerator(BaseGenerator):
         """
         Downloads and extracts the FiD model if not already present.
 
-        Returns
-        -------
-        str
-            The directory path where the model is stored.
+        Returns:
+            str: The directory path where the model is stored.
 
-        Raises
-        ------
-        ValueError
-            If an unknown FiD model is specified.
+        Raises:
+            ValueError: If an unknown FiD model is specified.
+
+        Example:
+            ```python
+            model_path = generator._download_model()
+            ```
         """
         model_url = self.MODEL_URLS.get(self.model_name)
         if not model_url:
@@ -125,10 +118,13 @@ class FiDGenerator(BaseGenerator):
         """
         Loads the FiD model and tokenizer.
 
-        Returns
-        -------
-        tuple
-            A tuple containing the tokenizer and the FiD model.
+        Returns:
+            tuple: A tuple containing the tokenizer and the FiD model.
+
+        Example:
+            ```python
+            tokenizer, model = generator._load_model()
+            ```
         """
         tokenizer = transformers.T5Tokenizer.from_pretrained('t5-base', return_dict=False)
         model = FiDT5.from_pretrained(self.model_path)
@@ -140,15 +136,16 @@ class FiDGenerator(BaseGenerator):
         """
         Converts `Document` objects into a FiD-compatible dataset.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of documents with queries and retrieved contexts.
+        Args:
+            documents (List[Document]): A list of documents with queries and retrieved contexts.
 
-        Returns
-        -------
-        tuple
-            A tuple containing a DataLoader and Dataset.
+        Returns:
+            tuple: A tuple containing a DataLoader and Dataset.
+
+        Example:
+            ```python
+            dataloader, dataset = generator._prepare_dataloader(documents)
+            ```
         """
         examples = []
         for doc in documents:
@@ -177,22 +174,18 @@ class FiDGenerator(BaseGenerator):
         """
         Generates answers for a list of documents.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of documents with queries and retrieved contexts.
+        Args:
+            documents (List[Document]): A list of documents with queries and retrieved contexts.
 
-        Returns
-        -------
-        List[str]
-            A list of generated answers.
+        Returns:
+            List[str]: A list of generated answers.
 
-        Example
-        -------
-        >>> generator = FiDGenerator(method="fid", model_name="nq_reader_base")
-        >>> documents = [Document(question=Question("Who wrote Hamlet?"))]
-        >>> print(generator.generate(documents))
-        ['William Shakespeare wrote Hamlet in the early 1600s.']
+        Example:
+            ```python
+            generator = FiDGenerator(method="fid", model_name="nq_reader_base")
+            documents = [Document(question=Question("Who wrote Hamlet?"))]
+            print(generator.generate(documents))  # ['William Shakespeare wrote Hamlet in the early 1600s.']
+            ```
         """
         eval_dataloader, eval_dataset = self._prepare_dataloader(documents)
 
