@@ -18,10 +18,9 @@ import subprocess
 
 class ColBERTRetriever:
     """
-    Implements **ColBERT** `[3]_`, a **late interaction** retrieval model that efficiently scores and ranks 
+    Implements **ColBERT**, a **late interaction** retrieval model that efficiently scores and ranks 
     passages based on **token-wise interactions**.
 
-    .. _[3]: https://arxiv.org/abs/2004.12832
 
     ColBERT enables **scalable and efficient document retrieval** by using **compressed representations** 
     and **approximate nearest neighbor search**. This retriever leverages Pyserini's ColBERT implementation.
@@ -41,8 +40,7 @@ class ColBERTRetriever:
         searcher (Searcher): **ColBERT search engine** initialized for retrieval.
         passages (dict): Dictionary mapping **passage IDs** to their **text and titles**.
 
-    Examples:
-        **Basic Usage:**
+    Example:
         ```python
         from rankify.dataset.dataset import Document, Question
         from rankify.retrievers.retriever import Retriever
