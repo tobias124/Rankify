@@ -28,7 +28,7 @@ class MonoBERT(BaseRanking):
         model (AutoModelForSequenceClassification): The **pretrained MonoBERT model** for reranking.
         tokenizer (AutoTokenizer): The **tokenizer** for MonoBERT.
 
-    Examples:
+    Example:
         ```python
         from rankify.dataset.dataset import Document, Question, Context
         from rankify.models.reranking import Reranking
