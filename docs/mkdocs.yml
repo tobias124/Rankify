@@ -1,0 +1,164 @@
+site_name: Rankify
+site_description: A Comprehensive Python Toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation
+site_url: https://rankify.readthedocs.io/
+docs_dir: "docs/"
+
+repo_url: https://github.com/DataScienceUIBK/Rankify
+repo_name: DataScienceUIBK/Rankify
+
+
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Installation: installation.md
+  - References:
+      - API Reference: api/index.md
+      - Dataset: api/dataset.md
+      - Metrics: api/metrics.md
+      - Retrievers:
+          - Retriever: api/retrievers/retriever.md
+          - BM25 Retriever: api/retrievers/bm25.md
+          - Dense Retriever: api/retrievers/dense.md
+          - BGE Retriever: api/retrievers/bge.md
+          - Colbert Retriever: api/retrievers/colbert.md
+          - Contriever Retriever: api/retrievers/contriever.md
+      - Rerankers:
+          - Base: api/rerankings/base.md
+          - Reranking: api/rerankings/reranking.md
+          - UPR: api/rerankings/upr.md
+          - FlashRank: api/rerankings/flashrank.md
+          - RankGPT: api/rerankings/rankgpt.md
+          - Blender Reranker: api/rerankings/blender.md
+          - ColBERT Reranker: api/rerankings/colbert_ranker.md
+          - EchoRank: api/rerankings/echo_rank.md
+          - First Reranker: api/rerankings/first_ranker.md
+          - Incontext Reranker: api/rerankings/incontext_reranker.md
+          - InRank Reranker: api/rerankings/inrank.md
+          - Listt5 Reranker: api/rerankings/listt5.md
+          - Lit5 Reranker: api/rerankings/lit5.md
+          - LLM Layerwise Reranker: api/rerankings/llm_layerwise_ranker.md
+          - LLM2vec Reranker: api/rerankings/llm2vec_reranker.md
+          - Monobert Reranker: api/rerankings/monobert.md
+          - Monot5 Reranker: api/rerankings/monot5.md
+          - Rank Fid Reranker: api/rerankings/rank_fid.md
+          - Rankt5 Reranker: api/rerankings/rankt5.md
+          - Sentence Transformer Reranker: api/rerankings/sentence_transformer_reranker.md
+          - splade Reranker: api/rerankings/splade_reranker.md
+          - Transformer Reranker: api/rerankings/transformer_reranker.md
+          - twolar Reranker: api/rerankings/twolar.md
+          - Vicuna Reranker: api/rerankings/vicuna_reranker.md
+          - Zephyr Reranker: api/rerankings/zephyr_reranker.md
+      - Generators:
+          - Base: api/generators/base.md
+          - Generator: api/generators/generator.md
+          - FiD Generator: api/generators/fid.md
+          - In Context Ralm Generator: api/generators/in_context_ralm.md
+  - License: license.md
+
+
+theme:
+    name: material
+    custom_dir: overrides
+    features:
+        - navigation.tabs
+        - navigation.path
+        - navigation.indexes
+        - toc.follow
+        - navigation.top
+        - search.suggest
+        - search.highlight
+        - content.tabs.link
+        - content.code.annotation
+        - content.code.copy
+        - navigation.footer
+        - content.action.edit
+    language: en
+    palette:
+        - scheme: default
+          toggle:
+            icon: material/weather-night
+            name: Switch to dark mode
+          primary: white
+          accent: black
+        - scheme: slate
+          toggle:
+            icon: material/weather-sunny
+            name: Switch to light mode
+          primary: black
+          accent: lime
+    icon:
+        repo: fontawesome/brands/git-alt
+        edit: material/pencil
+        view: material/eye
+    logo: assets/rankify-crop.png
+    favicon: assets/rankify-crop.png
+
+extra_css:
+    - stylesheets/extra.css
+
+plugins:
+    #- social
+    - search
+    - mkdocstrings:
+        handlers:
+            python:
+                options:
+                    docstring_style: google
+                    show_source: true
+                    show_root_heading: true
+                    heading_level: 3
+                    members_order: source
+                    separate_signature: false
+                    show_category_heading: true
+                    show_symbol_type_heading: true
+                    show_docstring_parameters: true
+                    show_if_no_docstring: true
+                    show_signature_annotations: true
+                    unwrap_annotated: true
+                    annotations_path: brief
+                    docstring_section_style: table
+                    merge_init_into_class: true
+                    rendering:
+                        show_if_no_docstring: true
+                        show_warnings: false
+                        html_meta: false
+    - mkdocs-jupyter:
+        ignore_h1_titles: True
+    # - redirects:
+    #     redirect_maps:
+    #         # Redirect /intro/ to the main page
+    #         "intro/index.md": "index.md"
+    #         "intro.md": "index.md"
+
+extra:
+    social:
+        - icon: fontawesome/brands/github
+          link: https://github.com/DataScienceUIBK/Rankify
+        - icon: fontawesome/brands/discord
+          link: https://discord.gg/Fbyf7ucKs5
+    cards: false  # Disable automatic generation of OG cards
+
+
+
+
+markdown_extensions:
+    - pymdownx.tabbed:
+        alternate_style: true
+    - pymdownx.highlight:
+        anchor_linenums: true
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - admonition
+    - pymdownx.arithmatex:
+        generic: true
+    - footnotes
+    - pymdownx.details
+    - pymdownx.superfences
+    - pymdownx.mark
+    - attr_list
+    - md_in_html
+    - pymdownx.emoji:
+        emoji_index: !!python/name:material.extensions.emoji.twemoji
+        emoji_generator: !!python/name:materialx.emoji.to_svg
+
