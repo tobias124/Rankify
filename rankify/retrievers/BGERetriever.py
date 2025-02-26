@@ -81,74 +81,59 @@ class MultiPartZipExtractor:
 
 class BGERetriever:
     """
-    BGERetriever: A Passage Retrieval System Using Precomputed Embeddings and FAISS Index `[1]`_.
+    Implements **BGE Retriever**, a **passage retrieval system** using **precomputed embeddings** and **FAISS indexing**.
 
-    .. _[1]: https://dl.acm.org/doi/10.1145/3625555.3662062
 
-    This retriever utilizes **precomputed FAISS indexes** to efficiently retrieve relevant documents based on query embeddings. 
-    It supports **multi-part zip extraction** and **automatic passage retrieval** for large-scale document retrieval tasks.
+    BGE Retriever efficiently retrieves relevant documents by **leveraging dense representations** and **FAISS-based approximate nearest neighbor (ANN) search**.
+    It supports **multi-part ZIP extraction** and **passage retrieval** for large-scale information retrieval tasks.
 
-    References
-    ----------
-    .. [1] Xiao et al. (2024): C-Pack: Packed Resources for General Chinese Embeddings.
+    References:
+        - **Xiao et al. (2024)**: *C-Pack: Packed Resources for General Chinese Embeddings*.
+          [Paper](https://dl.acm.org/doi/10.1145/3625555.3662062)
 
-    Attributes
-    ----------
-    model_name : str
-        The embedding model used for generating dense representations.
-    n_docs : int
-        The number of top documents to retrieve for each query.
-    batch_size : int
-        Batch size for encoding queries in parallel.
-    device : str
-        Device used for encoding (`cuda` or `cpu`).
-    index_type : str
-        Type of index to use (`wiki` or `msmarco`).
-    index_folder : str
-        Path where the FAISS index and supporting files are stored.
-    doc_ids : List[str]
-        List of document IDs mapped to stored embeddings.
-    doc_texts : dict
-        Dictionary mapping document IDs to text and title.
-    passage_path : str
-        Path to the downloaded passage file.
-    index : faiss.IndexFlatIP
-        The FAISS index used for nearest neighbor search.
-    model : AutoModel
-        The transformer model used for query encoding.
-    tokenizer : AutoTokenizer
-        The tokenizer corresponding to the embedding model.
+    Attributes:
+        model_name (str): The embedding model used for generating **dense representations**.
+        n_docs (int): Number of **top-ranked documents** retrieved per query.
+        batch_size (int): Number of **queries processed per batch** for efficiency.
+        device (str): The computing device (`"cuda"` or `"cpu"`).
+        index_type (str): The type of **retrieval index** (`"wiki"` or `"msmarco"`).
+        index_folder (str): Path where the **FAISS index** and supporting files are stored.
+        doc_ids (List[str]): List of **document IDs** mapped to stored embeddings.
+        doc_texts (dict): Dictionary mapping **document IDs** to text and title.
+        passage_path (str): Path to the downloaded **passage file**.
+        index (faiss.IndexFlatIP): The **FAISS index** used for nearest neighbor search.
+        model (AutoModel): The transformer model used for **query encoding**.
+        tokenizer (AutoTokenizer): The tokenizer corresponding to the embedding model.
 
-    Examples
-    --------
-    Basic Usage:
+    Examples:
+        **Basic Usage:**
+        ```python
+        from rankify.dataset.dataset import Document, Question
+        from rankify.retrievers.retriever import Retriever
 
-    >>> from rankify.dataset.dataset import Document, Question
-    >>> from rankify.retrievers.retriever import Retriever
-    >>> retriever = Retriever( method = "bge",model="BAAI/bge-large-en-v1.5", n_docs=5, index_type="wiki")
-    >>> documents = [Document(question=Question("Who discovered gravity?"))]
-    >>> retrieved_documents = retriever.retrieve(documents)
-    >>> print(retrieved_documents[0].contexts[0].text)
+        retriever = Retriever(method="bge", model="BAAI/bge-large-en-v1.5", n_docs=5, index_type="wiki")
+        documents = [Document(question=Question("Who discovered gravity?"))]
+
+        retrieved_documents = retriever.retrieve(documents)
+        print(retrieved_documents[0].contexts[0].text)
+        ```
     """
 
     CACHE_DIR = os.environ.get("RERANKING_CACHE_DIR", "./cache")
 
     def __init__(self, model="BAAI/bge-large-en-v1.5", n_docs=10, batch_size=32, device="cuda", index_type="wiki"):
         """
-        Initializes the BGB retriever.
+        Initializes the **BGE Retriever**.
 
-        Parameters
-        ----------
-        model_name : str
-            The name of the embedding model.
-        n_docs : int
-            Number of documents to retrieve per query.
-        batch_size : int
-            Batch size for encoding queries.
-        device : str
-            The device to use for encoding ('cuda' or 'cpu').
-        index_type : str
-            The type of index to use ('wiki' or 'msmarco').
+        Args:
+            model (str, optional): Name of the **embedding model** (default: `"BAAI/bge-large-en-v1.5"`).
+            n_docs (int, optional): Number of **top documents** to retrieve per query (default: `10`).
+            batch_size (int, optional): Number of **queries processed per batch** (default: `32`).
+            device (str, optional): Computing device (`"cuda"` or `"cpu"`, default: `"cuda"`).
+            index_type (str, optional): The **type of retrieval index** (`"wiki"` or `"msmarco"`, default: `"wiki"`).
+
+        Raises:
+            ValueError: If the specified `index_type` is not supported.
         """
         self.model_name = model
         self.n_docs = n_docs
@@ -177,7 +162,7 @@ class BGERetriever:
 
     def _ensure_index_and_passages_downloaded(self):
         """
-        Ensures that the necessary index files and passages are downloaded and extracted.
+        Ensures that the necessary **index files** and **passages** are **downloaded and extracted**.
         """
         os.makedirs(self.index_folder, exist_ok=True)
 
@@ -231,7 +216,11 @@ class BGERetriever:
 
     def _download_file(self, url, save_path):
         """
-        Downloads a file from the specified URL to the given path.
+        Downloads a **file** from a given **URL** and saves it to a **specified path**.
+
+        Args:
+            url (str): The URL of the **file to download**.
+            save_path (str): The **path** where the file will be stored.
         """
         print(f"Downloading {os.path.basename(save_path)}...")
         response = requests.get(url, stream=True)
@@ -241,13 +230,19 @@ class BGERetriever:
 
     def clean_filename(self, url):
         """
-        Cleans the filename from a URL by removing query parameters.
+        Extracts the **file name** from a URL while removing any query parameters.
+
+        Args:
+            url (str): The **URL** containing the file name.
+
+        Returns:
+            str: The **cleaned file name**.
         """
         return url.split("/")[-1].split("?")[0]
 
     def build_faiss_index_on_disk(self):
         """
-        Builds or loads a FAISS index depending on the index type.
+        Builds or loads a **FAISS index** for efficient **document retrieval**.
         """
         print("Handling FAISS index...")
 
@@ -278,12 +273,10 @@ class BGERetriever:
 
     def _load_document_ids(self):
         """
-        Loads the document IDs for the respective index type.
+        Loads **document IDs** for the **retrieval index**.
 
-        Returns
-        -------
-        list
-            The list of document IDs.
+        Returns:
+            List[str]: A list of **document IDs**.
         """
         doc_ids_path = os.path.join(self.index_folder, "bgb_index", "bge_doc_ids.pkl")
         print(f"Loading document IDs for '{self.index_type}' from {doc_ids_path}...")
@@ -302,12 +295,10 @@ class BGERetriever:
 
     def _load_tsv(self):
         """
-        Loads the TSV file and maps document IDs to their text and title.
+        Loads a **TSV file** mapping document **IDs** to **text and titles**.
 
-        Returns
-        -------
-        dict
-            A dictionary mapping document IDs to text and title.
+        Returns:
+            dict: A dictionary mapping **document IDs** to their corresponding **text and title**.
         """
         print(f"Loading passages from {self.passage_path}...")
         doc_texts = {}
@@ -320,17 +311,13 @@ class BGERetriever:
 
     def _encode_queries(self, queries):
         """
-        Encodes queries using the embedding model.
+        Encodes **queries** into **dense vector representations** using the **embedding model**.
 
-        Parameters
-        ----------
-        queries : list of str
-            List of query strings.
+        Args:
+            queries (List[str]): List of **query texts**.
 
-        Returns
-        -------
-        np.ndarray
-            The query embeddings.
+        Returns:
+            np.ndarray: **Query embeddings**.
         """
         all_embeddings = []
         with torch.no_grad():
@@ -345,24 +332,17 @@ class BGERetriever:
 
     def retrieve(self, documents: List[Document]) -> List[Document]:
         """
-        Retrieve contexts for each document in the input list using the document's question.
+        Retrieves **contexts** for each **document** based on its **question**.
 
-        Parameters
-        ----------
-        documents : List[Document]
-            A list of Document objects containing the queries and answers.
+        Args:
+            documents (List[Document]): A list of **Document objects** containing queries.
 
-        Returns
-        -------
-        List[Document]
-            The list of Document objects updated with retrieved contexts.
+        Returns:
+            List[Document]: The list of **Document objects** updated with retrieved **contexts**.
         """
         queries = [doc.question.question for doc in documents]
         query_embeddings = self._encode_queries(queries)
 
-        # Debugging: Log dimensionality
-        #print(f"Query embeddings dimensionality: {query_embeddings.shape[1]}")
-        #print(f"FAISS index dimensionality: {self.index.d}")
 
         # Ensure dimensions match
         if query_embeddings.shape[1] != self.index.d:
