@@ -2,10 +2,18 @@ site_name: Rankify Documentation
 site_url: https://github.com/DataScienceUIBK/Rankify
 theme:
   name: material
+  features:
+    - content.code.annotate
+    - navigation.sections
+    - navigation.indexes
+    - navigation.tabs
+    - navigation.instant
+    - toc.integrate
+
 markdown_extensions:
   - toc:
       permalink: true
-      separator: "_"
+      toc_depth: 3
 plugins:
   - search
   - mkdocstrings:
@@ -16,12 +24,16 @@ plugins:
             show_root_toc_entry: false  # This prevents module names from being added separately
             show_source: false
             heading_level: 2  # Ensure consistent heading levels
+
+
+
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
   - Installation: installation.md
   - Usage: usage.md
-  - Reference:
+  - 📖 References:
+      - API Reference: api/index.md
       - Dataset: api/dataset.md
       - Metrics: api/metrics.md
       - Retrievers:

@@ -1,3 +1,0 @@
-# Reranking Models
-
-::: rankify.models

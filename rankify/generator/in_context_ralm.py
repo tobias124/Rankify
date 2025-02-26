@@ -8,63 +8,52 @@ from rankify.utils.generator.InContextRalm.model_utils import load_model_and_tok
 
 class InContextRALMGenerator(BaseGenerator):
     """
-    In-Context Retrieval-Augmented Language Model (RALM) Generator `[2]`_  for Open-Domain Question Answering.
+    **In-Context Retrieval-Augmented Language Model (RALM) Generator**.
 
-    .. _[2]: https://arxiv.org/abs/2302.00083
 
-    This class implements **In-Context Retrieval-Augmented Language Models (RALM)** for **context-aware generation**.
-    It integrates **retrieved passages** into the input prompt for **few-shot learning**.
+    This class implements **In-Context Retrieval-Augmented Language Models (RALM)** for **context-aware text generation**.
+    It **integrates retrieved passages** into the input prompt for **few-shot learning**, improving response quality.
 
-    Attributes
-    ----------
-    device : str
-        Device used for inference (`'cuda'` or `'cpu'`).
-    model_name : str
-        Name of the pre-trained RALM model.
-    cache_dir : str
-        Directory to store the downloaded models.
-    num_docs : int
-        Number of retrieved contexts to include in the prompt (default: 1).
-    max_length : int
-        Maximum number of tokens the model can process.
-    max_tokens_to_generate : int
-        Maximum number of tokens the model generates in response.
+    Attributes:
+        device (str): Device used for inference (`'cuda'` or `'cpu'`).
+        model_name (str): Name of the pre-trained RALM model.
+        cache_dir (str): Directory to store downloaded models.
+        num_docs (int): Number of retrieved contexts to include in the prompt (default: `1`).
+        max_length (int): Maximum number of tokens the model can process.
+        max_tokens_to_generate (int): Maximum number of tokens the model generates in response.
 
-    Methods
-    -------
-    generate(documents: List[Document]) -> List[str]
-        Generates answers based on input queries and retrieved contexts.
+    References:
+        - **Ram et al.** *In-Context Retrieval-Augmented Language Models*  
+          [Paper](https://arxiv.org/abs/2302.00083)
 
-    Raises
-    ------
-    ValueError
-        If an unsupported model is provided.
+    See Also:
+        - `BaseGenerator`: Parent class for InContextRALMGenerator.
+        - `Few-Shot Learning`: This model **leverages retrieved passages** for in-context QA.
 
-    References
-    ----------
-    .. [2] Ram, Ori, et al. 
-      ["In-Context Retrieval-Augmented Language Models"](https://arxiv.org/abs/2302.00083).
-      *Transactions of the Association for Computational Linguistics, 11 (2023): 1316-1331.*
+    Example:
+        ```python
+        from rankify.generator.generator import Generator
+        from rankify.dataset.dataset import Document, Question, Answer, Context
 
-    Examples
-    --------
-    **Basic Usage:**
-    
-    >>> from rankify.generator.generator import Generator
-    >>> from rankify.dataset.dataset import Document, Question, Answer, Context
-    >>> generator = Generator(method="in-context-ralm", model_name="meta-llama/Llama-3.1-8B")
-    >>> documents = [
-    ...     Document(
-    ...         question=Question("Who discovered gravity?"),
-    ...         answers=Answer(["Isaac Newton"]),
-    ...         contexts=[
-    ...             Context(title="Gravity", text="Isaac Newton formulated the laws of gravity.", score=1.0)
-    ...         ]
-    ...     )
-    ... ]
-    >>> generated_answers = generator.generate(documents)
-    >>> print(generated_answers[0])
-    'Isaac Newton discovered gravity in the late 17th century.'
+        generator = Generator(method="in-context-ralm", model_name="meta-llama/Llama-3.1-8B")
+        documents = [
+            Document(
+                question=Question("Who discovered gravity?"),
+                answers=Answer(["Isaac Newton"]),
+                contexts=[
+                    Context(title="Gravity", text="Isaac Newton formulated the laws of gravity.", score=1.0)
+                ]
+            )
+        ]
+
+        generated_answers = generator.generate(documents)
+        print(generated_answers[0])  # 'Isaac Newton discovered gravity in the late 17th century.'
+        ```
+
+    Notes:
+        - **RALM dynamically integrates retrieved passages** to guide response generation.
+        - **Optimized for retrieval-augmented question answering** (RAG).
+        - Supports **meta-llama models (Llama-3.1-8B, Llama-2, etc.)**.
     """
 
     CACHE_DIR = os.environ.get("RERANKING_CACHE_DIR", "./cache")
@@ -72,6 +61,16 @@ class InContextRALMGenerator(BaseGenerator):
     def __init__(self, method: str = "in-context-ralm", model_name: str = "meta-llama/Llama-3.1-8B", **kwargs):
         """
         Initializes the RALM Generator.
+
+        Args:
+            method (str): The generator type (`"in-context-ralm"`).
+            model_name (str): The name of the pre-trained RALM model (e.g., `"meta-llama/Llama-3.1-8B"`).
+            **kwargs: Additional parameters for model configuration.
+
+        Example:
+            ```python
+            generator = InContextRALMGenerator(method="in-context-ralm", model_name="meta-llama/Llama-3.1-8B")
+            ```
         """
         super().__init__(method, model_name)
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -91,7 +90,22 @@ class InContextRALMGenerator(BaseGenerator):
 
     def _build_qa_prompt(self, example):
         """
-        Constructs the QA prompt for in-context learning.
+        Constructs the **QA prompt** for in-context learning.
+
+        Args:
+            example (dict): A dictionary containing question and retrieved contexts.
+
+        Returns:
+            str: The constructed prompt with retrieved passages.
+
+        Example:
+            ```python
+            example = {
+                "question": "Who invented the light bulb?",
+                "ctxs": [{"title": "Edison", "text": "Thomas Edison patented the light bulb."}]
+            }
+            prompt = generator._build_qa_prompt(example)
+            ```
         """
         question = example["question"]
         question = question[0].lower() + question[1:] if not question.endswith("?") else question
@@ -104,7 +118,18 @@ class InContextRALMGenerator(BaseGenerator):
 
     def _prepare_dataloader(self, documents: list[Document]):
         """
-        Converts `Document` objects into a RALM-compatible dataset.
+        Converts `Document` objects into a dataset **formatted for RALM**.
+
+        Args:
+            documents (List[Document]): A list of documents with **queries and retrieved contexts**.
+
+        Returns:
+            list: A list of dictionaries formatted for in-context learning.
+
+        Example:
+            ```python
+            dataset = generator._prepare_dataloader(documents)
+            ```
         """
         examples = []
         for doc in documents:
@@ -119,7 +144,20 @@ class InContextRALMGenerator(BaseGenerator):
 
     def generate(self, documents: list[Document]) -> list[str]:
         """
-        Generates answers for a list of documents using RALM.
+        Generates answers for **a list of documents** using RALM.
+
+        Args:
+            documents (List[Document]): A list of documents with **queries and retrieved contexts**.
+
+        Returns:
+            List[str]: A list of generated answers.
+
+        Example:
+            ```python
+            generator = InContextRALMGenerator(method="in-context-ralm", model_name="meta-llama/Llama-3.1-8B")
+            documents = [Document(question=Question("Who wrote Hamlet?"))]
+            print(generator.generate(documents))  # ['William Shakespeare wrote Hamlet in the early 1600s.']
+            ```
         """
         eval_dataset = self._prepare_dataloader(documents)
 

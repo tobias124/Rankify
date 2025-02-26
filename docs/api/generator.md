@@ -1,3 +1,0 @@
-# Generator
-
-::: rankify.generator.generator
