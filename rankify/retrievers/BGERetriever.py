@@ -105,8 +105,7 @@ class BGERetriever:
         model (AutoModel): The transformer model used for **query encoding**.
         tokenizer (AutoTokenizer): The tokenizer corresponding to the embedding model.
 
-    Examples:
-        **Basic Usage:**
+    Example:
         ```python
         from rankify.dataset.dataset import Document, Question
         from rankify.retrievers.retriever import Retriever
