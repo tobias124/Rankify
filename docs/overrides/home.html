@@ -3,12 +3,13 @@
 {% block content %}
 
 <style>
-/* ---------- GENERAL ---------- */
+/* ---------- GLOBAL STYLES ---------- */
 :root {
-    --rankify-primary: #00ffc8;
+    --rankify-primary: #4a148c; /* Deep purple */
+    --rankify-secondary: #ff4081; /* Bright pink */
     --rankify-dark-bg: #121212;
-    --rankify-text-light: #e0e0e0;
-    --rankify-accent: #ff0099;
+    --rankify-light-text: #e0e0e0;
+    --rankify-accent: #ffcc80;
 }
 
 .md-main__inner .md-content {
@@ -17,174 +18,176 @@
     padding: 0;
 }
 
-/* ---------- SPLIT SCREEN LAYOUT ---------- */
-.hero-container {
+/* ---------- HERO SECTION ---------- */
+.hero {
     display: flex;
-    height: 90vh;
-    background-color: var(--rankify-dark-bg);
-    color: var(--rankify-text-light);
-}
-
-/* LEFT SIDE - TERMINAL */
-.terminal-container {
-    flex: 1;
-    background-color: #1e1e1e;
-    padding: 2rem;
-    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: "Courier New", monospace;
-    border-right: 3px solid var(--rankify-primary);
+    text-align: center;
+    padding: 4rem 1.5rem;
+    background: linear-gradient(135deg, var(--rankify-primary) 30%, var(--rankify-secondary) 100%);
+    color: var(--rankify-light-text);
+    min-height: 500px;
+    border-radius: 0 0 50% 50%;
 }
 
-.terminal {
-    width: 90%;
-    max-width: 600px;
-    background-color: #000;
-    padding: 1rem;
-    border-radius: 8px;
-    color: var(--rankify-primary);
-    font-size: 1.2rem;
-    min-height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0px 0px 15px rgba(0, 255, 200, 0.4);
+.hero-logo {
+    max-width: 12rem;
+    height: auto;
+    margin-bottom: 1.5rem;
+    border-radius: 50%;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.cursor {
-    animation: blink 1s infinite;
+.hero-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
 }
 
-@keyframes blink {
-    50% { opacity: 0; }
-}
-
-/* RIGHT SIDE - FEATURES */
-.features-container {
-    flex: 1;
-    padding: 3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.feature {
-    display: flex;
-    align-items: center;
+.hero-subtitle {
+    font-size: 1.4rem;
+    max-width: 700px;
+    line-height: 1.6;
+    opacity: 0.9;
     margin-bottom: 2rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s ease-out;
 }
 
-.feature-icon {
-    font-size: 2rem;
-    margin-right: 1rem;
-    color: var(--rankify-accent);
-}
-
-.feature-text {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-/* CTA BUTTONS */
+/* ---------- CALL TO ACTION BUTTONS ---------- */
 .cta-buttons {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
     display: flex;
     gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
 }
 
 .cta-button {
-    background-color: var(--rankify-accent);
-    color: #fff;
     padding: 0.75rem 1.5rem;
-    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 8px;
     text-decoration: none;
-    font-weight: bold;
-    transition: transform 0.2s ease;
+    color: #fff;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.cta-button.primary {
+    background-color: var(--rankify-accent);
+}
+
+.cta-button.secondary {
+    background-color: transparent;
+    border: 2px solid #fff;
 }
 
 .cta-button:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
-/* Animation on Scroll */
-.reveal {
-    opacity: 1;
-    transform: translateY(0);
+/* ---------- FEATURES SECTION ---------- */
+.features-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background-color: #f5f5f5;
+    color: var(--rankify-dark-bg);
+}
+
+.features-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 3rem;
+}
+
+.features-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.feature-card {
+    width: 300px;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--rankify-primary);
+    margin-bottom: 1rem;
+}
+
+.feature-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.feature-description {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+/* ---------- RESPONSIVENESS ---------- */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .features-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-card {
+        width: 100%;
+        max-width: 300px;
+    }
 }
 </style>
 
-<div class="hero-container">
-    <!-- LEFT: TERMINAL SIMULATION -->
-    <div class="terminal-container">
-        <div class="terminal" id="terminal">
-            $ rankify retrieve --query "Best research papers on LLMs" <span class="cursor">|</span>
-        </div>
+<!-- HERO SECTION -->
+<div class="hero">
+    <img src="{{ 'assets/rankify-crop.png' | url }}" alt="Rankify Logo" class="hero-logo">
+    <h1 class="hero-title">Rankify</h1>
+    <p class="hero-subtitle">
+        A Comprehensive Python Toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation.
+    </p>
+    <div class="cta-buttons">
+        <a href="{{ 'getting-started' | url }}" class="cta-button primary">🚀 Get Started</a>
+        <a href="https://github.com/DataScienceUIBK/Rankify" class="cta-button secondary">⭐ GitHub</a>
     </div>
+</div>
 
-    <!-- RIGHT: FEATURES -->
-    <div class="features-container">
-        <div class="feature">
+<!-- FEATURES SECTION -->
+<section class="features-section">
+    <h2 class="features-title">Why Rankify?</h2>
+    <div class="features-grid">
+        <div class="feature-card">
             <span class="material-icons feature-icon">search</span>
-            <p class="feature-text">State-of-the-art Retrieval & Reranking</p>
+            <h3 class="feature-title">State-of-the-Art Retrieval</h3>
+            <p class="feature-description">Leverage advanced models like BM25, ColBERT, and more.</p>
         </div>
-        <div class="feature">
+        <div class="feature-card">
             <span class="material-icons feature-icon">bolt</span>
-            <p class="feature-text">Lightning-fast Execution</p>
+            <h3 class="feature-title">Lightning-Fast Execution</h3>
+            <p class="feature-description">Optimized for high-performance search and ranking.</p>
         </div>
-        <div class="feature">
+        <div class="feature-card">
             <span class="material-icons feature-icon">code</span>
-            <p class="feature-text">Fully Modular & Extensible</p>
-        </div>
-        <div class="feature">
-            <span class="material-icons feature-icon">storage</span>
-            <p class="feature-text">Pre-indexed Datasets Ready-to-use</p>
+            <h3 class="feature-title">Modular & Extensible</h3>
+            <p class="feature-description">Customize and extend retrieval and ranking with ease.</p>
         </div>
     </div>
-</div>
-
-<!-- CTA Floating Buttons -->
-<div class="cta-buttons">
-    <a href="{{ 'getting-started' | url }}" class="cta-button">🚀 Get Started</a>
-    <a href="https://github.com/DataScienceUIBK/Rankify" class="cta-button">⭐ GitHub</a>
-</div>
-
-<script>
-/* Terminal Animation */
-const commands = [
-    "$ rankify retrieve --query \"Best research papers on LLMs\"",
-    "$ rankify rerank --method RankGPT",
-    "$ rankify generate --context \"Top NLP techniques in 2024\"",
-    "$ rankify evaluate --dataset msmarco",
-];
-let cmdIndex = 0;
-const terminalElement = document.getElementById("terminal");
-
-function updateTerminal() {
-    terminalElement.innerHTML = commands[cmdIndex] + ' <span class="cursor">|</span>';
-    cmdIndex = (cmdIndex + 1) % commands.length;
-}
-
-setInterval(updateTerminal, 3000);
-
-/* Feature Animation */
-const features = document.querySelectorAll(".feature");
-
-function revealOnScroll() {
-    features.forEach((feature, index) => {
-        if (feature.getBoundingClientRect().top < window.innerHeight - 100) {
-            feature.classList.add("reveal");
-        }
-    });
-}
-
-window.addEventListener("scroll", revealOnScroll);
-</script>
+</section>
 
 {% endblock %}
