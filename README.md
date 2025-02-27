@@ -208,135 +208,32 @@ from rankify.dataset.dataset import Dataset
 Dataset.avaiable_dataset()
 ```
 
-**BM25 Retriever Datasets**
+**Retriever Datasets**
 ```python
 from rankify.dataset.dataset import Dataset
 # Download BM25-retrieved documents for nq-dev
 dataset = Dataset(retriever="bm25", dataset_name="nq-dev", n_docs=100)
 documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for 2wikimultihopqa-dev
-dataset = Dataset(retriever="bm25", dataset_name="2wikimultihopqa-train", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for archivialqa-dev
-dataset = Dataset(retriever="bm25", dataset_name="archivialqa-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for archivialqa-test
-dataset = Dataset(retriever="bm25", dataset_name="archivialqa-test", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for chroniclingamericaqa-test
-dataset = Dataset(retriever="bm25", dataset_name="chroniclingamericaqa-test", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for chroniclingamericaqa-dev
-dataset = Dataset(retriever="bm25", dataset_name="chroniclingamericaqa-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for entityquestions-test
-dataset = Dataset(retriever="bm25", dataset_name="entityquestions-test", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for ambig_qa-dev
-dataset = Dataset(retriever="bm25", dataset_name="ambig_qa-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for ambig_qa-train
-dataset = Dataset(retriever="bm25", dataset_name="ambig_qa-train", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for arc-test
-dataset = Dataset(retriever="bm25", dataset_name="arc-test", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BM25-retrieved documents for arc-dev
-dataset = Dataset(retriever="bm25", dataset_name="arc-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-```
-
-**BGE Retriever Datasets**
-```python
-from rankify.dataset.dataset import Dataset
 # Download BGE-retrieved documents for nq-dev
 dataset = Dataset(retriever="bge", dataset_name="nq-dev", n_docs=100)
 documents = dataset.download(force_download=False)
-# Download BGE-retrieved documents for 2wikimultihopqa-dev
-dataset = Dataset(retriever="bge", dataset_name="2wikimultihopqa-train", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download BGE-retrieved documents for archivialqa-dev
-dataset = Dataset(retriever="bge", dataset_name="archivialqa-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-```
-
-**ColBERT Retriever Datasets**
-
-
-```python
-from rankify.dataset.dataset import Dataset
 # Download ColBERT-retrieved documents for nq-dev
 dataset = Dataset(retriever="colbert", dataset_name="nq-dev", n_docs=100)
 documents = dataset.download(force_download=False)
-# Download ColBERT-retrieved documents for 2wikimultihopqa-dev
-dataset = Dataset(retriever="colbert", dataset_name="2wikimultihopqa-train", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download ColBERT-retrieved documents for archivialqa-dev
-dataset = Dataset(retriever="colbert", dataset_name="archivialqa-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-```
-
-**MSS-DPR Retriever Datasets**
-
-
-```python
-from rankify.dataset.dataset import Dataset
 # Download MSS-DPR-retrieved documents for nq-dev
 dataset = Dataset(retriever="mss-dpr", dataset_name="nq-dev", n_docs=100)
 documents = dataset.download(force_download=False)
-# Download MSS-DPR-retrieved documents for 2wikimultihopqa-dev
-dataset = Dataset(retriever="mss-dpr", dataset_name="2wikimultihopqa-train", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download MSS-DPR-retrieved documents for archivialqa-dev
-dataset = Dataset(retriever="mss-dpr", dataset_name="archivialqa-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-```
-
-**MSS Retriever Datasets**
-
-```python
-from rankify.dataset.dataset import Dataset
 # Download MSS-retrieved documents for nq-dev
 dataset = Dataset(retriever="mss", dataset_name="nq-dev", n_docs=100)
 documents = dataset.download(force_download=False)
-# Download MSS-retrieved documents for 2wikimultihopqa-dev
-dataset = Dataset(retriever="mss", dataset_name="2wikimultihopqa-train", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download MSS-retrieved documents for archivialqa-dev
-dataset = Dataset(retriever="mss", dataset_name="archivialqa-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-```
-
-**Contriever Retriever Datasets**
-
-```python
-from rankify.dataset.dataset import Dataset
 # Download MSS-retrieved documents for nq-dev
 dataset = Dataset(retriever="contriever", dataset_name="nq-dev", n_docs=100)
 documents = dataset.download(force_download=False)
-# Download MSS-retrieved documents for 2wikimultihopqa-dev
-dataset = Dataset(retriever="contriever", dataset_name="2wikimultihopqa-train", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download MSS-retrieved documents for archivialqa-dev
-dataset = Dataset(retriever="contriever", dataset_name="archivialqa-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-```
-
-
-**ANCE Retriever Datasets**
-
-```python
-from rankify.dataset.dataset import Dataset
 # Download ANCE-retrieved documents for nq-dev
 dataset = Dataset(retriever="ance", dataset_name="nq-dev", n_docs=100)
 documents = dataset.download(force_download=False)
-# Download ANCE-retrieved documents for 2wikimultihopqa-dev
-dataset = Dataset(retriever="ance", dataset_name="2wikimultihopqa-train", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download ANCE-retrieved documents for archivialqa-dev
-dataset = Dataset(retriever="ance", dataset_name="archivialqa-dev", n_docs=100)
-documents = dataset.download(force_download=False)
 ```
+
 
 **Load Pre-retrieved Dataset from File**  
 
