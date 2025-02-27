@@ -138,6 +138,7 @@ extra:
         - icon: fontawesome/brands/discord
           link: https://discord.gg/Fbyf7ucKs5
     cards: false  # Disable automatic generation of OG cards
+    footer: "Made with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) | Template taken from [DSPy](https://github.com/stanfordnlp/dspy)"
 
 
 
