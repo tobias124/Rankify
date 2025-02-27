@@ -1,193 +1,93 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <style>
-/* ---------- GLOBAL STYLES ---------- */
-:root {
-    --rankify-primary: #4a148c; /* Deep purple */
-    --rankify-secondary: #ff4081; /* Bright pink */
-    --rankify-dark-bg: #121212;
-    --rankify-light-text: #e0e0e0;
-    --rankify-accent: #ffcc80;
-}
-
-.md-main__inner .md-content {
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-/* ---------- HERO SECTION ---------- */
-.hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  /* Unique styling for homepage only */
+  .hero {
     text-align: center;
-    padding: 4rem 1.5rem;
-    background: linear-gradient(135deg, var(--rankify-primary) 30%, var(--rankify-secondary) 100%);
-    color: var(--rankify-light-text);
-    min-height: 500px;
+    padding: 5rem 2rem;
+    background: linear-gradient(135deg, #6a11cb 10%, #2575fc 90%);
+    color: white;
+    min-height: 550px;
     border-radius: 0 0 50% 50%;
-}
+    position: relative;
+  }
 
-.hero-logo {
-    max-width: 12rem;
-    height: auto;
-    margin-bottom: 1.5rem;
-    border-radius: 50%;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.hero-title {
-    font-size: 2.8rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-}
-
-.hero-subtitle {
-    font-size: 1.4rem;
+  /* Fix image appearance */
+  .hero img {
+    width: 80%; /* Make it larger */
     max-width: 700px;
-    line-height: 1.6;
-    opacity: 0.9;
-    margin-bottom: 2rem;
-}
+    height: auto;
+    display: block;
+    margin: 0 auto 2rem;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  }
 
-/* ---------- CALL TO ACTION BUTTONS ---------- */
-.cta-buttons {
+  .hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .hero p {
+    font-size: 1.3rem;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    opacity: 0.9;
+    color: #e0e0e0;
+  }
+
+  .cta-buttons {
     display: flex;
     gap: 1rem;
     justify-content: center;
-    margin-top: 1rem;
-}
+  }
 
-.cta-button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    border-radius: 8px;
+  .cta-button {
+    padding: 0.8rem 1.6rem;
+    background: #ffcc80;
+    color: black;
     text-decoration: none;
-    color: #fff;
+    border-radius: 10px;
+    font-weight: bold;
     transition: transform 0.2s ease, background-color 0.3s ease;
-}
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  }
 
-.cta-button.primary {
-    background-color: var(--rankify-accent);
-}
-
-.cta-button.secondary {
-    background-color: transparent;
-    border: 2px solid #fff;
-}
-
-.cta-button:hover {
+  .cta-button:hover {
     transform: scale(1.05);
-}
+    background-color: #ffd54f;
+  }
 
-/* ---------- FEATURES SECTION ---------- */
-.features-section {
-    padding: 4rem 2rem;
-    text-align: center;
-    background-color: #f5f5f5;
-    color: var(--rankify-dark-bg);
-}
-
-.features-title {
-    font-size: 2.2rem;
-    font-weight: 800;
-    margin-bottom: 3rem;
-}
-
-.features-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-}
-
-.feature-card {
-    width: 300px;
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.feature-icon {
-    font-size: 3rem;
-    color: var(--rankify-primary);
-    margin-bottom: 1rem;
-}
-
-.feature-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.feature-description {
-    font-size: 0.9rem;
-    opacity: 0.7;
-}
-
-/* ---------- RESPONSIVENESS ---------- */
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 2rem;
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .hero {
+      padding: 3rem 1rem;
+      min-height: auto;
     }
-
-    .hero-subtitle {
-        font-size: 1.1rem;
+    .hero img {
+      width: 95%;
+      max-width: 500px;
     }
-
-    .features-grid {
-        flex-direction: column;
-        align-items: center;
+    .hero h1 {
+      font-size: 2.2rem;
     }
-
-    .feature-card {
-        width: 100%;
-        max-width: 300px;
+    .hero p {
+      font-size: 1.1rem;
     }
-}
+  }
 </style>
 
-<!-- HERO SECTION -->
 <div class="hero">
-    <img src="{{ 'assets/rankify-crop.png' | url }}" alt="Rankify Logo" class="hero-logo">
-    <h1 class="hero-title">Rankify</h1>
-    <p class="hero-subtitle">
-        A Comprehensive Python Toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation.
-    </p>
-    <div class="cta-buttons">
-        <a href="{{ 'getting-started' | url }}" class="cta-button primary">🚀 Get Started</a>
-        <a href="https://github.com/DataScienceUIBK/Rankify" class="cta-button secondary">⭐ GitHub</a>
-    </div>
+  <img src="{{ 'assets/overview.jpg' | url }}" alt="Overview of Rankify">
+  <h1>Rankify</h1>
+  <p>A powerful Python toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation.</p>
+  <div class="cta-buttons">
+    <a href="{{ 'getting-started' | url }}" class="cta-button">🚀 Get Started</a>
+    <a href="https://github.com/DataScienceUIBK/Rankify" class="cta-button">⭐ GitHub</a>
+  </div>
 </div>
-
-<!-- FEATURES SECTION -->
-<section class="features-section">
-    <h2 class="features-title">Why Rankify?</h2>
-    <div class="features-grid">
-        <div class="feature-card">
-            <span class="material-icons feature-icon">search</span>
-            <h3 class="feature-title">State-of-the-Art Retrieval</h3>
-            <p class="feature-description">Leverage advanced models like BM25, ColBERT, and more.</p>
-        </div>
-        <div class="feature-card">
-            <span class="material-icons feature-icon">bolt</span>
-            <h3 class="feature-title">Lightning-Fast Execution</h3>
-            <p class="feature-description">Optimized for high-performance search and ranking.</p>
-        </div>
-        <div class="feature-card">
-            <span class="material-icons feature-icon">code</span>
-            <h3 class="feature-title">Modular & Extensible</h3>
-            <p class="feature-description">Customize and extend retrieval and ranking with ease.</p>
-        </div>
-    </div>
-</section>
 
 {% endblock %}
