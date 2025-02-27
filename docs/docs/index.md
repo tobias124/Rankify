@@ -3,8 +3,10 @@ sidebar_position: 1
 hide:
   - navigation
   - toc
-
+template: home.html
 ---
+
+
 
 # Welcome to Rankify
 
