@@ -36,48 +36,49 @@ _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and ret
 
 
 
-## :sparkles: Features
+### **🪄✨ Features**  
 
-  - **Unified Framework**: Combines retrieval, re-ranking, and retrieval-augmented generation (RAG).
-  - **Rich Dataset Support**: Includes 40 benchmark datasets with pre-retrieved documents.
-  - **Diverse Retrieval Methods**: Supports BM25, DPR, ANCE, BPR, ColBERT, BGE, and Contriever.
-  - **Powerful Re-Ranking**: Implements 24 models with 41 sub-methods for optimal ranking.
-  - **Prebuilt Indices**: Provides Wikipedia and MS MARCO corpora for streamlined retrieval.
-  - **Seamless RAG Integration**: Supports GPT, LLAMA, T5, and Fusion-in-Decoder (FiD) models.
-  - **Extensible & Modular**: Easily integrates custom datasets, retrievers, and ranking models.
-  - **Built-in Evaluation**: Includes retrieval, ranking, and RAG metrics for benchmarking.
-
-- **User-Friendly Documentation**: Detailed **[📖 online documentation](http://rankify.readthedocs.io/)**, example notebooks, and tutorials for easy adoption.  
+- 🔥 **Unified Framework**: Combines **retrieval**, **re-ranking**, and **retrieval-augmented generation (RAG)** into a single modular toolkit.  
+- 📚 **Rich Dataset Support**: Includes **40+ benchmark datasets** with **pre-retrieved documents** for seamless experimentation.  
+- 🧲 **Diverse Retrieval Methods**: Supports **BM25, DPR, ANCE, BPR, ColBERT, BGE, and Contriever** for flexible retrieval strategies.  
+- 🎯 **Powerful Re-Ranking**: Implements **24 advanced models** with **41 sub-methods** to optimize ranking performance.  
+- 🏗️ **Prebuilt Indices**: Provides **Wikipedia and MS MARCO** corpora, eliminating indexing overhead and speeding up retrieval.  
+- 🔮 **Seamless RAG Integration**: Works with **GPT, LLAMA, T5, and Fusion-in-Decoder (FiD)** models for **retrieval-augmented generation**.  
+- 🛠 **Extensible & Modular**: Easily integrates **custom datasets, retrievers, ranking models, and RAG pipelines**.  
+- 📊 **Built-in Evaluation Suite**: Includes **retrieval, ranking, and RAG metrics** for robust benchmarking.  
+- 📖 **User-Friendly Documentation**: Access detailed **[📖 online docs](http://rankify.readthedocs.io/)**, **example notebooks**, and **tutorials** for easy adoption.  
+ 
 
 ## 🔍 Roadmap  
 
 **Rankify** is still under development, and this is our first release (**v0.1.0**). While it already supports a wide range of retrieval, re-ranking, and RAG techniques, we are actively enhancing its capabilities by adding more retrievers, rankers, datasets, and features.  
 
-### 🚀 Planned Improvements  
 
-- **Retrievers**  
-  - ✅ Supports BM25, DPR, ANCE, BPR, ColBERT, BGE, Contriever
-  - ⏳ Add Spar, MSS, MSS-DPR
-  - ⏳ Enable custom index loading 
+### **🛠 Planned Improvements**  
 
-- **Re-Rankers**  
-  - ✅ 24 models, 41 sub-methods
-  - ⏳ Add more advanced ranking models
-  
-- **Datasets**  
-  - ✅ 40 benchmark datasets  
-  - ⏳ Add more datasets & support custom integration  
+#### **Retrievers**  
+✅ **Supports**: BM25, DPR, ANCE, BPR, ColBERT, BGE, Contriever  
+✨ ⏳ **Coming Soon**: Spar, MSS, MSS-DPR  
+✨ ⏳ **Custom Index Loading** for user-defined retrieval corpora  
 
-- **Retrieval-Augmented Generation (RAG)**  
-  - ✅ Supports GPT, LLAMA, T5
-  - ⏳ Extend for more generative models 
+#### **Re-Rankers**  
+✅ **24 models & 41 sub-methods**  
+✨ ⏳ **Expanding with more ranking models**  
 
-- **Evaluation & Usability**  
-  - ✅ Standard retrieval & ranking metrics
-  - ⏳ Add advanced evaluation metrics (NDCG, MAP)
+#### **Datasets**  
+✅ **40 benchmark datasets**  
+✨ ⏳ **Adding new datasets & custom dataset integration**  
 
-- **Pipeline Integration**  
-  - ⏳ Add a pipeline module for full workflow automation
+#### **Retrieval-Augmented Generation (RAG)**  
+✅ **Works with**: GPT, LLAMA, T5  
+✨ ⏳ **Expanding to more generative models**  
+
+#### **Evaluation & Usability**  
+✅ **Standard metrics**: Top-K, EM, Recall  
+✨ ⏳ **Adding advanced metrics**: NDCG, MAP for retrievers  
+
+#### **Pipeline Integration**  
+✨ ⏳ **Introducing a pipeline module** for end-to-end retrieval, ranking, and RAG workflows  
 
 ## 🔧 Installation  
 
