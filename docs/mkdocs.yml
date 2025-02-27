@@ -54,7 +54,7 @@ nav:
           - Generator: api/generators/generator.md
           - FiD Generator: api/generators/fid.md
           - In Context Ralm Generator: api/generators/in_context_ralm.md
-  - License: license.md
+  - Tutorials: tutorials/index.md
 
 
 theme:
