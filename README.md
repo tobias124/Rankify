@@ -38,21 +38,14 @@ _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and ret
 
 ## :sparkles: Features
 
-- **Comprehensive Retrieval & Reranking Framework**: Rankify unifies retrieval, re-ranking, and retrieval-augmented generation (RAG) into a single modular Python toolkit, enabling seamless experimentation and benchmarking.  
-
-- **Extensive Dataset Support**: Includes **40 benchmark datasets** with **pre-retrieved documents**, covering diverse domains such as **question answering, dialogue, entity linking, and fact verification**.  
-
-- **Diverse Retriever Integration**: Supports **7 retrieval techniques**, including **BM25, DPR, ANCE, BPR, ColBERT, BGE, and Contriever**, providing flexibility for various retrieval strategies.  
-
-- **Advanced Re-ranking Models**: Implements **24 primary re-ranking models** with **41 sub-methods**, covering **pointwise, pairwise, and listwise** re-ranking approaches for enhanced ranking performance.  
-
-- **Prebuilt Retrieval Indices**: Provides **precomputed Wikipedia and MS MARCO corpora** for multiple retrieval models, eliminating indexing overhead and accelerating experiments.  
-
-- **Seamless RAG Integration**: Bridges retrieval and generative models (e.g., **GPT, LLAMA, T5**), enabling retrieval-augmented generation with **zero-shot**, **Fusion-in-Decoder (FiD)**, and **in-context learning** strategies.  
-
-- **Modular & Extensible Design**: Easily integrates custom datasets, retrievers, re-rankers, and generation models using Rankify’s structured Python API.  
-
-- **Comprehensive Evaluation Suite**: Offers **automated performance evaluation** with **retrieval, ranking, and RAG metrics**, ensuring reproducible benchmarking.  
+  - **Unified Framework**: Combines retrieval, re-ranking, and retrieval-augmented generation (RAG).
+  - **Rich Dataset Support**: Includes 40 benchmark datasets with pre-retrieved documents.
+  - **Diverse Retrieval Methods**: Supports BM25, DPR, ANCE, BPR, ColBERT, BGE, and Contriever.
+  - **Powerful Re-Ranking**: Implements 24 models with 41 sub-methods for optimal ranking.
+  - **Prebuilt Indices**: Provides Wikipedia and MS MARCO corpora for streamlined retrieval.
+  - **Seamless RAG Integration**: Supports GPT, LLAMA, T5, and Fusion-in-Decoder (FiD) models.
+  - **Extensible & Modular**: Easily integrates custom datasets, retrievers, and ranking models.
+  - **Built-in Evaluation**: Includes retrieval, ranking, and RAG metrics for benchmarking.
 
 - **User-Friendly Documentation**: Detailed **[📖 online documentation](http://rankify.readthedocs.io/)**, example notebooks, and tutorials for easy adoption.  
 
@@ -63,29 +56,28 @@ _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and ret
 ### 🚀 Planned Improvements  
 
 - **Retrievers**  
-  - [x] Support for **BM25, DPR, ANCE, BPR, ColBERT, BGE, and Contriever**  
-  - [ ] Add missing retrievers: **Spar, MSS, MSS-DPR**  
-  - [ ] Enable **custom index loading** and support for user-defined retrieval corpora  
+  - ✅ Supports BM25, DPR, ANCE, BPR, ColBERT, BGE, Contriever
+  - ⏳ Add Spar, MSS, MSS-DPR
+  - ⏳ Enable custom index loading 
 
 - **Re-Rankers**  
-  - [x] 24 primary re-ranking models with 41 sub-methods  
-  - [ ] Expand the list by adding **more advanced ranking models** 
-
+  - ✅ 24 models, 41 sub-methods
+  - ⏳ Add more advanced ranking models
+  
 - **Datasets**  
-  - [x] 40 benchmark datasets for retrieval, ranking, and RAG  
-  - [ ] Add **more datasets**  
-  - [ ] Support for **custom dataset integration**  
+  - ✅ 40 benchmark datasets  
+  - ⏳ Add more datasets & support custom integration  
 
 - **Retrieval-Augmented Generation (RAG)**  
-  - [x] Integration with **GPT, LLAMA, and T5**  
-  - [ ] Extend support for **more generative models**   
+  - ✅ Supports GPT, LLAMA, T5
+  - ⏳ Extend for more generative models 
 
 - **Evaluation & Usability**  
-  - [x] Standard retrieval and ranking evaluation metrics (Top-K, EM, Recall, ...)
-  - [ ] Add **advanced evaluation metrics** (NDCG, MAP for retriever )  
+  - ✅ Standard retrieval & ranking metrics
+  - ⏳ Add advanced evaluation metrics (NDCG, MAP)
 
 - **Pipeline Integration**  
-  - [ ] **Add a pipeline module** for streamlined retrieval, re-ranking, and RAG workflows 
+  - ⏳ Add a pipeline module for full workflow automation
 
 ## 🔧 Installation  
 
