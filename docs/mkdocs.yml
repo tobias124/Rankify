@@ -10,8 +10,8 @@ repo_name: DataScienceUIBK/Rankify
 
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
   - Installation: installation.md
+  - Getting Started: getting-started.md
   - References:
       - API Reference: api/index.md
       - Dataset: api/dataset.md
