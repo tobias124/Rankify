@@ -2,91 +2,92 @@
 
 {% block content %}
 <style>
-  /* Unique styling for homepage only */
+  /* Hero container */
   .hero {
     text-align: center;
-    padding: 5rem 2rem;
-    background: linear-gradient(135deg, #6a11cb 10%, #2575fc 90%);
-    color: white;
-    min-height: 550px;
-    border-radius: 0 0 50% 50%;
-    position: relative;
+    padding: 2rem 1rem; /* Smaller vertical spacing */
+    background-color: #fff;
+    color: #333;
   }
 
-  /* Fix image appearance */
   .hero img {
-    width: 80%; /* Make it larger */
-    max-width: 700px;
-    height: auto;
-    display: block;
-    margin: 0 auto 2rem;
-    border-radius: 12px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    width: 60%;
+    max-width: 600px;
+    margin-bottom: 1rem;
   }
 
   .hero h1 {
-    font-size: 2.8rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 2.2rem;
     font-weight: bold;
-    color: #fff;
+    justify-content: center;
+    color: #000000;
   }
 
   .hero p {
-    font-size: 1.3rem;
-    max-width: 700px;
-    margin: 0 auto 2rem;
-    opacity: 0.9;
-    color: #e0e0e0;
-  }
-
-  .cta-buttons {
-    display: flex;
-    gap: 1rem;
+    margin-bottom: 1rem;
+    color: #000000;
     justify-content: center;
   }
 
-  .cta-button {
-    padding: 0.8rem 1.6rem;
-    background: #ffcc80;
-    color: black;
-    text-decoration: none;
-    border-radius: 10px;
-    font-weight: bold;
-    transition: transform 0.2s ease, background-color 0.3s ease;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  /* Badge rows */
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
   }
-
-  .cta-button:hover {
-    transform: scale(1.05);
-    background-color: #ffd54f;
-  }
-
-  /* Mobile responsiveness */
-  @media (max-width: 768px) {
-    .hero {
-      padding: 3rem 1rem;
-      min-height: auto;
-    }
-    .hero img {
-      width: 95%;
-      max-width: 500px;
-    }
-    .hero h1 {
-      font-size: 2.2rem;
-    }
-    .hero p {
-      font-size: 1.1rem;
-    }
+  .badge-row a img {
+    height: 25px; /* Adjust badge size */
+    width: auto;
   }
 </style>
 
 <div class="hero">
-  <img src="{{ 'assets/overview.jpg' | url }}" alt="Overview of Rankify">
+  <img src="{{ 'assets/overview.jpg' | url }}" width="700" height="400" alt="Overview of Rankify">
   <h1>Rankify</h1>
-  <p>A powerful Python toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation.</p>
-  <div class="cta-buttons">
-    <a href="{{ 'getting-started' | url }}" class="cta-button">🚀 Get Started</a>
-    <a href="https://github.com/DataScienceUIBK/Rankify" class="cta-button">⭐ GitHub</a>
+  <p>A powerful Python toolkit for Retrieval, Re-Ranking, and Retrieval-Augmented Generation. By integrating cutting-edge techniques and modular components, it simplifies the process of searching, sorting, and leveraging external knowledge for efficient question answering, document retrieval, and text generation tasks.
+
+
+
+
+
+
+  </p>
+
+  <!-- First Row: 5 Badges -->
+  <div class="badge-row">
+    <a href="https://arxiv.org/abs/2502.02464" target="_blank">
+      <img src="https://img.shields.io/badge/arXiv-b5212f.svg?logo=arxiv" alt="ArXiv">
+    </a>
+    <a href="https://huggingface.co/datasets/abdoelsayed/reranking-datasets" target="_blank">
+      <img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace%20Datasets-27b3b4.svg" alt="HuggingFace Datasets">
+    </a>
+    <a href="https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light" target="_blank">
+      <img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace%20Datasets%20light-orange.svg" alt="HF Light">
+    </a>
+    <a>
+      <img alt="Python Version" src="https://img.shields.io/badge/Python-3.10_3.11-blue">
+    </a>
+    <a href="https://opensource.org/license/apache-2-0">
+      <img src="https://img.shields.io/static/v1?label=License&message=Apache-2.0&color=red" alt="Apache 2.0">
+    </a>
+  </div>
+
+  <!-- Second Row: 4 Badges -->
+  <div class="badge-row">
+    <a href="https://pepy.tech/projects/rankify" target="_blank">
+      <img src="https://static.pepy.tech/badge/rankify" alt="PyPI Downloads">
+    </a>
+    <a href="https://github.com/DataScienceUIBK/rankify/releases" target="_blank">
+      <img alt="GitHub release" src="https://img.shields.io/github/release/DataScienceUIBK/rankify.svg?label=Version&color=orange">
+    </a>
+    <a href="{{ 'getting-started' | url }}">
+      <img src="https://img.shields.io/badge/Get%20Started-blue?style=flat&logo=bookstack" alt="Get Started">
+    </a>
+    <a href="https://github.com/DataScienceUIBK/Rankify" target="_blank">
+      <img src="https://img.shields.io/badge/GitHub-100000?style=flat&logo=github&logoColor=white" alt="GitHub">
+    </a>
   </div>
 </div>
 
