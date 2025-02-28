@@ -32,25 +32,27 @@ _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and ret
 <p align="center">
 <img src="images/overview.png" width="500" height="500" >
 </p>
+
+
 ---
 
 ## :link: Navigation
 - [Features](#-features)
 - [Roadmap](#-roadmap)
 - [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Retrievers](#-retrievers)
-- [Re-Rankers](#-rerankers)
-- [Generators](#-generators)
-- [Evaluation](#-evaluating-with-metrics)
+- [Quick Start](#rocket-quick-start)
+- [Retrievers](#2️⃣-running-retrieval)
+- [Re-Rankers](#3️⃣-running-reranking)
+- [Generators](#4️⃣-using-generator-module)
+- [Evaluation](#5️⃣-evaluating-with-metrics)
 - [Documentation](#-documentation)
 - [Contributing](#-contributing)
-- [License](#-license)
+- [License](#bookmark-license)
 - [Acknowledgments](#-acknowledgments)
-- [Citation](#-citation)
+- [Citation](#star2-citation)
 
 ---
-### **🪄✨ Features**  
+### **✨ Features**  
 
 - 🔥 **Unified Framework**: Combines **retrieval**, **re-ranking**, and **retrieval-augmented generation (RAG)** into a single modular toolkit.  
 - 📚 **Rich Dataset Support**: Includes **40+ benchmark datasets** with **pre-retrieved documents** for seamless experimentation.  
