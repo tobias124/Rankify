@@ -35,7 +35,7 @@ _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and ret
 
 
 
-
+---
 ### **🪄✨ Features**  
 
 - 🔥 **Unified Framework**: Combines **retrieval**, **re-ranking**, and **retrieval-augmented generation (RAG)** into a single modular toolkit.  
