@@ -721,7 +721,7 @@ for i, doc in enumerate(retrieved_documents):
 ## 3️⃣ Running Reranking
 Rankify provides support for multiple reranking models. Below are examples of how to use each model.  
 
-** Example: Reranking a Document**  
+**Example: Reranking a Document**  
 ```python
 from rankify.dataset.dataset import Document, Question, Answer, Context
 from rankify.models.reranking import Reranking
