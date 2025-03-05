@@ -323,12 +323,14 @@ INDEX_TYPE = {
     },
     'bge': {
         'wiki': {
-            'part1_url': "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/index/bgb_index.z01?download=true",
-            'part2_url': "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/index/bgb_index.zip?download=true",
+            'urls': [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/index/bgb_index.tar.gz.part1?download=true",
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/index/bgb_index.tar.gz.part2?download=true",
+            ],
             'passages_url': "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/psgs_w100/psgs_w100.tsv?download=true",
         },
         'msmarco': {
-            'url': "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/index/msmarco_embeddings_bgb.zip?download=true",
+            'urls': "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/index/msmarco_embeddings_bgb.zip?download=true",
             'passages_url': "https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/msmarco-passage-corpus/msmarco-passage-corpus.tsv?download=true",
         },
     },
