@@ -19,10 +19,57 @@ import shutil, gzip
 class BGERetriever:
     """
     Implements **BGE Retriever**, a **passage retrieval system** using **precomputed embeddings** and **FAISS indexing**.
+
+
+    BGE Retriever efficiently retrieves relevant documents by **leveraging dense representations** and **FAISS-based approximate nearest neighbor (ANN) search**.
+    It supports **multi-part ZIP extraction** and **passage retrieval** for large-scale information retrieval tasks.
+
+    References:
+        - **Xiao et al. (2024)**: *C-Pack: Packed Resources for General Chinese Embeddings*.
+          [Paper](https://dl.acm.org/doi/10.1145/3625555.3662062)
+
+    Attributes:
+        model_name (str): The embedding model used for generating **dense representations**.
+        n_docs (int): Number of **top-ranked documents** retrieved per query.
+        batch_size (int): Number of **queries processed per batch** for efficiency.
+        device (str): The computing device (`"cuda"` or `"cpu"`).
+        index_type (str): The type of **retrieval index** (`"wiki"` or `"msmarco"`).
+        index_folder (str): Path where the **FAISS index** and supporting files are stored.
+        doc_ids (List[str]): List of **document IDs** mapped to stored embeddings.
+        doc_texts (dict): Dictionary mapping **document IDs** to text and title.
+        passage_path (str): Path to the downloaded **passage file**.
+        index (faiss.IndexFlatIP): The **FAISS index** used for nearest neighbor search.
+        model (AutoModel): The transformer model used for **query encoding**.
+        tokenizer (AutoTokenizer): The tokenizer corresponding to the embedding model.
+
+    Example:
+        ```python
+        from rankify.dataset.dataset import Document, Question
+        from rankify.retrievers.retriever import Retriever
+
+        retriever = Retriever(method="bge", model="BAAI/bge-large-en-v1.5", n_docs=5, index_type="wiki")
+        documents = [Document(question=Question("Who discovered gravity?"))]
+
+        retrieved_documents = retriever.retrieve(documents)
+        print(retrieved_documents[0].contexts[0].text)
+        ```
     """
     CACHE_DIR = os.environ.get("RERANKING_CACHE_DIR", "./cache")
 
     def __init__(self, model="BAAI/bge-large-en-v1.5", n_docs=10, batch_size=32, device="cuda", index_type="wiki"):
+        """
+        Initializes the **BGE Retriever**.
+
+        Args:
+            model (str, optional): Name of the **embedding model** (default: `"BAAI/bge-large-en-v1.5"`).
+            n_docs (int, optional): Number of **top documents** to retrieve per query (default: `10`).
+            batch_size (int, optional): Number of **queries processed per batch** (default: `32`).
+            device (str, optional): Computing device (`"cuda"` or `"cpu"`, default: `"cuda"`).
+            index_type (str, optional): The **type of retrieval index** (`"wiki"` or `"msmarco"`, default: `"wiki"`).
+
+        Raises:
+            ValueError: If the specified `index_type` is not supported.
+        """
         self.model_name = model
         self.n_docs = n_docs
         self.batch_size = batch_size
@@ -51,6 +98,9 @@ class BGERetriever:
         return os.path.basename(parsed_url.path)
 
     def _ensure_index_and_passages_downloaded(self):
+        """
+        Ensures that the necessary **index files** and **passages** are **downloaded and extracted**.
+        """
         os.makedirs(self.index_folder, exist_ok=True)
         required_files = [
             os.path.join(self.index_folder, "bge_doc_ids.pkl"),
@@ -79,6 +129,13 @@ class BGERetriever:
             self.passage_path = passage_path
 
     def _download_file(self, url, save_path):
+        """
+        Downloads a **file** from a given **URL** and saves it to a **specified path**.
+
+        Args:
+            url (str): The URL of the **file to download**.
+            save_path (str): The **path** where the file will be stored.
+        """
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         response = requests.get(url, stream=True)
         with open(save_path, "wb") as f:
@@ -86,6 +143,18 @@ class BGERetriever:
                 f.write(chunk)
 
     def _extract_zip_files(self, folder):
+        """
+        Extracts all `.zip` files in the specified folder and places the extracted files in the same directory.
+
+        This method processes each ZIP archive found in the folder, extracts its contents directly 
+        into the `index_folder`, and removes the ZIP file after extraction. 
+
+        Args:
+            folder (str): The directory containing the ZIP files to be extracted.
+
+        Raises:
+            zipfile.BadZipFile: If any of the ZIP archives are corrupted or not valid.
+        """
         zip_files = [f for f in os.listdir(folder) if f.endswith(".zip")]
         target_folder = folder  # Ensure it extracts inside the same folder
 
@@ -111,6 +180,19 @@ class BGERetriever:
 
 
     def _extract_multi_part_zip(self, folder):
+        """
+        Extracts multi-part `.tar.gz` archives from the specified folder and unpacks them.
+
+        This method first merges multiple `.tar.gz` parts into a single compressed archive.
+        It then decompresses the archive and extracts its contents into the given folder. 
+        The method ensures that all temporary files (e.g., split parts and the merged archive)  are removed after extraction.
+
+        Args:
+            folder (str): The directory containing the multi-part archive files.
+
+        Raises:
+            RuntimeError: If the combined archive is not a valid `.tar.gz` file.
+        """
         zip_parts = sorted([f for f in os.listdir(folder) if f.startswith("bgb_index.tar.")],
                            key=lambda x: x.split('.')[-1])
         combined_zip_path = os.path.join(folder, "combined.tar.gz")
