@@ -52,20 +52,24 @@ class BGERetriever:
 
     def _ensure_index_and_passages_downloaded(self):
         os.makedirs(self.index_folder, exist_ok=True)
-
-        if not os.path.exists(os.path.join(self.index_folder, self.index_type)):
-            if isinstance(self.index_config['urls'], list):
-                for url in self.index_config['urls']:
-                    filename = self.extract_filename_from_url(url)
-                    zip_path = os.path.join(self.index_folder, filename)
+        required_files = [
+            os.path.join(self.index_folder, "bge_doc_ids.pkl"),
+            os.path.join(self.index_folder, "bge_embeddings.h5"),
+        ]
+        if not all(os.path.exists(f) for f in required_files):
+            if not os.path.exists(os.path.join(self.index_folder, self.index_type)):
+                if isinstance(self.index_config['urls'], list):
+                    for url in self.index_config['urls']:
+                        filename = self.extract_filename_from_url(url)
+                        zip_path = os.path.join(self.index_folder, filename)
+                        if not os.path.exists(zip_path):
+                            self._download_file(url, zip_path)
+                    self._extract_multi_part_zip(self.index_folder)
+                else:
+                    zip_path = os.path.join(self.index_folder, "index.zip")
                     if not os.path.exists(zip_path):
-                        self._download_file(url, zip_path)
-                self._extract_multi_part_zip(self.index_folder)
-            else:
-                zip_path = os.path.join(self.index_folder, "index.zip")
-                if not os.path.exists(zip_path):
-                    self._download_file(self.index_config['urls'], zip_path)
-                self._extract_zip_files(self.index_folder)
+                        self._download_file(self.index_config['urls'], zip_path)
+                    self._extract_zip_files(self.index_folder)
 
         if self.passages_url:
             passage_file_name = self.extract_filename_from_url(self.passages_url)
@@ -103,6 +107,8 @@ class BGERetriever:
                         shutil.copyfileobj(source, target)
 
             print(f"Extracted {zip_file} directly into {target_folder}")
+            os.remove(zip_path)
+
 
     def _extract_multi_part_zip(self, folder):
         zip_parts = sorted([f for f in os.listdir(folder) if f.startswith("bgb_index.tar.")],
@@ -116,8 +122,6 @@ class BGERetriever:
                     shutil.copyfileobj(part_file, combined)
 
         try:
-            """with zipfile.ZipFile(combined_zip_path, "r") as zip_ref:
-                zip_ref.extractall(folder)"""
             tar_file = combined_zip_path.replace(".gz", "")
             with gzip.open(combined_zip_path, "rb") as f_in, open(tar_file, "wb") as f_out:
                 shutil.copyfileobj(f_in, f_out)
@@ -127,6 +131,8 @@ class BGERetriever:
             raise RuntimeError("Error: Combined file is not a valid ZIP archive.")
         finally:
             os.remove(combined_zip_path)
+            for part in zip_parts:
+                os.remove(os.path.join(folder, part))
 
     def build_faiss_index_on_disk(self):
         """
