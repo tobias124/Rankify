@@ -269,7 +269,8 @@ Now, you can integrate **retrieved documents** with **re-ranking** and **RAG** w
 
 The following table provides an overview of the availability of different retrieval methods (**BM25, DPR, ColBERT, ANCE, BGE, Contriever**) for each dataset.  
 
-✅ **Completed**  
+✅ **Completed**
+⏳  **Part Completed, Pending other Parts**
 🕒 **Pending**  
 
 <table style="width: 100%;">
@@ -395,7 +396,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">⏳</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
@@ -413,7 +414,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">⏳</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
@@ -467,7 +468,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">⏳</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
@@ -476,7 +477,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">⏳</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
@@ -503,7 +504,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">⏳</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
@@ -550,7 +551,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">⏳</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
@@ -580,7 +581,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">⏳</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
@@ -590,7 +591,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">⏳</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
@@ -610,7 +611,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">⏳</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
