@@ -1,7 +1,6 @@
 
 import rankify 
-
-
+import os
 
 from rankify.dataset.dataset import Document, Question, Answer, Context
 from rankify.retrievers.retriever import Retriever
@@ -41,7 +40,8 @@ for i, doc in enumerate(retrieved_documents):
     print(doc)"""
 
 
-retriever = Retriever(method="bge", n_docs=1 , index_type="msmarco" )
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+retriever = Retriever(method="hyde", n_docs=2 , index_type="wiki", api_key=OPENAI_API_KEY )
 retrieved_documents = retriever.retrieve(documents)
 
 # Print the first retrieved document
@@ -54,7 +54,7 @@ retrieved_documents = retriever.retrieve(documents)
 # Print the first retrieved document
 for i, doc in enumerate(retrieved_documents):
     print(f"\nDocument {i+1}:")
-    print(doc)
-"""
+    print(doc)"""
+
 
 
