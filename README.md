@@ -720,6 +720,13 @@ bge_retriever_wiki = Retriever(method="bge", model="BAAI/bge-large-en-v1.5", n_d
 
 # BGE retrieval on MS MARCO
 bge_retriever_msmacro = Retriever(method="bge", model="BAAI/bge-large-en-v1.5", n_docs=5, index_type="msmarco")
+
+
+# Hyde retrieval on Wikipedia
+hyde_retriever_wiki = Retriever(method="hyde" , n_docs=5, index_type="wiki", api_key=OPENAI_API_KEY )
+
+# Hyde retrieval on MS MARCO
+hyde_retriever_msmacro = Retriever(method="hyde", n_docs=5, index_type="msmarco", api_key=OPENAI_API_KEY)
 ```
 
 **Running Retrieval**
