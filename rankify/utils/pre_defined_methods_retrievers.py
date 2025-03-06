@@ -3,7 +3,7 @@ from rankify.retrievers.bm25 import BM25Retriever
 from rankify.retrievers.contriever import ContrieverRetriever
 from rankify.retrievers.BGERetriever import BGERetriever
 from rankify.retrievers.colbert import ColBERTRetriever
-
+from rankify.retrievers.hyde import HydeRetreiver
 
 
 METHOD_MAP ={
@@ -14,4 +14,5 @@ METHOD_MAP ={
     'ance': DenseRetriever,
     'bge': BGERetriever,
     'colbert': ColBERTRetriever,
+    'hyde': HydeRetreiver,
 }
