@@ -949,6 +949,7 @@ print(after_ranking_metrics)
 - ✅ **BGE** 
 - ✅ **Contriever** 
 - ✅ **BPR** 
+- ✅ **HYDE** 
 - 🕒 **Spar**   
 - 🕒 **Dragon** 
 - 🕒 **Hybird** 
