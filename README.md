@@ -379,7 +379,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
   <tr>
@@ -388,7 +388,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
   <tr>
@@ -397,7 +397,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">⏳</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
   <tr>
@@ -415,7 +415,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">⏳</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
   <tr>
@@ -469,7 +469,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">⏳</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
     <tr>
@@ -478,7 +478,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">⏳</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
     <tr>
@@ -505,7 +505,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">⏳</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
     <tr>
@@ -523,7 +523,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
     <tr>
@@ -552,7 +552,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">⏳</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
     </tr>
@@ -582,7 +582,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">⏳</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
       </tr>
@@ -592,7 +592,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">⏳</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
       </tr>
@@ -612,7 +612,7 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">⏳</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
   </tr>
         </tr>
