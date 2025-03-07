@@ -323,7 +323,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">AmbigQA</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
@@ -377,7 +377,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">BoolQ</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -386,7 +386,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">CommonSenseQA</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -395,7 +395,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">CuratedTREC</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">⏳</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -413,7 +413,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">FERMI</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">⏳</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -467,7 +467,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">NarrativeQA</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">⏳</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -476,7 +476,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">NQ</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">⏳</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -494,7 +494,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">PIQA</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
     <td align="center">🕒</td>
@@ -503,7 +503,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">PopQA</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">⏳</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -521,7 +521,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">SIQA</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">🕒</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -550,7 +550,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">TriviaQA</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">⏳</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -580,7 +580,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">WebQ</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">⏳</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -590,7 +590,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">WikiQA</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">⏳</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
@@ -610,7 +610,7 @@ The following table provides an overview of the availability of different retrie
     <td align="left">WikiPassageQA</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
-    <td align="center">🕒</td>
+    <td align="center">✅</td>
     <td align="center">⏳</td>
     <td align="center">✅</td>
     <td align="center">🕒</td>
