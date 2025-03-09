@@ -1,592 +1,1354 @@
-HF_PRE_DEFIND_DATASET={
-    'bm25':{
-
-        '2wikimultihopqa-dev':{
-            "filename":"dev.json",
+HF_PRE_DEFIND_DATASET = {
+    "ance": {
+        "curatedtrec-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from ANCE retriever for curatedtrec dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/ance/curatedtrec/test.json?download=true"
+            ]
+        },
+        "fermi-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from ANCE retriever for fermi dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/ance/fermi/test.json?download=true"
+            ]
+        },
+        "narrativeqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from ANCE retriever for narrativeqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/ance/narrativeqa/test.json?download=true"
+            ]
+        },
+        "nq-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from ANCE retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/ance/nq/test.json?download=true"
+            ]
+        },
+        "popqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from ANCE retriever for popqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/ance/popqa/test.json?download=true"
+            ]
+        },
+        "triviaqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from ANCE retriever for triviaqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/ance/triviaqa/test.json?download=true"
+            ]
+        },
+        "web_questions-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from ANCE retriever for web_questions dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/ance/web_questions/test.json?download=true"
+            ]
+        },
+        "wiki_qa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from ANCE retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/ance/wiki_qa/test.json?download=true"
+            ]
+        },
+        "wikipassageqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from ANCE retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/ance/wikipassageqa/test.json?download=true"
+            ]
+        }
+    },
+    "bge": {
+        "boolq-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/2wikimultihopqa/dev.json?download=true"]
+            "desc": "Top-1000 passages from BGE retriever for boolq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/boolq/dev.json?download=true"
+            ]
         },
-        '2wikimultihopqa-train':{
-            "filename":"train.json",
+        "boolq-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/2wikimultihopqa/train.json?download=true"]
+            "desc": "Top-1000 passages from BGE retriever for boolq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/boolq/train.json?download=true"
+            ]
         },
-        'archivialqa-dev':{
-            "filename":"val.json",
+        "commonsense_qa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for commonsense_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/commonsense_qa/dev.json?download=true"
+            ]
+        },
+        "commonsense_qa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for commonsense_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/commonsense_qa/train.json?download=true"
+            ]
+        },
+        "curatedtrec-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for curatedtrec dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/curatedtrec/test.json?download=true"
+            ]
+        },
+        "fermi-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for fermi dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/fermi/test.json?download=true"
+            ]
+        },
+        "narrativeqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for narrativeqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/narrativeqa/test.json?download=true"
+            ]
+        },
+        "nq-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/nq/dev.json?download=true"
+            ]
+        },
+        "nq-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/nq/test.json?download=true"
+            ]
+        },
+        "nq-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/nq/train.json?download=true"
+            ]
+        },
+        "popqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for popqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/popqa/test.json?download=true"
+            ]
+        },
+        "siqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for siqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/siqa/dev.json?download=true"
+            ]
+        },
+        "siqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for siqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/siqa/train.json?download=true"
+            ]
+        },
+        "triviaqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for triviaqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/triviaqa/test.json?download=true"
+            ]
+        },
+        "web_questions-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for web_questions dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/web_questions/test.json?download=true"
+            ]
+        },
+        "wiki_qa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/wiki_qa/dev.json?download=true"
+            ]
+        },
+        "wiki_qa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/wiki_qa/test.json?download=true"
+            ]
+        },
+        "wiki_qa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/wiki_qa/train.json?download=true"
+            ]
+        },
+        "wikipassageqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/wikipassageqa/dev.json?download=true"
+            ]
+        },
+        "wikipassageqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/wikipassageqa/test.json?download=true"
+            ]
+        },
+        "wikipassageqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BGE retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bge/wikipassageqa/train.json?download=true"
+            ]
+        }
+    },
+    "bm25": {
+        "2wikimultihopqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for 2wikimultihopqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/2wikimultihopqa/dev.json?download=true"
+            ]
+        },
+        "2wikimultihopqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for 2wikimultihopqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/2wikimultihopqa/train.json?download=true"
+            ]
+        },
+        "ArchivialQA-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for ArchivialQA dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ArchivialQA/test.json?download=true"
+            ]
+        },
+        "ArchivialQA-val": {
+            "filename": "val.json",
             "original_ext": "val.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ArchivialQA/val.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for ArchivialQA dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ArchivialQA/val.json?download=true"
+            ]
         },
-        'archivialqa-test':{
-            "filename":"test.json",
+        "ChroniclingAmericaQA-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ArchivialQA/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for ChroniclingAmericaQA dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ChroniclingAmericaQA/test.json?download=true"
+            ]
         },
-        'chroniclingamericaqa-test':{
-            "filename":"test.json",
-            "original_ext": "test.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ChroniclingAmericaQA/test.json?download=true"]
-        },
-        'chroniclingamericaqa-dev':{
-            "filename":"val.json",
+        "ChroniclingAmericaQA-val": {
+            "filename": "val.json",
             "original_ext": "val.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ChroniclingAmericaQA/val.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for ChroniclingAmericaQA dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ChroniclingAmericaQA/val.json?download=true"
+            ]
         },
-        'entityquestions-test':{
-            "filename":"test.json",
+        "EntityQuestions-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/EntityQuestions/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for EntityQuestions dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/EntityQuestions/test.json?download=true"
+            ]
         },
-        'ambig_qa-dev':{
-            "filename":"dev.json",
+        "ambig_qa-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ambig_qa/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for ambig_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ambig_qa/dev.json?download=true"
+            ]
         },
-        'ambig_qa-train':{
-            "filename":"train.json",
+        "ambig_qa-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ambig_qa/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for ambig_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ambig_qa/train.json?download=true"
+            ]
         },
-        'arc-test':{
-            "filename":"test.json",
+        "arc-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for arc dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/arc/dev.json?download=true"
+            ]
+        },
+        "arc-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/arc/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for arc dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/arc/test.json?download=true"
+            ]
         },
-        'arc-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/arc/dev.json?download=true"]
-        },
-        'arc-train':{
-            "filename":"train.json",
+        "arc-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/arc/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for arc dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/arc/train.json?download=true"
+            ]
         },
-        'ay2-train':{
-            "filename":"train.json",
-            "original_ext": "train.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ay2/train.json?download=true"]
-        },
-        'ay2-dev':{
-            "filename":"dev.json",
+        "asqa-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ay2/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for asqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/asqa/dev.json?download=true"
+            ]
         },
-        'asqa-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/asqa/dev.json?download=true"]
-        },
-        'asqa-train':{
-            "filename":"train.json",
+        "asqa-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/asqa/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for asqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/asqa/train.json?download=true"
+            ]
         },
-        'bamboogle-test':{
-            "filename":"test.json",
+        "ay2-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for ay2 dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ay2/dev.json?download=true"
+            ]
+        },
+        "ay2-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for ay2 dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/ay2/train.json?download=true"
+            ]
+        },
+        "bamboogle-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/bamboogle/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for bamboogle dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/bamboogle/test.json?download=true"
+            ]
         },
-        'boolq-train':{
-            "filename":"train.json",
+        "boolq-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/boolq/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for boolq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/boolq/train.json?download=true"
+            ]
         },
-        'boolq-dev':{
-            "filename":"val.json",
+        "boolq-val": {
+            "filename": "val.json",
             "original_ext": "val.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/boolq/val.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for boolq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/boolq/val.json?download=true"
+            ]
         },
-        'commonsense_qa-train':{
-            "filename":"train.json",
-            "original_ext": "train.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/commonsense_qa/train.json?download=true"]
-        },
-        'commonsense_qa-dev':{
-            "filename":"dev.json",
+        "commonsense_qa-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/commonsense_qa/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for commonsense_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/commonsense_qa/dev.json?download=true"
+            ]
         },
-        'curatedtrec-train':{
-            "filename":"train.json",
+        "commonsense_qa-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/curatedtrec/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for commonsense_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/commonsense_qa/train.json?download=true"
+            ]
         },
-        'curatedtrec-test':{
-            "filename":"test.json",
+        "curatedtrec-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/curatedtrec/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for curatedtrec dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/curatedtrec/test.json?download=true"
+            ]
         },
-        'domainrag-test':{
-            "filename":"test.json",
+        "curatedtrec-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for curatedtrec dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/curatedtrec/train.json?download=true"
+            ]
+        },
+        "domainrag-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/domainrag/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for domainrag dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/domainrag/test.json?download=true"
+            ]
         },
-        'eli5-dev':{
-            "filename":"dev.json",
+        "eli5-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/eli5/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for eli5 dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/eli5/dev.json?download=true"
+            ]
         },
-        'eli5-train':{
-            "filename":"train.json",
+        "eli5-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/eli5/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for eli5 dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/eli5/train.json?download=true"
+            ]
         },
-        'fermi-test':{
-            "filename":"test.json",
+        "fermi-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for fermi dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fermi/dev.json?download=true"
+            ]
+        },
+        "fermi-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fermi/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for fermi dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fermi/test.json?download=true"
+            ]
         },
-        'fermi-dev':{
-            "filename":"dev.json",
+        "fermi-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for fermi dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fermi/train.json?download=true"
+            ]
+        },
+        "fever-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fermi/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for fever dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fever/dev.json?download=true"
+            ]
         },
-        'fermi-train':{
-            "filename":"train.json",
+        "fever-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fermi/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for fever dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fever/train.json?download=true"
+            ]
         },
-        'fever-dev':{
-            "filename":"dev.json",
+        "hellaswag-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fever/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for hellaswag dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/hellaswag/dev.json?download=true"
+            ]
         },
-        'fever-train':{
-            "filename":"train.json",
+        "hellaswag-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/fever/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for hellaswag dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/hellaswag/train.json?download=true"
+            ]
         },
-        'hellaswag-train':{
-            "filename":"train.json",
-            "original_ext": "train.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/hellaswag/train.json?download=true"]
-        },
-        'hellaswag-dev':{
-            "filename":"dev.json",
+        "hotpotqa-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/hellaswag/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for hotpotqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/hotpotqa/dev.json?download=true"
+            ]
         },
-        'hotpotqa-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/hotpotqa/dev.json?download=true"]
-        },
-        'hotpotqa-train':{
-            "filename":"train.json",
+        "hotpotqa-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/hotpotqa/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for hotpotqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/hotpotqa/train.json?download=true"
+            ]
         },
-        'mmlu-train':{
-            "filename":"train.json",
-            "original_ext": "train.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/mmlu/train.json?download=true"]
-        },
-        'mmlu-5_shot':{
-            "filename":"5_shot.json",
+        "mmlu-5_shot": {
+            "filename": "5_shot.json",
             "original_ext": "5_shot.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/mmlu/5_shot.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for mmlu dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/mmlu/5_shot.json?download=true"
+            ]
         },
-        'mmlu-dev':{
-            "filename":"dev.json",
+        "mmlu-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/mmlu/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for mmlu dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/mmlu/dev.json?download=true"
+            ]
         },
-        'mmlu-test':{
-            "filename":"test.json",
+        "mmlu-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/mmlu/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for mmlu dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/mmlu/test.json?download=true"
+            ]
         },
-        'musique-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/musique/dev.json?download=true"]
-        },
-        'musique-train':{
-            "filename":"train.json",
+        "mmlu-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/musique/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for mmlu dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/mmlu/train.json?download=true"
+            ]
         },
-        'narrativeqa-dev':{
-            "filename":"dev.json",
+        "musique-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/narrativeqa/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for musique dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/musique/dev.json?download=true"
+            ]
         },
-        'narrativeqa-test':{
-            "filename":".json",
-            "original_ext": ".json",
+        "musique-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/narrativeqa/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for musique dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/musique/train.json?download=true"
+            ]
         },
-        'narrativeqa-train':{
-            "filename":".json",
-            "original_ext": ".json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/narrativeqa/train.json?download=true"]
-        },
-        'nq-dev':{
-            "filename":"dev.json",
+        "narrativeqa-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/nq/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for narrativeqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/narrativeqa/dev.json?download=true"
+            ]
         },
-        'nq-test':{
-            "filename":"test.json",
+        "narrativeqa-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/nq/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for narrativeqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/narrativeqa/test.json?download=true"
+            ]
         },
-        'nq-train':{
-            "filename":"train.json",
+        "narrativeqa-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/nq/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for narrativeqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/narrativeqa/train.json?download=true"
+            ]
         },
-        'openbookqa-dev':{
-            "filename":"dev.json",
+        "nq-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/openbookqa/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/nq/dev.json?download=true"
+            ]
         },
-        'openbookqa-train':{
-            "filename":"train.json",
-            "original_ext": "train.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/openbookqa/train.json?download=true"]
-        },
-        'openbookqa-test':{
-            "filename":"test.json",
+        "nq-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/openbookqa/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/nq/test.json?download=true"
+            ]
         },
-        'piqa-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/piqa/dev.json?download=true"]
-        },
-        'piqa-train':{
-            "filename":"train.json",
+        "nq-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/piqa/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/nq/train.json?download=true"
+            ]
         },
-        'popqa-test':{
-            "filename":"test.json",
+        "openbookqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for openbookqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/openbookqa/dev.json?download=true"
+            ]
+        },
+        "openbookqa-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/popqa/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for openbookqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/openbookqa/test.json?download=true"
+            ]
         },
-        'quartz-test':{
-            "filename":"test.json",
+        "openbookqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for openbookqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/openbookqa/train.json?download=true"
+            ]
+        },
+        "piqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for piqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/piqa/dev.json?download=true"
+            ]
+        },
+        "piqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for piqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/piqa/train.json?download=true"
+            ]
+        },
+        "popqa-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/quartz/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for popqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/popqa/test.json?download=true"
+            ]
         },
-        'quartz-dev':{
-            "filename":"dev.json",
+        "quartz-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/quartz/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for quartz dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/quartz/dev.json?download=true"
+            ]
         },
-        'quartz-train':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/quartz/dev.json?download=true"]
-        },
-        'siqa-train':{
-            "filename":"train.json",
-            "original_ext": "train.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/siqa/train.json?download=true"]
-        },
-        'siqa-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/siqa/dev.json?download=true"]
-        },
-        'squad-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/squad/dev.json?download=true"]
-        },
-        'squad-test':{
-            "filename":"test.json",
+        "quartz-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/squad/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for quartz dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/quartz/test.json?download=true"
+            ]
         },
-        'squad-train':{
-            "filename":"train.json",
+        "quartz-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/squad/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for quartz dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/quartz/train.json?download=true"
+            ]
         },
-        'strategyqa-train':{
-            "filename":"train.json",
+        "siqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for siqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/siqa/dev.json?download=true"
+            ]
+        },
+        "siqa-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/strategyqa/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for siqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/siqa/train.json?download=true"
+            ]
         },
-        'trex-dev':{
-            "filename":"dev.json",
+        "squad-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/trex/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for squad dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/squad/dev.json?download=true"
+            ]
         },
-        'triviaqa-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/triviaqa/dev.json?download=true"]
-        },
-        'triviaqa-test':{
-            "filename":"test.json",
+        "squad-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/triviaqa/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for squad dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/squad/test.json?download=true"
+            ]
         },
-        'triviaqa-train':{
-            "filename":"train.json",
+        "squad-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/triviaqa/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for squad dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/squad/train.json?download=true"
+            ]
         },
-        'truthful_qa-dev':{
-            "filename":"dev.json",
+        "strategyqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for strategyqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/strategyqa/train.json?download=true"
+            ]
+        },
+        "trex-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/truthful_qa/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for trex dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/trex/dev.json?download=true"
+            ]
         },
-        'webq-test':{
-            "filename":"test.json",
+        "triviaqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for triviaqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/triviaqa/dev.json?download=true"
+            ]
+        },
+        "triviaqa-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/web_questions/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for triviaqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/triviaqa/test.json?download=true"
+            ]
         },
-        'webq-train':{
-            "filename":"train.json",
+        "triviaqa-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/web_questions/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for triviaqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/triviaqa/train.json?download=true"
+            ]
         },
-
-        'wiki_qa-dev':{
-            "filename":"dev.json",
+        "truthful_qa-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wiki_qa/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for truthful_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/truthful_qa/dev.json?download=true"
+            ]
         },
-
-        'wiki_qa-test':{
-            "filename":"test.json",
+        "web_questions-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wiki_qa/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for web_questions dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/web_questions/test.json?download=true"
+            ]
         },
-
-        'wiki_qa-train':{
-            "filename":"train.json",
+        "web_questions-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wiki_qa/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for web_questions dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/web_questions/train.json?download=true"
+            ]
         },
-        'wikiasp-train':{
-            "filename":"train.json",
-            "original_ext": "train.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikiasp/train.json?download=true"]
-        },
-        'wikiasp-dev':{
-            "filename":"dev.json",
+        "wiki_qa-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikiasp/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wiki_qa/dev.json?download=true"
+            ]
         },
-        'wikiasp-test':{
-            "filename":"test.json",
+        "wiki_qa-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikiasp/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wiki_qa/test.json?download=true"
+            ]
         },
-        'wikipassageqa-test':{
-            "filename":"test.json",
+        "wiki_qa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wiki_qa/train.json?download=true"
+            ]
+        },
+        "wikiasp-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for wikiasp dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikiasp/dev.json?download=true"
+            ]
+        },
+        "wikiasp-test": {
+            "filename": "test.json",
             "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikipassageqa/test.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for wikiasp dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikiasp/test.json?download=true"
+            ]
         },
-        'wikipassageqa-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
-            "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikipassageqa/dev.json?download=true"]
-        },
-        'wikipassageqa-train':{
-            "filename":"train.json",
+        "wikiasp-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikipassageqa/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for wikiasp dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikiasp/train.json?download=true"
+            ]
         },
-        'wned-dev':{
-            "filename":"dev.json",
+        "wikipassageqa-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wned/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikipassageqa/dev.json?download=true"
+            ]
         },
-        'wow-dev':{
-            "filename":"dev.json",
-            "original_ext": "dev.json",
+        "wikipassageqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wow/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikipassageqa/test.json?download=true"
+            ]
         },
-        'wow-train':{
-            "filename":"train.json",
+        "wikipassageqa-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wow/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wikipassageqa/train.json?download=true"
+            ]
         },
-        'zsre-dev':{
-            "filename":"dev.json",
+        "wned-dev": {
+            "filename": "dev.json",
             "original_ext": "dev.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/zsre/dev.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for wned dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wned/dev.json?download=true"
+            ]
         },
-        'zsre-train':{
-            "filename":"train.json",
+        "wow-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for wow dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wow/dev.json?download=true"
+            ]
+        },
+        "wow-train": {
+            "filename": "train.json",
             "original_ext": "train.json",
             "compressed": False,
-            "desc": "Top-1000 passages from BM25 retriever for WebQA Questions test set.",
-            "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/zsre/train.json?download=true"]
+            "desc": "Top-1000 passages from BM25 retriever for wow dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/wow/train.json?download=true"
+            ]
         },
-
+        "zsre-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for zsre dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/zsre/dev.json?download=true"
+            ]
+        },
+        "zsre-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for zsre dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/zsre/train.json?download=true"
+            ]
+        }
     },
+    "colbert": {
+        "ambig_qa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for ambig_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/ambig_qa/dev.json?download=true"
+            ]
+        },
+        "ambig_qa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for ambig_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/ambig_qa/train.json?download=true"
+            ]
+        },
+        "boolq-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for boolq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/boolq/dev.json?download=true"
+            ]
+        },
+        "boolq-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for boolq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/boolq/train.json?download=true"
+            ]
+        },
+        "commonsense_qa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for commonsense_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/commonsense_qa/dev.json?download=true"
+            ]
+        },
+        "commonsense_qa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for commonsense_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/commonsense_qa/train.json?download=true"
+            ]
+        },
+        "curatedtrec-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for curatedtrec dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/curatedtrec/test.json?download=true"
+            ]
+        },
+        "curatedtrec-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for curatedtrec dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/curatedtrec/train.json?download=true"
+            ]
+        },
+        "fermi-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for fermi dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/fermi/dev.json?download=true"
+            ]
+        },
+        "fermi-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for fermi dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/fermi/test.json?download=true"
+            ]
+        },
+        "fermi-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for fermi dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/fermi/train.json?download=true"
+            ]
+        },
+        "narrativeqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for narrativeqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/narrativeqa/dev.json?download=true"
+            ]
+        },
+        "narrativeqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for narrativeqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/narrativeqa/test.json?download=true"
+            ]
+        },
+        "narrativeqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for narrativeqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/narrativeqa/train.json?download=true"
+            ]
+        },
+        "nq-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/nq/dev.json?download=true"
+            ]
+        },
+        "nq-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/nq/test.json?download=true"
+            ]
+        },
+        "nq-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for nq dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/nq/train.json?download=true"
+            ]
+        },
+        "piqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for piqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/piqa/dev.json?download=true"
+            ]
+        },
+        "piqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for piqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/piqa/train.json?download=true"
+            ]
+        },
+        "popqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for popqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/popqa/test.json?download=true"
+            ]
+        },
+        "popqa-test.part1": {
+            "filename": "test.json.part1.json",
+            "original_ext": "test.json.part1.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for popqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/popqa/test.json.part1.json?download=true"
+            ]
+        },
+        "siqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for siqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/siqa/dev.json?download=true"
+            ]
+        },
+        "siqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for siqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/siqa/train.json?download=true"
+            ]
+        },
+        "squad-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for squad dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/squad/dev.json?download=true"
+            ]
+        },
+        "squad-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for squad dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/squad/train.json?download=true"
+            ]
+        },
+        "triviaqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for triviaqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/triviaqa/dev.json?download=true"
+            ]
+        },
+        "triviaqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for triviaqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/triviaqa/test.json?download=true"
+            ]
+        },
+        "triviaqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for triviaqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/triviaqa/train.json?download=true"
+            ]
+        },
+        "web_questions-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for web_questions dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/web_questions/test.json?download=true"
+            ]
+        },
+        "web_questions-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for web_questions dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/web_questions/train.json?download=true"
+            ]
+        },
+        "wiki_qa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/wiki_qa/dev.json?download=true"
+            ]
+        },
+        "wiki_qa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/wiki_qa/test.json?download=true"
+            ]
+        },
+        "wiki_qa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for wiki_qa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/wiki_qa/train.json?download=true"
+            ]
+        },
+        "wikipassageqa-dev": {
+            "filename": "dev.json",
+            "original_ext": "dev.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/wikipassageqa/dev.json?download=true"
+            ]
+        },
+        "wikipassageqa-test": {
+            "filename": "test.json",
+            "original_ext": "test.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/wikipassageqa/test.json?download=true"
+            ]
+        },
+        "wikipassageqa-train": {
+            "filename": "train.json",
+            "original_ext": "train.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from COLBERT retriever for wikipassageqa dataset.",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/colbert/wikipassageqa/train.json?download=true"
+            ]
+        }
+    },
+
     'dpr':{
         'webq-test':{
             "filename":"webq-test.json",
@@ -700,9 +1462,8 @@ HF_PRE_DEFIND_DATASET={
             "desc": "Top-1000 passages from DPR retriever for ArchivialQA Questions test set.",
             "url" : ["https://huggingface.co/datasets/abdoelsayed/reranking-datasets/resolve/main/dpr/ArchivialQA-test.json?download=true"]
         },
-        
     },
-    'mss-dpr':{
+    "mss-dpr":{
         'webq-test':{
             "filename":"webq-test.json",
             "original_ext": ".json",
