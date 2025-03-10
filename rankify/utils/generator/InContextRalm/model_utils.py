@@ -22,13 +22,12 @@ def load_model_and_tokenizer(model_name, model_parallelism=False, cache_dir=None
         model_args["torch_dtype"] = config.torch_dtype
     if auth_token is not None:
         model_args["use_auth_token"] = auth_token
-    # , **model_args
+   
     model = AutoModelForCausalLM.from_pretrained(model_name, **model_args).eval()
     if not model_parallelism:
         model = model.to(device)
     tokenizer = load_tokenizer(model_name)
 
-    """if device_count > 1 and not model_parallelism:
-        model = torch.nn.DataParallel(model)"""
+
 
     return model, tokenizer, config, device
