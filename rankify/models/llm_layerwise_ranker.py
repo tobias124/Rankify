@@ -95,7 +95,7 @@ class LLMLayerWiseRanker(BaseRanking):
     
         self.model_name = model_name
         
-        self.dtype = get_dtype( kwargs.get("dtype", torch.float32), self.device)
+        self.dtype = get_dtype( kwargs.get("dtype", torch.float16), self.device)
 
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name, trust_remote_code=True

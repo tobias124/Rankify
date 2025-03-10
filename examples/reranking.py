@@ -3,6 +3,7 @@ from rankify.models.reranking import Reranking
 from rankify.utils.pre_defind_models import HF_PRE_DEFIND_MODELS
 
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"  
 
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -20,12 +21,14 @@ document = Document(question=question, answers=answers, contexts=contexts)
 
 # Function to test a reranking model
 def test_reranking_model(model_category, model_name):
+    reranker = None 
     try:
         print(f"Testing {model_category}: {model_name} ...")
-        if model_category =="apiranker":
+        if model_category =="apiranker" or  model_category =="rankgpt-api":
             api_key = OPENAI_API_KEY
         else:
             api_key=ANTHROPIC_API_KEY
+        
         reranker = Reranking(method=model_category, model_name=model_name, api_key=api_key)
         reranker.rank([document])
 

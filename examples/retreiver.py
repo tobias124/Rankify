@@ -22,7 +22,7 @@ documents = [
 
 
 
-retriever = Retriever(method="colbert", n_docs=1 , index_type="wiki" )
+"""retriever = Retriever(method="colbert", n_docs=1 , index_type="wiki" )
 retrieved_documents = retriever.retrieve(documents)
 
 # Print the first retrieved document
@@ -38,7 +38,7 @@ retrieved_documents = retriever.retrieve(documents)
 for i, doc in enumerate(retrieved_documents):
     print(f"\nDocument {i+1}:")
     print(doc)
-
+"""
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 retriever = Retriever(method="hyde", n_docs=2 , index_type="wiki", api_key=OPENAI_API_KEY )
