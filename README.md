@@ -951,7 +951,9 @@ print(after_ranking_metrics)
 - ✅ **Contriever** 
 - ✅ **BPR** 
 - ✅ **HYDE** 
-- 🕒 **Spar**   
+- 🕒 **RepLlama**   
+- 🕒 **coCondenser**   
+- 🕒 **Spar** 
 - 🕒 **Dragon** 
 - 🕒 **Hybird** 
 ---
@@ -985,6 +987,8 @@ print(after_ranking_metrics)
 - ✅ **Incontext Reranker**
 - 🕒 **DynRank**
 - 🕒 **ASRank**
+- 🕒 **RankLlama**
+
 ---
 
 ### **3️⃣ Generators**  
