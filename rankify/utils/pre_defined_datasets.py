@@ -274,6 +274,141 @@ HF_PRE_DEFIND_DATASET = {
         }
     },
     "bm25": {
+        "dl19": {
+            "filename": "dl19.json",
+            "original_ext": "dl19.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for dl19 dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/trec_dl19/dl19.json?download=true"
+            ]
+        },
+        "dl20": {
+            "filename": "dl20.json",
+            "original_ext": "dl20.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for dl20 dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/trec_dl20/dl20.json?download=true"
+            ]
+        },
+        "beir-arguana": {
+            "filename": "arguana.json",
+            "original_ext": "arguana.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for arguana dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/arguana.json?download=true"
+            ]
+        },
+        "beir-covid": {
+            "filename": "covid.json",
+            "original_ext": "covid.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for covid dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/covid.json?download=true"
+            ]
+        },
+        "beir-dbpedia": {
+            "filename": "dbpedia.json",
+            "original_ext": "dbpedia.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for dbpedia dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/dbpedia.json?download=true"
+            ]
+        },
+        "beir-fever": {
+            "filename": "fever.json",
+            "original_ext": "fever.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for fever dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/fever.json?download=true"
+            ]
+        },
+        "beir-fiqa": {
+            "filename": "fiqa.json",
+            "original_ext": "fiqa.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for fiqa dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/fiqa.json?download=true"
+            ]
+        },
+        "beir-news": {
+            "filename": "news.json",
+            "original_ext": "news.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for news dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/news.json?download=true"
+            ]
+        },
+        "beir-nfc": {
+            "filename": "nfc.json",
+            "original_ext": "nfc.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for nfc dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/nfc.json?download=true"
+            ]
+        },
+        "beir-quora": {
+            "filename": "quora.json",
+            "original_ext": "quora.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for quora dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/quora.json?download=true"
+            ]
+        },
+        "beir-robust04": {
+            "filename": "robust04.json",
+            "original_ext": "robust04.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for robust04 dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/robust04.json?download=true"
+            ]
+        },
+        "beir-scidocs": {
+            "filename": "scidocs.json",
+            "original_ext": "scidocs.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for scidocs dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/scidocs.json?download=true"
+            ]
+        },
+        "beir-scifact": {
+            "filename": "scifact.json",
+            "original_ext": "scifact.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for scifact dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/scifact.json?download=true"
+            ]
+        },
+        "beir-signal": {
+            "filename": "signal.json",
+            "original_ext": "signal.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for signal dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/signal.json?download=true"
+            ]
+        },
+        "beir-touche": {
+            "filename": "touche.json",
+            "original_ext": "touche.json",
+            "compressed": False,
+            "desc": "Top-1000 passages from BM25 retriever for touche dataset, from ms-macro",
+            "url": [
+                "https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light/resolve/main/bm25/beir/touche.json?download=true"
+            ]
+        },
         "2wikimultihopqa-dev": {
             "filename": "dev.json",
             "original_ext": "dev.json",
