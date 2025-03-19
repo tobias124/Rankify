@@ -261,6 +261,8 @@ class Document:
         
         if "query_id" in data:
             id = data["query_id"]
+        else:
+            id = None
         contexts = [Context(**ctx) for ctx in data["ctxs"][:n_docs]]
         return cls(question, answers, contexts, id=id)
 
