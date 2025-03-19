@@ -51,50 +51,7 @@ _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and ret
 - [Acknowledgments](#-acknowledgments)
 - [Citation](#star2-citation)
 
----
-### **✨ Features**  
 
-- 🔥 **Unified Framework**: Combines **retrieval**, **re-ranking**, and **retrieval-augmented generation (RAG)** into a single modular toolkit.  
-- 📚 **Rich Dataset Support**: Includes **40+ benchmark datasets** with **pre-retrieved documents** for seamless experimentation.  
-- 🧲 **Diverse Retrieval Methods**: Supports **BM25, DPR, ANCE, BPR, ColBERT, BGE, and Contriever** for flexible retrieval strategies.  
-- 🎯 **Powerful Re-Ranking**: Implements **24 advanced models** with **41 sub-methods** to optimize ranking performance.  
-- 🏗️ **Prebuilt Indices**: Provides **Wikipedia and MS MARCO** corpora, eliminating indexing overhead and speeding up retrieval.  
-- 🔮 **Seamless RAG Integration**: Works with **GPT, LLAMA, T5, and Fusion-in-Decoder (FiD)** models for **retrieval-augmented generation**.  
-- 🛠 **Extensible & Modular**: Easily integrates **custom datasets, retrievers, ranking models, and RAG pipelines**.  
-- 📊 **Built-in Evaluation Suite**: Includes **retrieval, ranking, and RAG metrics** for robust benchmarking.  
-- 📖 **User-Friendly Documentation**: Access detailed **[📖 online docs](http://rankify.readthedocs.io/)**, **example notebooks**, and **tutorials** for easy adoption.  
- 
-
-## 🔍 Roadmap  
-
-**Rankify** is still under development, and this is our first release (**v0.1.0**). While it already supports a wide range of retrieval, re-ranking, and RAG techniques, we are actively enhancing its capabilities by adding more retrievers, rankers, datasets, and features.  
-
-
-### **🛠 Planned Improvements**  
-
-#### **Retrievers**  
-✅ **Supports**: BM25, DPR, ANCE, BPR, ColBERT, BGE, Contriever  
-✨ ⏳ **Coming Soon**: Spar, MSS, MSS-DPR  
-✨ ⏳ **Custom Index Loading** for user-defined retrieval corpora  
-
-#### **Re-Rankers**  
-✅ **24 models & 41 sub-methods**  
-✨ ⏳ **Expanding with more ranking models**  
-
-#### **Datasets**  
-✅ **40 benchmark datasets**  
-✨ ⏳ **Adding new datasets & custom dataset integration**  
-
-#### **Retrieval-Augmented Generation (RAG)**  
-✅ **Works with**: GPT, LLAMA, T5  
-✨ ⏳ **Expanding to more generative models**  
-
-#### **Evaluation & Usability**  
-✅ **Standard metrics**: Top-K, EM, Recall  
-✨ ⏳ **Adding advanced metrics**: NDCG, MAP for retrievers  
-
-#### **Pipeline Integration**  
-✨ ⏳ **Introducing a pipeline module** for end-to-end retrieval, ranking, and RAG workflows  
 
 ## 🔧 Installation  
 
@@ -939,6 +896,7 @@ after_ranking_metrics = metrics.calculate_retrieval_metrics(ks=[1, 5, 10, 20, 50
 print(after_ranking_metrics)
 ```
 
+
 ## 📜 Supported Models
 
 
@@ -995,6 +953,52 @@ print(after_ranking_metrics)
 - ✅ **Fusion-in-Decoder (FiD) with T5**
 - ✅ **In-Context Learning RLAM** 
 ---
+
+
+### **✨ Features**  
+
+- 🔥 **Unified Framework**: Combines **retrieval**, **re-ranking**, and **retrieval-augmented generation (RAG)** into a single modular toolkit.  
+- 📚 **Rich Dataset Support**: Includes **40+ benchmark datasets** with **pre-retrieved documents** for seamless experimentation.  
+- 🧲 **Diverse Retrieval Methods**: Supports **BM25, DPR, ANCE, BPR, ColBERT, BGE, and Contriever** for flexible retrieval strategies.  
+- 🎯 **Powerful Re-Ranking**: Implements **24 advanced models** with **41 sub-methods** to optimize ranking performance.  
+- 🏗️ **Prebuilt Indices**: Provides **Wikipedia and MS MARCO** corpora, eliminating indexing overhead and speeding up retrieval.  
+- 🔮 **Seamless RAG Integration**: Works with **GPT, LLAMA, T5, and Fusion-in-Decoder (FiD)** models for **retrieval-augmented generation**.  
+- 🛠 **Extensible & Modular**: Easily integrates **custom datasets, retrievers, ranking models, and RAG pipelines**.  
+- 📊 **Built-in Evaluation Suite**: Includes **retrieval, ranking, and RAG metrics** for robust benchmarking.  
+- 📖 **User-Friendly Documentation**: Access detailed **[📖 online docs](http://rankify.readthedocs.io/)**, **example notebooks**, and **tutorials** for easy adoption.  
+ 
+
+## 🔍 Roadmap  
+
+**Rankify** is still under development, and this is our first release (**v0.1.0**). While it already supports a wide range of retrieval, re-ranking, and RAG techniques, we are actively enhancing its capabilities by adding more retrievers, rankers, datasets, and features.  
+
+
+### **🛠 Planned Improvements**  
+
+#### **Retrievers**  
+✅ **Supports**: BM25, DPR, ANCE, BPR, ColBERT, BGE, Contriever  
+✨ ⏳ **Coming Soon**: Spar, MSS, MSS-DPR  
+✨ ⏳ **Custom Index Loading** for user-defined retrieval corpora  
+
+#### **Re-Rankers**  
+✅ **24 models & 41 sub-methods**  
+✨ ⏳ **Expanding with more ranking models**  
+
+#### **Datasets**  
+✅ **40 benchmark datasets**  
+✨ ⏳ **Adding new datasets & custom dataset integration**  
+
+#### **Retrieval-Augmented Generation (RAG)**  
+✅ **Works with**: GPT, LLAMA, T5  
+✨ ⏳ **Expanding to more generative models**  
+
+#### **Evaluation & Usability**  
+✅ **Standard metrics**: Top-K, EM, Recall  
+✨ ⏳ **Adding advanced metrics**: NDCG, MAP for retrievers  
+
+#### **Pipeline Integration**  
+✨ ⏳ **Introducing a pipeline module** for end-to-end retrieval, ranking, and RAG workflows  
+--
 
 ## 📖 Documentation
 
