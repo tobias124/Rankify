@@ -12,7 +12,10 @@ class DownloadManger:
             raise FileNotFoundError(f"Dataset {dataset} Not Supported yet. Please choose another dataset.\nCheck Dataset.available_dataset()")
 
         filename = HF_PRE_DEFIND_DATASET[retriever][dataset]['filename']
-        dataset_name, dataset_split = dataset.split('-', 1)
+        if '-' in dataset:
+            dataset_name, dataset_split = dataset.split('-', 1)
+        else:
+            dataset_name = dataset
         urls = HF_PRE_DEFIND_DATASET[retriever][dataset]['url']
         path = os.path.join(os.environ['RERANKING_CACHE_DIR'], 'dataset', retriever, dataset_name)
         file_path = os.path.join(path, filename)

@@ -4,8 +4,9 @@ import collections
 import math
 from functools import lru_cache
 from collections import Counter
-
-
+import tempfile
+import subprocess
+import os 
 def normalize_answer(s):
     """
     Normalizes an answer string by **removing punctuation, articles,** and **extra whitespace**.
@@ -382,7 +383,23 @@ class Metrics:
         calculate_retrieval_metrics(ks, use_reordered): Computes **retrieval performance at multiple K**.
         calculate_generation_metrics(predictions): Computes **generation evaluation scores**.
     """
-
+    QREL_MAPPING = {
+        'dl19': 'dl19-passage',
+        'dl20': 'dl20-passage',
+        'covid': 'beir-v1.0.0-trec-covid-test',
+        'arguana': 'beir-v1.0.0-arguana-test',
+        'touche': 'beir-v1.0.0-webis-touche2020-test',
+        'news': 'beir-v1.0.0-trec-news-test',
+        'scifact': 'beir-v1.0.0-scifact-test',
+        'fiqa': 'beir-v1.0.0-fiqa-test',
+        'scidocs': 'beir-v1.0.0-scidocs-test',
+        'nfc': 'beir-v1.0.0-nfcorpus-test',
+        'quora': 'beir-v1.0.0-quora-test',
+        'dbpedia': 'beir-v1.0.0-dbpedia-entity-test',
+        'fever': 'beir-v1.0.0-fever-test',
+        'robust04': 'beir-v1.0.0-robust04-test',
+        'signal': 'beir-v1.0.0-signal1m-test',
+    }
     def __init__(self, documents):
         """
         Initializes the **Metrics** class.
@@ -448,3 +465,107 @@ class Metrics:
             results.update(score)
 
         return results
+    def generate_trec_format(self):
+        """
+        Converts **Documents** into **TREC format** for evaluation.
+
+        Returns:
+            str: String formatted in **TREC format**.
+        """
+        trec_results = []
+        for doc in self.documents:
+            for rank, context in enumerate(doc.contexts):
+                trec_results.append(f"{doc.id} Q0 {context.id} {rank + 1} {context.score} rankify")
+        return "\n".join(trec_results)
+
+    def calculate_trec_metrics(self, ndcg_cuts=[10], map_cuts=[100], mrr_cuts=[10], qrel='dl19', use_reordered=False):
+        """
+        Computes **NDCG, MAP, and MRR** using Pyserini's `trec_eval` command-line tool.
+
+        Args:
+            ndcg_cuts (list, optional): List of **NDCG@k** values (default: `[10]`).
+            map_cuts (list, optional): List of **MAP@k** values (default: `[100]`).
+            mrr_cuts (list, optional): List of **MRR@k** values (default: `[10]`).
+            qrel (str, optional): The **dataset key** (default: `'dl19'`).
+            use_reordered (bool, optional): Whether to use **reranked contexts**.
+
+        Returns:
+            dict: Dictionary containing **NDCG@k, MAP@k, and MRR@k** scores.
+        """
+        if qrel not in self.QREL_MAPPING:
+            raise ValueError(f"Invalid dataset '{qrel}'. Choose from: {list(self.QREL_MAPPING.keys())}")
+
+        results = {}
+
+        with tempfile.NamedTemporaryFile(delete=False, mode="w") as trec_file:
+            trec_file.write(self.generate_trec_format())
+            trec_file_path = trec_file.name
+
+        # Path to the TREC qrels file (ground-truth relevance file)
+        
+
+        # Ensure `trec_eval` is installed and accessible
+        trec_eval_cmd = "python -m pyserini.eval.trec_eval"
+
+        for k in ndcg_cuts:
+            cmd = f"{trec_eval_cmd} -c -m ndcg_cut.{k} {self.QREL_MAPPING[qrel]} {trec_file_path}"
+            output = self.run_trec_eval(cmd)
+            results[f"ndcg@{k}"] = output
+
+        for k in map_cuts:
+            cmd = f"{trec_eval_cmd} -c -m map_cut.{k} {self.QREL_MAPPING[qrel]} {trec_file_path}"
+            output = self.run_trec_eval(cmd)
+            results[f"map@{k}"] = output
+
+        for k in mrr_cuts:
+            cmd = f"{trec_eval_cmd} -c -m recip_rank {self.QREL_MAPPING[qrel]} {trec_file_path}"
+            output = self.run_trec_eval(cmd)
+            results[f"mrr@{k}"] = output
+
+        # Clean up temporary file
+        os.remove(trec_file_path)
+
+        return results
+
+    def run_trec_eval(self, command):
+        """
+        Runs `trec_eval` and extracts the metric score.
+
+        Args:
+            command (str): The `trec_eval` command.
+
+        Returns:
+            float: Extracted metric score.
+        """
+        try:
+            output = subprocess.run(command.split(), capture_output=True, text=True, check=True)
+            return self.parse_trec_output(output.stdout)
+        except subprocess.CalledProcessError as e:
+            print(f"Error running `trec_eval`: {e.stderr}")
+            return 0.0  # Return 0 if the command fails
+
+    def parse_trec_output(self, output):
+        """
+        Parses the **output** from `trec_eval`.
+
+        Args:
+            output (str): Raw text output from `trec_eval`.
+
+        Returns:
+            float: Extracted metric score.
+        """
+        lines = output.strip().split("\n")
+        if not lines:
+            print("Warning: `trec_eval` output is empty. Check input files.")
+            return 0.0
+
+        last_line = lines[-1].split()
+        if len(last_line) < 3:
+            print(f"Warning: Unexpected `trec_eval` output format:\n{output}")
+            return 0.0
+
+        try:
+            return float(last_line[2])  # Extract the metric score
+        except ValueError:
+            print(f"Error parsing metric score from:\n{output}")
+            return 0.0
