@@ -5,7 +5,7 @@ from rankify.metrics.metrics import Metrics
 #Dataset.avaiable_dataset()
 
 
-datasets = ["hotpotqa-dev", "ChroniclingAmericaQA-test" , "ArchivialQA-test"]#["nq-dev", "nq-test" , "squad1-test", "trivia-dev", "trivia-test", "webq-test", "squad1-dev" ] #
+datasets = ["nq-test"]#, "ChroniclingAmericaQA-test" , "ArchivialQA-test"]#["nq-dev", "nq-test" , "squad1-test", "trivia-dev", "trivia-test", "webq-test", "squad1-dev" ] #
 
 for name in datasets:
     print("*"*100)
