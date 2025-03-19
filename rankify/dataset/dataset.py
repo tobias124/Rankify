@@ -202,7 +202,7 @@ class Document:
         contexts (list[Context]): A list of related contexts.
         reorder_contexts (list[Context] or None): A reordered list of contexts based on relevance.
     """
-    def __init__(self, question: Question, answers: Answer, contexts: list = None) -> None:
+    def __init__(self, question: Question, answers: Answer, contexts: list = None , id: int = None) -> None:
         """
         Initializes a Document instance.
 
@@ -225,6 +225,7 @@ class Document:
         self.answers: Answer = answers
         self.contexts: List[Context] = contexts
         self.reorder_contexts: List[Context] = None
+        self.id = id 
 
     @classmethod
     def from_dict(cls, data: dict,n_docs:int=100) -> 'Document':
@@ -253,11 +254,15 @@ class Document:
             ```
         """
         question = Question(data["question"])
-        answers = Answer(data["answers"])
+        if "answers" in data:
+            answers = Answer(data["answers"])
+        else:
+            answers =Answer('')
         
-        
+        if "query_id" in data:
+            id = data["query_id"]
         contexts = [Context(**ctx) for ctx in data["ctxs"][:n_docs]]
-        return cls(question, answers, contexts)
+        return cls(question, answers, contexts, id=id)
 
     def to_dict(self) -> Dict[str, Optional[object]]:
         """
@@ -416,7 +421,8 @@ class Dataset:
         """
         filepath= DownloadManger.download(self.retriever,self.dataset_name, force_download =force_download)
         self.documents= self.load_dataset(filepath, self.n_docs)
-        self.update_contexts_from_passages()
+        if 'beir' not in self.dataset_name and 'dl' not in self.dataset_name:
+            self.update_contexts_from_passages()
         return self.documents
     @classmethod
     def load_dataset(cls, filepath:str, n_docs: int= 100) -> List[Document]:
