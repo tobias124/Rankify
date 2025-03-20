@@ -15,7 +15,7 @@ from transformers import logging
 logging.set_verbosity_error()
 from rankify.models.base import BaseRanking
 from tqdm import tqdm  # Import tqdm for progress tracking
-
+import copy
 
 
 def set_random_seed(seed):
@@ -196,7 +196,7 @@ class UPR(BaseRanking):
             shared_nll_list.append(avg_null)
 
         topk_scores,indexes = torch.topk(-torch.cat(shared_nll_list),k=len(context_tensor))
-        reordered_context = [document.contexts[i] for i in indexes]
+        reordered_context = [copy.deepcopy(document.contexts[i]) for i in indexes]
 
         for i, ctx in enumerate(reordered_context):
             ctx.score = topk_scores[i].item()
@@ -307,7 +307,7 @@ class UPR(BaseRanking):
             sharded_nll_list.append(avg_nll)
 
         topk_scores,indexes = torch.topk(-torch.cat(sharded_nll_list),k=len(context_tensor))
-        reordered_context = [document.contexts[i] for i in indexes]
+        reordered_context = [copy.deepcopy(document.contexts[i]) for i in indexes]
 
         for i, ctx in enumerate(reordered_context):
             ctx.score = topk_scores[i].item()
