@@ -465,7 +465,7 @@ class Metrics:
             results.update(score)
 
         return results
-    def generate_trec_format(self):
+    def generate_trec_format(self, use_reordered= False):
         """
         Converts **Documents** into **TREC format** for evaluation.
 
@@ -473,9 +473,17 @@ class Metrics:
             str: String formatted in **TREC format**.
         """
         trec_results = []
+        if use_reordered:
+            name= "rankify"
+        else:
+            name="bm25"
         for doc in self.documents:
-            for rank, context in enumerate(doc.contexts):
-                trec_results.append(f"{doc.id} Q0 {context.id} {rank + 1} {context.score} rankify")
+            
+            contexts_to_use = doc.reorder_contexts if (use_reordered and doc.reorder_contexts) else doc.contexts
+
+            for rank, context in enumerate(contexts_to_use):
+                trec_results.append(f"{doc.id} Q0 {context.id} {rank + 1} {context.score} {name}")
+        
         return "\n".join(trec_results)
 
     def calculate_trec_metrics(self, ndcg_cuts=[10], map_cuts=[100], mrr_cuts=[10], qrel='dl19', use_reordered=False):
@@ -498,12 +506,10 @@ class Metrics:
         results = {}
 
         with tempfile.NamedTemporaryFile(delete=False, mode="w") as trec_file:
-            trec_file.write(self.generate_trec_format())
+            trec_file.write(self.generate_trec_format(use_reordered))
             trec_file_path = trec_file.name
 
         # Path to the TREC qrels file (ground-truth relevance file)
-        
-
         # Ensure `trec_eval` is installed and accessible
         trec_eval_cmd = "python -m pyserini.eval.trec_eval"
 
