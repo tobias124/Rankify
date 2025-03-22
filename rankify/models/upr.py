@@ -151,7 +151,7 @@ class UPR(BaseRanking):
 
             all_ids.append(ids)
             has_answer_list.append(has_answer)
-
+        
         input_encoding = tokenizer(all_ids, 
                                         padding='longest',
                                         max_length=512,
@@ -335,6 +335,8 @@ class UPR(BaseRanking):
             ```
         """
         for document in tqdm(documents, desc="Reranking Documents"):
+            if len(document.contexts) == 0:
+                continue
             if 'gpt' in self.model_name:
                 reordered_context = self.rank_gpt(document,  self.model, self.tokenizer, self.verbalizer_head, self.verbalizer, self.use_gpu , self.shard_size, self.include_eos_token)
             else:
