@@ -161,6 +161,8 @@ class FlashRanker(BaseRanking):
         Args:
             model_name (str): The name of the model to download.
         """
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+
         local_zip_file = self.cache_dir / f"{model_name}.zip"
         model_url = "https://huggingface.co/prithivida/flashrank/resolve/main/{}.zip"
         formatted_model_url = model_url.format(model_name)
@@ -191,7 +193,7 @@ class FlashRanker(BaseRanking):
         tokenizer_config = json.load(open(str(self.model_dir / "tokenizer_config.json")))
         tokens_map = json.load(open(str(self.model_dir / "special_tokens_map.json")))
         tokenizer = Tokenizer.from_file(str(self.model_dir / "tokenizer.json"))
-        print(tokenizer_config["model_max_length"] , max_length)
+        #print(tokenizer_config["model_max_length"] , max_length)
         tokenizer.enable_truncation(max_length=min(tokenizer_config["model_max_length"], max_length))
         tokenizer.enable_padding(pad_id=config["pad_token_id"], pad_token=tokenizer_config["pad_token"])
 
@@ -278,6 +280,8 @@ class FlashRanker(BaseRanking):
             List[Document]: Documents with updated `reorder_contexts` after reranking.
         """
         for document in tqdm(documents, desc="Reranking Documents"):
+            if len(document.contexts) == 0:
+                continue
             query = document.question.question
             passages = document.contexts
             if self.llm_model is not None:
