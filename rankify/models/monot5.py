@@ -10,7 +10,7 @@ from rankify.utils.pre_defind_models import PREDICTION_TOKENS
 logger = logging.getLogger(__name__)
 from tqdm import tqdm  # Import tqdm for progress tracking
 
-
+import copy
 
 
 class MonoT5(BaseRanking):
@@ -158,13 +158,15 @@ class MonoT5(BaseRanking):
         Returns:
             List[Document]: Documents with updated **`reorder_contexts`** after reranking.
         """
+        
         for doc in tqdm(documents, desc="Reranking Documents"):
             query = doc.question.question
             prompts = [self.inputs_template.format(query=query, text=context.text) for context in doc.contexts]
             scores = self._get_scores(query, [context.text for context in doc.contexts])
-            for context, score in zip(doc.contexts, scores):
+            contexts = copy.deepcopy(doc.contexts)
+            for context, score in zip(contexts, scores):
                 context.score = score
-            doc.reorder_contexts = sorted(doc.contexts, key=lambda x: x.score, reverse=True)
+            doc.reorder_contexts = sorted(contexts, key=lambda x: x.score, reverse=True)
         return documents
     @staticmethod
     def _chunks(contexts: list[Context],batch_size: int):
