@@ -8,6 +8,8 @@ sidebar_position: 2
 ## 🔥 Overview
 Rankify is a **powerful Python toolkit** for **Retrieval, Re-Ranking, and Retrieval-Augmented Generation (RAG)**. It integrates **7 retrieval techniques, 24 state-of-the-art re-ranking models, and multiple RAG methods**, enabling seamless experimentation across retrieval pipelines.
 
+
+
 ---
 
 ## 📚 Using Pre-Retrieved Datasets
