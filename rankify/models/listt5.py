@@ -148,6 +148,7 @@ class ListT5(BaseRanking):
         """
         question = document.question.question
         contexts = [ctx.text for ctx in document.contexts]
+        scores = [ctx.score for ctx in document.contexts]
         full_list_idx = list(range(len(contexts)))
         saved_top_indices = []
         
@@ -164,8 +165,12 @@ class ListT5(BaseRanking):
         if len(saved_top_indices) < len(full_list_idx):
             remaining_indices = [idx for idx in full_list_idx if idx not in saved_top_indices]
             saved_top_indices.extend(remaining_indices)
-
-        return [document.contexts[idx] for idx in saved_top_indices]
+        reranked_contexts= []
+        copy_document= copy.deepcopy(document)
+        for idx , score in zip(saved_top_indices,scores):
+            copy_document.contexts[idx].score= score 
+            reranked_contexts.append(copy_document.contexts[idx])
+        return reranked_contexts #[document.contexts[idx] for idx in saved_top_indices]
 
     def _get_out_k(self, question, contexts, chunk):
         """
