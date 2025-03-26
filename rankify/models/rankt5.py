@@ -9,6 +9,7 @@ from rankify.dataset.dataset import Document
 from typing import List
 import copy
 from tqdm import tqdm  # Import tqdm for progress tracking
+import copy
 
 class RankT5(BaseRanking):
     """
@@ -122,7 +123,7 @@ class RankT5(BaseRanking):
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             query = document.question.question
-            passages = document.contexts
+            passages = copy.deepcopy(document.contexts)
 
             # Prepare input texts based on the selected mode
             if self.mode == 'monot5':
@@ -165,8 +166,12 @@ class RankT5(BaseRanking):
             rank = torch.argsort(all_scores_tensor, descending=True).tolist()
 
             # Prepare the reordered list of contexts
-            reranked_passages = [copy.deepcopy(passages[rank_id]) for rank_id in rank]
-
+            #reranked_passages = [copy.deepcopy(passages[rank_id]) for rank_id in rank]
+            reranked_passages = []
+            for new_idx in rank:
+                context = copy.deepcopy(passages[new_idx])
+                context.score = scores_holder[new_idx]
+                reranked_passages.append(context)
             # Assign the reranked passages to reorder_contexts
             document.reorder_contexts = reranked_passages
         return documents
