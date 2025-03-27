@@ -15,6 +15,12 @@ Framework and Library Usage:
 - Utilize specialized libraries for information retrieval (e.g., Pyserini, FAISS).
 - Implement efficient vector storage and retrieval mechanisms.
 - Use vLLM for optimized inference with large language models.
+- Use `Retriever` from `rankify.retrievers.retriever` for document retrieval (BM25, DPR, ANCE, BGE, ColBERT, etc.).
+- Use `Reranking` from `rankify.models.reranking` for reranking documents with over 24 models.
+- Use `Generator` from `rankify.generator.generator` for retrieval-augmented generation (RAG).
+- Use `Dataset` from `rankify.dataset.dataset` to load question-only or pre-retrieved JSON datasets.
+- Use `Metrics` from `rankify.metrics.metrics` to evaluate retrieval, reranking, and generation performance.
+
 
 Data Handling and Preprocessing:
 
