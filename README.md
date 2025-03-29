@@ -1040,12 +1040,16 @@ Thank you for helping make this project better!
 
 ## 🌐 Community Contributions
 
-> 🇨🇳 **Chinese community resources available!**  
-> Special thanks to [Xiumao](https://github.com/xiumao) for writing two exceptional Chinese blog posts about Rankify:  
+ **Chinese community resources available!**  
+
+Special thanks to [Xiumao](https://github.com/xiumao) for writing two exceptional Chinese blog posts about Rankify:  
+
 > - 📘 [Introduction to Rankify](https://mp.weixin.qq.com/s/-dH64Q_KWvj8VQq7Ys383Q)  
 > - 📘 [Deep dive into re-ranking models in Rankify](https://mp.weixin.qq.com/s/XcOmXGv4CqUIp0oBcOgltw)  
-> These articles were crafted with high-traffic optimization in mind and are widely recommended in Chinese academic and developer circles.  
-> We updated the [中文版本](README_zh.md) to reflect these blog contributions while keeping original content intact—thank you Xiumao for your continued support!
+
+These articles were crafted with high-traffic optimization in mind and are widely recommended in Chinese academic and developer circles. 
+
+We updated the [中文版本](README_zh.md) to reflect these blog contributions while keeping original content intact—thank you Xiumao for your continued support!
 
 
 ## :bookmark: License
