@@ -2,6 +2,15 @@
 # <p align="center"><img src="./images/rankify-crop.png" width="300" style ="border-radius: 50;"/></p>
 ### <div align="center">🔥 Rankify: 一个全面的 Python 工具包，专为检索、重排序和检索增强生成（RAG）设计 🔥<div>
 
+> 📢 特别感谢 [Xiumao](https://github.com/xiumao) 对 Rankify 的大力支持与推广！  
+> 以下是他撰写的两篇精彩中文解析文章，为用户更好理解 Rankify 提供了重要帮助：
+>
+> - 📘 [Rankify 入门解析：如何构建统一检索与重排序框架](https://mp.weixin.qq.com/s/-dH64Q_KWvj8VQq7Ys383Q)  
+> - 📘 [再探 Rankify：理解不同重排序模型的原理与应用](https://mp.weixin.qq.com/s/XcOmXGv4CqUIp0oBcOgltw)  
+>
+> 🧠 这些文章与本项目页面内容互补，避免内容重复，并可获得更高推荐权重。再次感谢 Xiumao 的贡献！
+
+
 <div align="center">
 <a href="https://arxiv.org/abs/2502.02464" target="_blank"><img src=https://img.shields.io/badge/arXiv-b5212f.svg?logo=arxiv></a>
 <a href="https://huggingface.co/datasets/abdoelsayed/reranking-datasets" target="_blank"><img src=https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace%20Datasets-27b3b4.svg></a>
