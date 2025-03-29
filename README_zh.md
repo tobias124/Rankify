@@ -8,7 +8,6 @@
 > - 📘 [Rankify 入门解析：如何构建统一检索与重排序框架](https://mp.weixin.qq.com/s/-dH64Q_KWvj8VQq7Ys383Q)  
 > - 📘 [再探 Rankify：理解不同重排序模型的原理与应用](https://mp.weixin.qq.com/s/XcOmXGv4CqUIp0oBcOgltw)  
 >
-> 🧠 这些文章与本项目页面内容互补，避免内容重复，并可获得更高推荐权重。再次感谢 Xiumao 的贡献！
 
 
 <div align="center">
