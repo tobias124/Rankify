@@ -2,7 +2,7 @@
 # <p align="center"><img src="./images/rankify-crop.png" width="300" style ="border-radius: 50;"/></p>
 ### <div align="center">🔥 Rankify: 一个全面的 Python 工具包，专为检索、重排序和检索增强生成（RAG）设计 🔥<div>
 
-> 📢 特别感谢 [Xiumao](https://github.com/xiumao) 对 Rankify 的大力支持与推广！  
+> 📢 特别感谢 [Xiumao](https://github.com/xiumaoprompt) 对 Rankify 的大力支持与推广！  
 > 以下是他撰写的两篇精彩中文解析文章，为用户更好理解 Rankify 提供了重要帮助：
 >
 > - 📘 [Rankify 入门解析：如何构建统一检索与重排序框架](https://mp.weixin.qq.com/s/-dH64Q_KWvj8VQq7Ys383Q)  
