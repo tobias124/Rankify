@@ -6,6 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from rankify.utils.helper import get_device,get_dtype
 import torch
 from tqdm import tqdm  # Import tqdm for progress tracking
+import copy
 
 class LLMLayerWiseRanker(BaseRanking):
     """
@@ -187,11 +188,12 @@ class LLMLayerWiseRanker(BaseRanking):
                 batch_scores = all_scores[-1].cpu().numpy().tolist()
                 scores.extend(batch_scores)
 
+            contexts = copy.deepcopy(doc.contexts)
             # Update each context with its score and reorder based on scores
-            for context, score in zip(doc.contexts, scores):
+            for context, score in zip(contexts, scores):
                 context.score = score
-
-            doc.reorder_contexts = sorted(doc.contexts, key=lambda x: x.score, reverse=True)
+            
+            doc.reorder_contexts = sorted(contexts, key=lambda x: x.score, reverse=True)
 
         return documents
 
