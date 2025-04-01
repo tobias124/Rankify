@@ -33,7 +33,20 @@ _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and ret
 <img src="images/overview.png" width="500" height="500" >
 </p>
 
+---
+## 🚀 Demo
 
+To run the demo locally:
+
+```bash
+# Make sure Rankify is installed
+pip install streamlit
+
+# Then run the demo
+streamlit run demo.py
+```
+
+https://github.com/user-attachments/assets/13184943-55db-4f0c-b509-fde920b809bc
 ---
 
 ## :link: Navigation
