@@ -47,6 +47,8 @@ streamlit run demo.py
 ```
 
 https://github.com/user-attachments/assets/13184943-55db-4f0c-b509-fde920b809bc
+
+
 ---
 
 ## :link: Navigation
