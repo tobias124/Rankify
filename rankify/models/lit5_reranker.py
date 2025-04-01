@@ -120,7 +120,7 @@ class LiT5DistillReranker(BaseRanking):
 
         # Reorder contexts based on reranked_result
         document.reorder_contexts = [
-            docid_to_context[int(candidate["docid"])] for candidate in reranked_result.candidates
+            docid_to_context[str(candidate["docid"])] for candidate in reranked_result.candidates
         ]
         return document
 
@@ -213,7 +213,7 @@ class LiT5ScoreReranker(BaseRanking):
 
         # Reorder contexts based on reranked_result
         document.reorder_contexts = [
-            docid_to_context[int(candidate["docid"])] for candidate in reranked_result.candidates
+            docid_to_context[str(candidate["docid"])] for candidate in reranked_result.candidates
         ]
         return document
 
