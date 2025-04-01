@@ -105,6 +105,9 @@ class LLMLayerWiseRanker(BaseRanking):
         self.tokenizer.model_max_length = self.max_sequence_length
         self.tokenizer.padding_side = "right"
 
+        if self.tokenizer.pad_token_id is None:
+            self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
+
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name, trust_remote_code=True, torch_dtype=self.dtype
         ).to(self.device)
