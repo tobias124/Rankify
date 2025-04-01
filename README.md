@@ -18,7 +18,7 @@
 <!--   -->
 </div>
 
-If you like our Framework, **don't hesitate to ⭐ star this repository ⭐**. This helps us to **make the Framework more better and scalable to different models and mehods 🤗**.
+If you like our Framework, **don't hesitate to ⭐ star this repository ⭐**. This helps us to **make the Framework more better and scalable to different models and methods 🤗**.
 
 <!-- <img src="./images/output.gif" height=50 alt="Star the repo   " />-->
 
