@@ -144,7 +144,7 @@ class Context:
         """
         self.score: Optional[float] = score
         self.has_answer: Optional[bool] = has_answer
-        self.id: Optional[int] = id
+        self.id: Optional[str] = id
         self.title: Optional[str] = title
         self.text: Optional[str] = text
 
@@ -225,7 +225,7 @@ class Document:
         self.answers: Answer = answers
         self.contexts: List[Context] = contexts
         self.reorder_contexts: List[Context] = None
-        self.id = id 
+        self.id = str(id) 
 
     @classmethod
     def from_dict(cls, data: dict,n_docs:int=100) -> 'Document':
