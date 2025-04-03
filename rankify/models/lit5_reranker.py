@@ -7,6 +7,7 @@ from typing import List
 from rankify.utils.models.rank_llm.rerank import Reranker
 from rankify.utils.models.rank_llm.data import Request
 from tqdm import tqdm  # Import tqdm for progress tracking
+import copy 
 
 class LiT5DistillReranker(BaseRanking):
     """
@@ -116,13 +117,18 @@ class LiT5DistillReranker(BaseRanking):
             #logging=logging,
         )
             # Create a mapping from docid to the original context
-        docid_to_context = {ctx.id: ctx for ctx in document.contexts}
-
+        
+        contexts = copy.deepcopy(document.contexts)
+        docid_to_context = {ctx.id: ctx for ctx in contexts}
         # Reorder contexts based on reranked_result
-        document.reorder_contexts = [
-            docid_to_context[str(candidate["docid"])] for candidate in reranked_result.candidates
-        ]
+        reorder_contexts = []
+        for candidate in reranked_result.candidates:
+            d = docid_to_context[str(candidate["docid"])]
+            d.score = candidate["score"]
+            reorder_contexts.append(d)
+        document.reorder_contexts = reorder_contexts
         return document
+        
 
 
 class LiT5ScoreReranker(BaseRanking):
@@ -209,11 +215,14 @@ class LiT5ScoreReranker(BaseRanking):
         )
 
         # Create a mapping from docid to the original context
-        docid_to_context = {ctx.id: ctx for ctx in document.contexts}
-
+        contexts = copy.deepcopy(document.contexts)
+        docid_to_context = {ctx.id: ctx for ctx in contexts}
         # Reorder contexts based on reranked_result
-        document.reorder_contexts = [
-            docid_to_context[str(candidate["docid"])] for candidate in reranked_result.candidates
-        ]
+        reorder_contexts = []
+        for candidate in reranked_result.candidates:
+            d = docid_to_context[str(candidate["docid"])]
+            d.score = candidate["score"]
+            reorder_contexts.append(d)
+        document.reorder_contexts = reorder_contexts
         return document
 
