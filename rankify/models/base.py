@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from rankify.dataset.dataset import Document
 
+
+
 class BaseRanking(ABC):
     """
     An abstract base class for implementing different ranking models.
