@@ -5,7 +5,7 @@ from rankify.utils.models.rank_llm.data import Request
 from rankify.utils.models.rank_llm.rerank.listwise import RankListwiseOSLLM
 from typing import List
 from tqdm import tqdm  # Import tqdm for progress tracking
-
+import copy
 
 class VicunaReranker(BaseRanking):
     """
@@ -143,13 +143,16 @@ class VicunaReranker(BaseRanking):
             logging=logging,
         )[0]
 
+        contexts = copy.deepcopy(document.contexts)
+
         # Create a mapping from docid to the original context
-        docid_to_context = {ctx.id: ctx for ctx in document.contexts}
+        docid_to_context = {str(ctx.id): ctx for ctx in document.contexts}
 
         # Reorder contexts based on reranked_result
-        document.reorder_contexts = [
-            docid_to_context[int(candidate["docid"])]
-            for candidate in reranked_result.candidates
-        ]
-
+        reorder_contexts = []
+        for candidate in reranked_result.candidates:
+            d = docid_to_context[str(candidate["docid"])]
+            d.score = candidate["score"]
+            reorder_contexts.append(d)
+        document.reorder_contexts = reorder_contexts
         return document
