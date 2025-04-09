@@ -6,7 +6,7 @@ from rankify.utils.models.rank_llm.rerank.listwise import RankListwiseOSLLM
 from typing import List
 from rankify.utils.models.rank_llm.rerank import PromptMode
 from tqdm import tqdm  # Import tqdm for progress tracking
-
+import copy
 class ZephyrReranker(BaseRanking):
     """
     Implements **ZephyrReranker**, a **listwise ranking approach** designed for
