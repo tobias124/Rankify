@@ -146,7 +146,7 @@ class VicunaReranker(BaseRanking):
         contexts = copy.deepcopy(document.contexts)
 
         # Create a mapping from docid to the original context
-        docid_to_context = {str(ctx.id): ctx for ctx in document.contexts}
+        docid_to_context = {str(ctx.id): ctx for ctx in contexts}
 
         # Reorder contexts based on reranked_result
         reorder_contexts = []
