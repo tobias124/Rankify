@@ -1,4 +1,5 @@
 import llm_blender
+from llm_blender.gpt_eval.utils import get_ranks_from_scores
 from rankify.models.base import BaseRanking
 from rankify.dataset.dataset import Document
 from typing import List
@@ -61,9 +62,10 @@ class BlenderReranker(BaseRanking):
             model = BlenderReranker(method="blender_reranker", model_name="PairRM")
             ```
         """
+        self.device = kwargs.get("device", "cuda") 
         self.method = method
         self.blender = llm_blender.Blender()
-        self.blender.loadranker(model_name)  # Load the ranker model
+        self.blender.loadranker(model_name , device=self.device)  # Load the ranker model
 
     def rank(self, documents: List[Document]) -> List[Document]:
         """
@@ -86,7 +88,7 @@ class BlenderReranker(BaseRanking):
             ```
         """
         for document in tqdm(documents, desc="Reranking Documents"):
-            document = self._rerank_document(document)
+                document = self._rerank_document(document)
         return documents
 
     def _rerank_document(self, document: Document) -> Document:
@@ -117,15 +119,20 @@ class BlenderReranker(BaseRanking):
             raise ValueError("No Context Provide!!!!")
 
         # Perform reranking
-        ranks = self.blender.rank([input_text], [candidate_texts], return_scores=False)
-
+        scores = self.blender.rank([input_text], [candidate_texts], return_scores=True, disable_tqdm=True)
+        ranks =get_ranks_from_scores(scores)
 
         if ranks.size == 0 or len(ranks[0]) != len(candidate_texts):
             raise ValueError("Invalid ranks returned from LLM-Blender.")
 
         # Map ranks to contexts
-        #print(ranks[0])
-        ranked_contexts = [document.contexts[idx-1] for idx in ranks[0]]
+        contexts = copy.deepcopy(document.contexts)
+        ranked_contexts = []
+        for score, idx in zip(scores[0], ranks[0]):
+            ctx= contexts[idx-1]
+            ctx.score= score
+            ranked_contexts.append(ctx)
+
 
         # Update the document's reordered contexts
         document.reorder_contexts = ranked_contexts
