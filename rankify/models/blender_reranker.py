@@ -4,6 +4,7 @@ from rankify.dataset.dataset import Document
 from typing import List
 from tqdm import tqdm  # Import tqdm for progress tracking
 
+import copy
 
 class BlenderReranker(BaseRanking):
     """
