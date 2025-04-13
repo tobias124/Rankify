@@ -6,7 +6,7 @@ from rankify.dataset.dataset import Document
 from typing import List
 from tqdm import tqdm  # Import tqdm for progress tracking
 
-
+import copy
 def splade_max_pooling(logits, attention_mask):
     """
     Perform Splade-style max pooling with log scaling.
@@ -124,10 +124,13 @@ class SpladeReranker(BaseRanking):
             Document: The reranked **Document** with updated `reorder_contexts`.
         """
         query = document.question.question  # Extract query text
-        contexts = document.contexts
+        contexts = copy.deepcopy(document.contexts)
 
         # Extract context texts
         context_texts = [ctx.text for ctx in contexts]
+        if not context_texts:
+            document.reorder_contexts = []
+            return document
 
         # Compute query and document scores
         scores = self._rerank(query, context_texts)

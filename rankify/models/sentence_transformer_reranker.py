@@ -4,7 +4,7 @@ from rankify.models.base import BaseRanking
 from rankify.dataset.dataset import Document
 from typing import List
 from tqdm import tqdm  # Import tqdm for progress tracking
-
+import copy
 
 class SentenceTransformerReranker(BaseRanking):
     """
@@ -114,7 +114,7 @@ class SentenceTransformerReranker(BaseRanking):
             Document: The reranked **Document** with updated `reorder_contexts`.
         """
         query = document.question.question  # Extract query text
-        contexts = document.contexts
+        contexts = copy.deepcopy(document.contexts)
 
         # Extract context texts
         context_texts = [ctx.text for ctx in contexts]

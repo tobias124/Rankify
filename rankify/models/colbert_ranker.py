@@ -7,7 +7,7 @@ from rankify.models.base import BaseRanking
 from rankify.dataset.dataset import Document
 from rankify.utils.models.colbert import _insert_token, _colbert_score, ColBERTModel  # Assume you provide these helpers unchanged
 from tqdm import tqdm  # Import tqdm for progress tracking
-
+import copy
 
 class ColBERTReranker(BaseRanking):
     """
@@ -119,14 +119,18 @@ class ColBERTReranker(BaseRanking):
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             query = document.question.question
-            contexts = [ctx.text for ctx in document.contexts]
+            contexts = [copy.deepcopy(ctx.text) for ctx in document.contexts]
 
             # Compute scores
             scores = self._colbert_rank(query, contexts)
 
             # Reorder contexts based on scores
+            document.reorder_contexts = []
             ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
-            document.reorder_contexts = [document.contexts[idx] for idx in ranked_indices]
+            for index in ranked_indices:
+                d =copy.deepcopy(document.contexts[index]) 
+                d.score= scores[index]
+                document.reorder_contexts.append(d)
         return documents
     
     @torch.inference_mode()
