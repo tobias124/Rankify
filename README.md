@@ -914,6 +914,7 @@ print(after_ranking_metrics)
 
 
 ## 📜 Supported Models
+
 ### **1️⃣ Index**  
 - ✅ **Wikipedia**
 - ✅ **MS-MARCO**
