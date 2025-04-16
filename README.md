@@ -914,7 +914,10 @@ print(after_ranking_metrics)
 
 
 ## 📜 Supported Models
-
+### **1️⃣ Index**  
+- ✅ **Wikipedia**
+- ✅ **MS-MARCO**
+- 🕒 **Online Search** 
 
 ### **1️⃣ Retrievers**  
 - ✅ **BM25**

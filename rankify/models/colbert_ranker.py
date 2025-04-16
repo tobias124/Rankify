@@ -119,6 +119,10 @@ class ColBERTReranker(BaseRanking):
         """
         for document in tqdm(documents, desc="Reranking Documents"):
             query = document.question.question
+            if not document.contexts:
+                # Skip document if no valid contexts
+                print(f"[SKIP] Document skipped — no valid contexts. Query: '{query}'")
+                continue
             contexts = [copy.deepcopy(ctx.text) for ctx in document.contexts]
 
             # Compute scores
@@ -253,7 +257,7 @@ class ColBERTReranker(BaseRanking):
                     pad_length = QLEN - original_length
                     padded_input_ids = input_ids.tolist() + [mask_token_id] * pad_length
                     padded_attention_mask = (
-                        encoding["attention_mask"][i].tolist() + [0] * pad_length
+                        encoding["attention_mask"][i].tolist() + [0] *  pad_length
                     )
                 else:
                     padded_input_ids = input_ids[:QLEN].tolist()
