@@ -4,7 +4,7 @@ from typing import List
 from rankify.models.base import BaseRanking
 from rankify.dataset.dataset import Document
 from tqdm import tqdm  # Import tqdm for progress tracking
-
+import copy
 
 class EchoRankReranker(BaseRanking):
     """
@@ -171,7 +171,7 @@ Output Passage A or Passage B."""
                         pairwise_contexts[i], pairwise_contexts[j] = pairwise_contexts[j], pairwise_contexts[i]
 
             # Assign scores and sort
-            all_contexts = pairwise_contexts + no_contexts
+            all_contexts = copy.deepcopy(pairwise_contexts + no_contexts )
             for context in all_contexts:
                 context.score = 1.0 if context in pairwise_contexts else 0.0  # Assigning scores based on pairwise ranking
             
