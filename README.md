@@ -929,7 +929,7 @@ print(after_ranking_metrics)
 - ✅ **Contriever** 
 - ✅ **BPR** 
 - ✅ **HYDE** 
-- 🕒 **RepLlama**   
+- 🕒 **RepLlama**
 - 🕒 **coCondenser**   
 - 🕒 **Spar** 
 - 🕒 **Dragon** 
