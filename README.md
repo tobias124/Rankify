@@ -921,14 +921,14 @@ print(after_ranking_metrics)
 - 🕒 **Online Search** 
 
 ### **1️⃣ Retrievers**  
-- ✅ **BM25**
-- ✅ **DPR** 
-- ✅ **ColBERT**   
-- ✅ **ANCE**
-- ✅ **BGE** 
-- ✅ **Contriever** 
-- ✅ **BPR** 
-- ✅ **HYDE** 
+- ✅ **[BM25](https://dl.acm.org/doi/10.1561/1500000019)**
+- ✅ **[DPR](https://arxiv.org/abs/2004.04906)** 
+- ✅ **[ColBERT](https://arxiv.org/abs/2004.12832)**   
+- ✅ **[ANCE](https://arxiv.org/abs/2007.00808)**
+- ✅ **[BGE](https://arxiv.org/abs/2402.03216)** 
+- ✅ **[Contriever](https://arxiv.org/abs/2112.09118)** 
+- ✅ **[BPR](https://arxiv.org/abs/2106.00882)** 
+- ✅ **[HYDE](https://arxiv.org/abs/2212.10496)** 
 - 🕒 **RepLlama**
 - 🕒 **coCondenser**   
 - 🕒 **Spar** 
@@ -938,21 +938,21 @@ print(after_ranking_metrics)
 
 ### **2️⃣ Rerankers**  
 
-- ✅ **Cross-Encoders** 
-- ✅ **RankGPT**
-- ✅ **RankGPT-API** 
-- ✅ **MonoT5**
-- ✅ **MonoBert**
-- ✅ **RankT5** 
-- ✅ **ListT5** 
-- ✅ **LiT5Score**
-- ✅ **LiT5Dist**
-- ✅ **Vicuna Reranker**
-- ✅ **Zephyr Reranker**
-- ✅ **Sentence Transformer-based** 
-- ✅ **FlashRank Models**  
+- ✅ **[Cross-Encoders](https://huggingface.co/cross-encoder)** 
+- ✅ **[RankGPT](https://arxiv.org/abs/2304.09542)**
+- ✅ **[RankGPT-API](https://arxiv.org/abs/2304.09542)** 
+- ✅ **[MonoT5](https://arxiv.org/abs/2003.06713)**
+- ✅ **[MonoBert](https://arxiv.org/abs/1910.14424)**
+- ✅ **[RankT5](https://arxiv.org/abs/2210.10634)** 
+- ✅ **[ListT5](https://arxiv.org/abs/2402.15838)** 
+- ✅ **[LiT5Score](https://arxiv.org/abs/2312.16098)**
+- ✅ **[LiT5Dist](https://arxiv.org/abs/2312.16098)**
+- ✅ **[Vicuna Reranker](https://arxiv.org/abs/2309.15088)**
+- ✅ **[Zephyr Reranker](https://arxiv.org/abs/2312.02724)**
+- ✅ **[Sentence Transformer-based](https://huggingface.co/sentence-transformers)** 
+- ✅ **[FlashRank Models](https://github.com/PrithivirajDamodaran/FlashRank)**  
 - ✅ **API-Based Rerankers**  
-- ✅ **ColBERT Reranker**
+- ✅ **[ColBERT Reranker](https://arxiv.org/abs/2004.12832)**
 - ✅ **LLM Layerwise Ranker** 
 - ✅ **Splade Reranker**
 - ✅ **UPR Reranker**
