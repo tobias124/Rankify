@@ -954,15 +954,15 @@ print(after_ranking_metrics)
 - ✅ **API-Based Rerankers**  
 - ✅ **[ColBERT Reranker](https://arxiv.org/abs/2004.12832)**
 - ✅ **LLM Layerwise Ranker** 
-- ✅ **Splade Reranker**
-- ✅ **UPR Reranker**
-- ✅ **Inranker Reranker**
+- ✅ **[Splade Reranker](https://dl.acm.org/doi/10.1145/3477495.3531857)**
+- ✅ **[UPR Reranker](https://arxiv.org/abs/2204.07496)**
+- ✅ **[Inranker Reranker](https://arxiv.org/abs/2401.06910)**
 - ✅ **Transformer Reranker**
-- ✅ **FIRST Reranker**
-- ✅ **Blender Reranker**
-- ✅ **LLM2VEC Reranker**
-- ✅ **ECHO Reranker**
-- ✅ **Incontext Reranker**
+- ✅ **[FIRST Reranker](https://arxiv.org/abs/2411.05508)**
+- ✅ **[Blender Reranker](https://arxiv.org/abs/2306.02561)**
+- ✅ **[LLM2VEC Reranker](https://arxiv.org/abs/2404.05961)**
+- ✅ **[ECHO Reranker](https://arxiv.org/abs/2402.10866)**
+- ✅ **[Incontext Reranker](https://arxiv.org/abs/2411.18947)**
 - 🕒 **DynRank**
 - 🕒 **ASRank**
 - 🕒 **RankLlama**
