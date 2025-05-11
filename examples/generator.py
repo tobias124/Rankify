@@ -13,7 +13,7 @@ contexts = [
 doc = Document(question=question, answers=answers, contexts=contexts)
 
 # Initialize Generator (e.g., Meta Llama)
-generator = Generator(method="in-context-ralm", model_name='meta-llama/Llama-3.1-8B')
+generator = Generator(method="fid", model_name='nq_reader_base')
 
 # Generate answer
 generated_answers = generator.generate([doc])
