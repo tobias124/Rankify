@@ -174,3 +174,5 @@ cython_debug/
 examples/test.py
 
 test/
+
+rankify-focus.code-workspace

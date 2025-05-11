@@ -1,5 +1,4 @@
 from typing import List
-
 from rankify.generator.base_rag_model import BaseRAGModel
 from rankify.generator.prompt_generator import PromptGenerator
 
@@ -12,8 +11,9 @@ class HuggingFaceModel(BaseRAGModel):
 
     def generate(self, prompt: str, **kwargs) -> str:
         """Generate a response using Hugging Face's model."""
-        # Example implementation (replace with actual model inference)
-        return f"Generated response for prompt: {prompt}"
+        inputs = self.tokenizer(prompt, return_tensors="pt")
+        outputs = self.model.generate(**inputs, **kwargs)
+        return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     def embed(self, text: str, **kwargs) -> List[float]:
         """Generate embeddings using Hugging Face's model."""
