@@ -11,7 +11,12 @@ class HuggingFaceModel(BaseRAGModel):
 
     def generate(self, prompt: str, **kwargs) -> str:
         """Generate a response using Hugging Face's model."""
-        inputs = self.tokenizer(prompt, return_tensors="pt")
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device) # ensure inputs are on the same device as the model
+        # define generation parameters defaults TODO: should be excluded into config
+        kwargs.setdefault("max_length", 128)
+        kwargs.setdefault("temperature", 0.7)
+        
+
         outputs = self.model.generate(**inputs, **kwargs)
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
