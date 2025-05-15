@@ -2,7 +2,7 @@ from rankify.dataset.dataset import Document, Question, Answer, Context
 from rankify.generator.generator import Generator
 
 # Define question and answer
-question = Question("Who is the Soccer world cup winner of 2014?")
+question = Question("What is the capital of Austria?")
 #answers = Answer(["Paris"])
 answers=Answer("")
 contexts = [
@@ -14,7 +14,7 @@ contexts = [
 doc = Document(question=question, answers=answers, contexts=contexts)
 
 # Initialize Generator (e.g., Meta Llama)
-generator = Generator(method="chain-of-thought-rag", model_name='meta-llama/Meta-Llama-3.1-8B-Instruct', backend="huggingface")
+generator = Generator(method="basic-rag", model_name='meta-llama/Meta-Llama-3.1-8B-Instruct', backend="huggingface")
 
 # Generate answer
 generated_answers = generator.generator.answer_question([doc], max_new_tokens=256)
