@@ -8,8 +8,9 @@ from rankify.generator.in_context_ralm import InContextRALMGenerator
 GENERATOR_MODELS = {
     #"fid": FiDGenerator,
     #"in-context-ralm": InContextRALMGenerator,
-    "huggingface": HuggingFaceModel,  # Add this line
+    #"huggingface": HuggingFaceModel,  # Add this line
     "basic-rag": BasicRAG,
+    "chain-of-thought-rag": ChainOfThoughtRAG,
     # Future models can be added here (e.g., "t5": T5Generator, "gpt": GPTGenerator)
 }
 
