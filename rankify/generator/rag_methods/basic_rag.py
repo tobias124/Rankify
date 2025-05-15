@@ -3,8 +3,9 @@ from rankify.generator.base_rag_model import BaseRAGModel
 
 from typing import List
 from rankify.dataset.dataset import Document
+from rankify.generator.rag_methods.base_rag_method import BaseRAGMethod
 
-class BasicRAG:
+class BasicRAG(BaseRAGMethod):
     def __init__(self, model: BaseRAGModel):
         self.model = model
 

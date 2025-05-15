@@ -14,8 +14,8 @@ contexts = [
 doc = Document(question=question, answers=answers, contexts=contexts)
 
 # Initialize Generator (e.g., Meta Llama)
-generator = Generator(method="basic-rag", model_name='meta-llama/Meta-Llama-3.1-8B-Instruct', backend="huggingface")
+generator = Generator(method="chain-of-thought-rag", model_name='meta-llama/Meta-Llama-3.1-8B-Instruct', backend="huggingface")
 
 # Generate answer
-generated_answers = generator.generator.answer_question([doc], max_new_tokens=100)
+generated_answers = generator.generator.answer_question([doc], max_new_tokens=256)
 print(generated_answers)  # Output: ["Paris"]
