@@ -4,9 +4,10 @@ from rankify.generator.rag_methods.chain_of_thought_rag import ChainOfThoughtRAG
 from rankify.generator.models.huggingface_model import HuggingFaceModel
 from rankify.generator.fid import FiDGenerator
 from rankify.generator.in_context_ralm import InContextRALMGenerator
+from rankify.generator.rag_methods.fid_rag_method import FiDRAGMethod
 
 GENERATOR_MODELS = {
-    #"fid": FiDGenerator,
+    "fid": FiDGenerator,
     #"in-context-ralm": InContextRALMGenerator,
     #"huggingface": HuggingFaceModel,  # Add this line
     "basic-rag": BasicRAG,
@@ -73,6 +74,8 @@ class Generator:
             self.generator = BasicRAG(model)
         elif method == "chain-of-thought-rag":
             self.generator = ChainOfThoughtRAG(model)
+        elif method == "fid":
+            self.generator = FiDRAGMethod(model)
         else:
             # For other methods, directly assign the model
             self.generator = model
