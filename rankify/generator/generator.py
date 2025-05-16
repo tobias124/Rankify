@@ -4,17 +4,8 @@ from rankify.generator.rag_methods.chain_of_thought_rag import ChainOfThoughtRAG
 from rankify.generator.models.huggingface_model import HuggingFaceModel
 from rankify.generator.rag_methods.fid_rag_method import FiDRAGMethod
 from rankify.generator.rag_methods.in_context_ralm_rag import InContextRALMRAG
+from rankify.utils.generator.generator_models import GENERATOR_MODELS
 
-GENERATOR_MODELS = {
-    #"fid": FiDGenerator,
-    "in-context-ralm": InContextRALMRAG,
-    "fid": FiDRAGMethod,
-    #"in-context-ralm": InContextRALMGenerator,
-    #"huggingface": HuggingFaceModel,  # Add this line
-    "basic-rag": BasicRAG,
-    "chain-of-thought-rag": ChainOfThoughtRAG,
-    # Future models can be added here (e.g., "t5": T5Generator, "gpt": GPTGenerator)
-}
 
 class Generator:
     """
@@ -70,20 +61,12 @@ class Generator:
         # Initialize the generator model based on the method
         model = model_factory(model_name=model_name, backend=backend, method=method, **kwargs)
         
-        # Initialize the RAG method
-        if method == "basic-rag":
-            self.generator = BasicRAG(model)
-        elif method == "chain-of-thought-rag":
-            self.generator = ChainOfThoughtRAG(model)
-        elif method == "in-context-ralm":
-            self.generator = InContextRALMRAG(model)
-        elif method == "fid":
-            self.generator = FiDRAGMethod(model)
-        else:
-            # For other methods, directly assign the model
-            self.generator = model
-        
-        #self.generator = GENERATOR_MODELS[method](method, model_name, **kwargs)
+        # get the class for the specified method
+        rag_method_class = GENERATOR_MODELS[method]
+
+        # Initialize the generator with the model and any additional parameters
+        self.generator = rag_method_class(model, **kwargs)
+
 
     def generate(self, documents):
         """
