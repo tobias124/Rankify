@@ -1,7 +1,7 @@
 import os
 import torch
 from torch.utils.data import DataLoader, SequentialSampler
-from rankify.generator.base_rag_model import BaseRAGModel
+from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.utils.generator.FiD.data import Dataset, Collator
 #from rankify.utils.generator.FiD.util import load_t5_tokenizer
 from  rankify.utils.generator.FiD.model import FiDT5

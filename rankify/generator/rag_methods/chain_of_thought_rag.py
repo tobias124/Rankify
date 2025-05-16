@@ -1,6 +1,6 @@
 from typing import List
 from rankify.dataset.dataset import Document
-from rankify.generator.base_rag_model import BaseRAGModel
+from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.generator.rag_methods.base_rag_method import BaseRAGMethod
 
 

@@ -1,4 +1,4 @@
-from rankify.generator.model_factory import model_factory
+from rankify.generator.models.model_factory import model_factory
 from rankify.generator.rag_methods.basic_rag import BasicRAG
 from rankify.generator.rag_methods.chain_of_thought_rag import ChainOfThoughtRAG
 from rankify.generator.models.huggingface_model import HuggingFaceModel

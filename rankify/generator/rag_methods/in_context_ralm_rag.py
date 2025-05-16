@@ -3,9 +3,8 @@ import json
 from typing import List
 import torch
 from tqdm import tqdm
-from rankify.generator.base import BaseGenerator
 from rankify.dataset.dataset import Document
-from rankify.generator.base_rag_model import BaseRAGModel
+from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.generator.rag_methods.base_rag_method import BaseRAGMethod
 from rankify.utils.generator.InContextRalm.model_utils import load_model_and_tokenizer
 from transformers import AutoConfig

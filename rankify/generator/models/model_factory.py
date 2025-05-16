@@ -1,7 +1,7 @@
 import torch
 from rankify.generator.models.fid_model import FiDModel
 from rankify.generator.models.openai_model import OpenAIModel
-from rankify.generator.base_rag_model import BaseRAGModel
+from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.generator.models.huggingface_model import HuggingFaceModel
 from rankify.generator.prompt_generator import PromptGenerator
 
