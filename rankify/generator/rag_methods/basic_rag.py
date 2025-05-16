@@ -1,5 +1,5 @@
 from typing import List
-from rankify.generator.base_rag_model import BaseRAGModel
+from rankify.generator.models.base_rag_model import BaseRAGModel
 
 from typing import List
 from rankify.dataset.dataset import Document

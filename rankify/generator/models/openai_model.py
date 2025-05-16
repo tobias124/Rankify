@@ -1,5 +1,4 @@
-from typing import List
-from rankify.generator.base_rag_model import BaseRAGModel
+from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.generator.prompt_generator import PromptGenerator
 
 class OpenAIModel(BaseRAGModel):
@@ -12,8 +11,3 @@ class OpenAIModel(BaseRAGModel):
         """Generate a response using OpenAI's API."""
         # Example implementation (replace with actual API call)
         return f"Generated response for prompt: {prompt}"
-
-    def embed(self, text: str, **kwargs) -> List[float]:
-        """Generate embeddings using OpenAI's API."""
-        # Example implementation (replace with actual API call)
-        return [0.1, 0.2, 0.3]  # Dummy embedding

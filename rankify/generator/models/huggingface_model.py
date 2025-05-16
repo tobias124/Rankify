@@ -1,5 +1,4 @@
-from typing import List
-from rankify.generator.base_rag_model import BaseRAGModel
+from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.generator.prompt_generator import PromptGenerator
 
 class HuggingFaceModel(BaseRAGModel):
@@ -19,8 +18,3 @@ class HuggingFaceModel(BaseRAGModel):
 
         outputs = self.model.generate(**inputs, **kwargs)
         return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-
-    def embed(self, text: str, **kwargs) -> List[float]:
-        """Generate embeddings using Hugging Face's model."""
-        # Example implementation (replace with actual embedding logic)
-        return [0.4, 0.5, 0.6]  # Dummy embedding

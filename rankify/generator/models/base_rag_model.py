@@ -7,7 +7,6 @@ class BaseRAGModel(ABC):
         """Generate a response based on the given prompt."""
         pass
 
-    @abstractmethod
     def embed(self, text: str, **kwargs) -> List[float]:
-        """Generate embeddings for the given text."""
-        pass
+        """Optional: Generate embeddings for the given text."""
+        raise NotImplementedError("Embedding is not required for this implementation.")
