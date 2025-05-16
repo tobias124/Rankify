@@ -3,6 +3,22 @@ from rankify.generator.prompt_generator import PromptGenerator
 from rankify.utils.api.openaiclient import OpenaiClient
 
 class OpenAIModel(BaseRAGModel):
+    """
+    **OpenAI Model** for Retrieval-Augmented Generation (RAG).
+
+    This class integrates OpenAI's GPT models for text generation in a RAG pipeline. 
+    It uses the OpenAI API to generate responses based on input prompts.
+
+    Attributes:
+        model_name (str): Name of the OpenAI model (e.g., "gpt-3.5-turbo").
+        api_keys (list): List of API keys for authenticating with OpenAI.
+        prompt_generator (PromptGenerator): Instance for generating prompts.
+        client (OpenaiClient): Client for interacting with the OpenAI API.
+
+    Notes:
+        - This model uses OpenAI's GPT models for text generation.
+        - It supports additional parameters like `max_tokens` and `temperature`.
+    """
     def __init__(self, model_name: str, api_keys: list, prompt_generator: PromptGenerator, base_url: str = None):
         """
         Initialize the OpenAIModel with the OpenaiClient.

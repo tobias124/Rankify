@@ -6,7 +6,6 @@ from tqdm import tqdm
 from rankify.dataset.dataset import Document
 from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.generator.rag_methods.base_rag_method import BaseRAGMethod
-from rankify.utils.generator.huggingface_models.model_utils import load_model_and_tokenizer
 from transformers import AutoConfig
 
 class InContextRALMRAG(BaseRAGMethod):
@@ -82,11 +81,7 @@ class InContextRALMRAG(BaseRAGMethod):
         self.num_docs = kwargs.get("num_docs", 1)  # Default: 1 supporting document
 
 
-        # TODO: take care of this
-        # Load the model and tokenizer
-        #self.model, self.tokenizer, self.config, self.device = load_model_and_tokenizer(
-         #   self.model_name
-        #)
+
         self.tokenizer.pad_token = self.tokenizer.eos_token
 
         self.config = AutoConfig.from_pretrained(model.model_name)

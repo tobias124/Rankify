@@ -6,7 +6,7 @@ from rankify.dataset.dataset import Document
 from rankify.generator.rag_methods.base_rag_method import BaseRAGMethod
 
 class BasicRAG(BaseRAGMethod):
-    def __init__(self, model: BaseRAGModel):
+    def __init__(self, model: BaseRAGModel, **kwargs):
         self.model = model
 
     def answer_question(self, documents: List[Document], **kwargs) -> List[str]:
