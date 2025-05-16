@@ -7,7 +7,7 @@ from rankify.generator.prompt_generator import PromptGenerator
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from rankify.utils.generator.InContextRalm.model_utils import load_model, load_tokenizer
+from rankify.utils.generator.huggingface_models.model_utils import load_model, load_tokenizer
 
 def model_factory(model_name: str, backend: str, method: str, **kwargs) -> BaseRAGModel:
     prompt_generator = PromptGenerator(model_type=model_name, method=method)

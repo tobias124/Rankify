@@ -207,9 +207,3 @@ class FiDModel(BaseRAGModel):
                     results.append(answer)
 
         return results
-
-
-    def embed(self, text: str, **kwargs) -> list[float]:
-        """Generate embeddings using OpenAI's API."""
-        # Example implementation (replace with actual API call)
-        return [0.1, 0.2, 0.3]  # Dummy embedding

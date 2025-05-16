@@ -6,7 +6,7 @@ from tqdm import tqdm
 from rankify.dataset.dataset import Document
 from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.generator.rag_methods.base_rag_method import BaseRAGMethod
-from rankify.utils.generator.InContextRalm.model_utils import load_model_and_tokenizer
+from rankify.utils.generator.huggingface_models.model_utils import load_model_and_tokenizer
 from transformers import AutoConfig
 
 class InContextRALMRAG(BaseRAGMethod):
