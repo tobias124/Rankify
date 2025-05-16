@@ -2,15 +2,13 @@ from rankify.generator.model_factory import model_factory
 from rankify.generator.rag_methods.basic_rag import BasicRAG
 from rankify.generator.rag_methods.chain_of_thought_rag import ChainOfThoughtRAG
 from rankify.generator.models.huggingface_model import HuggingFaceModel
-from rankify.generator.fid import FiDGenerator
-from rankify.generator.in_context_ralm import InContextRALMGenerator
 from rankify.generator.rag_methods.fid_rag_method import FiDRAGMethod
 from rankify.generator.rag_methods.in_context_ralm_rag import InContextRALMRAG
 
 GENERATOR_MODELS = {
     #"fid": FiDGenerator,
     "in-context-ralm": InContextRALMRAG,
-    "fid": FiDGenerator,
+    "fid": FiDRAGMethod,
     #"in-context-ralm": InContextRALMGenerator,
     #"huggingface": HuggingFaceModel,  # Add this line
     "basic-rag": BasicRAG,

@@ -1,14 +1,10 @@
 import os
-from typing import List
 import torch
-import json
-from pathlib import Path
 from torch.utils.data import DataLoader, SequentialSampler
 from rankify.generator.base_rag_model import BaseRAGModel
 from rankify.utils.generator.FiD.data import Dataset, Collator
 #from rankify.utils.generator.FiD.util import load_t5_tokenizer
 from  rankify.utils.generator.FiD.model import FiDT5
-from rankify.generator.base import BaseGenerator
 from rankify.utils.generator.download import ModelDownloader
 from rankify.dataset.dataset import Document
 import transformers
@@ -213,7 +209,7 @@ class FiDModel(BaseRAGModel):
         return results
 
 
-    def embed(self, text: str, **kwargs) -> List[float]:
+    def embed(self, text: str, **kwargs) -> list[float]:
         """Generate embeddings using OpenAI's API."""
         # Example implementation (replace with actual API call)
         return [0.1, 0.2, 0.3]  # Dummy embedding
