@@ -15,7 +15,7 @@ def model_factory(model_name: str, backend: str, method: str, **kwargs) -> BaseR
         return OpenAIModel(model_name, kwargs["api_key"], prompt_generator)
     elif backend == "huggingface":
         tokenizer = load_tokenizer(model_name)
-        model = load_model(model_name, torch_dtype=torch.float16) 
+        model = load_model(model_name, **kwargs) 
         return HuggingFaceModel(model_name, tokenizer, model, prompt_generator)
     elif backend == "fid":
         return FiDModel(method, model_name, **kwargs)
