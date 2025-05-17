@@ -1,6 +1,6 @@
 from rankify.dataset.dataset import Document, Question, Answer, Context
 from rankify.generator.generator import Generator
-from rankify.utils.models.rank_llm.rerank.api_keys import get_openai_api_key
+from rankify.utils.models.rank_llm.rerank.api_keys import get_litellm_api_key
 
 # Define question and answer
 question = Question("What is the capital of France?")
@@ -15,10 +15,10 @@ contexts = [
 doc = Document(question=question, answers=answers, contexts=contexts)
 
 #load api-key
-api_key = get_openai_api_key()
+api_key = get_litellm_api_key()
 
 # Initialize Generator (e.g., Meta Llama)
-generator = Generator(method="basic-rag", model_name='ollama/mistral', backend="openai", use_litellm=True, api_keys=[api_key]) #api_key=api_key)
+generator = Generator(method="basic-rag", model_name='ollama/mistral', backend="litellm", api_key=api_key)
 
 # Generate answer
 generated_answers = generator.generator.answer_question([doc])

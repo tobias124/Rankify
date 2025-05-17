@@ -7,7 +7,6 @@ class LitellmClient:
         self.api_key = keys
 
     def chat(self, return_text=True, *args, **kwargs):
-
         response = completion(api_key=self.api_key, *args, **kwargs)
         if return_text:
             response = response.choices[0].message.content
