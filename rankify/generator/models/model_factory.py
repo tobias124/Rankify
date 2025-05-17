@@ -4,6 +4,7 @@ from rankify.generator.models.litellm_model import LitellmModel
 from rankify.generator.models.openai_model import OpenAIModel
 from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.generator.models.huggingface_model import HuggingFaceModel
+from rankify.generator.models.vllm_model import VLLMModel
 from rankify.generator.prompt_generator import PromptGenerator
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -22,5 +23,7 @@ def model_factory(model_name: str, backend: str, method: str, use_litellm=False,
         return FiDModel(method, model_name, **kwargs)
     elif backend == "litellm":
         return LitellmModel(model_name, kwargs["api_key"], prompt_generator)
+    elif backend == "vllm":
+        return VLLMModel(model_name, prompt_generator, **kwargs)
     else:
         raise ValueError(f"Unsupported backend: {backend}")
