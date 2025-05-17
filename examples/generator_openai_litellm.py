@@ -18,7 +18,7 @@ doc = Document(question=question, answers=answers, contexts=contexts)
 api_key = get_openai_api_key()
 
 # Initialize Generator (e.g., Meta Llama)
-generator = Generator(method="basic-rag", model_name='gpt-3.5-turbo', backend="openai", api_keys=[api_key])
+generator = Generator(method="basic-rag", model_name='ollama/mistral', backend="openai", use_litellm=True, api_keys=[api_key]) #api_key=api_key)
 
 # Generate answer
 generated_answers = generator.generator.answer_question([doc])

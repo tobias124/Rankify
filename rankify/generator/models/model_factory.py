@@ -9,10 +9,10 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 from rankify.utils.generator.huggingface_models.model_utils import load_model, load_tokenizer
 
-def model_factory(model_name: str, backend: str, method: str, **kwargs) -> BaseRAGModel:
+def model_factory(model_name: str, backend: str, method: str, use_litellm=False, **kwargs) -> BaseRAGModel:
     prompt_generator = PromptGenerator(model_type=model_name, method=method)
     if backend == "openai":
-        return OpenAIModel(model_name, kwargs["api_key"], prompt_generator)
+        return OpenAIModel(model_name, kwargs["api_keys"], prompt_generator, use_litellm=use_litellm)
     elif backend == "huggingface":
         tokenizer = load_tokenizer(model_name)
         model = load_model(model_name, **kwargs) 

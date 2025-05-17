@@ -1,5 +1,6 @@
 from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.generator.prompt_generator import PromptGenerator
+from rankify.utils.api.litellmclient import LitellmClient
 from rankify.utils.api.openaiclient import OpenaiClient
 
 class OpenAIModel(BaseRAGModel):
@@ -19,7 +20,7 @@ class OpenAIModel(BaseRAGModel):
         - This model uses OpenAI's GPT models for text generation.
         - It supports additional parameters like `max_tokens` and `temperature`.
     """
-    def __init__(self, model_name: str, api_keys: list, prompt_generator: PromptGenerator, base_url: str = None):
+    def __init__(self, model_name: str, api_keys: list, prompt_generator: PromptGenerator, base_url: str = None, use_litellm=False):
         """
         Initialize the OpenAIModel with the OpenaiClient.
 
@@ -30,8 +31,11 @@ class OpenAIModel(BaseRAGModel):
         """
         self.model_name = model_name
         self.prompt_generator = prompt_generator
-        self.client = OpenaiClient(keys=api_keys, base_url=base_url)
-
+        if use_litellm:
+            self.client = LitellmClient()
+        else:
+            self.client = OpenaiClient(keys=api_keys, base_url=base_url)
+        
     def generate(self, prompt: str, **kwargs) -> str:
         """
         Generate a response using OpenAI's API.
