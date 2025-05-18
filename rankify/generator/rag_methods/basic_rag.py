@@ -9,7 +9,7 @@ class BasicRAG(BaseRAGMethod):
     def __init__(self, model: BaseRAGModel, **kwargs):
         self.model = model
 
-    def answer_question(self, documents: List[Document], **kwargs) -> List[str]:
+    def answer_questions(self, documents: List[Document], **kwargs) -> List[Document]:
         """
         Answer question for a list of documents using the model.
 
@@ -19,16 +19,21 @@ class BasicRAG(BaseRAGMethod):
         Returns:
             str: An answer based on the given documents and question.
         """
+        answers = []
+
         for document in documents:
             # Extract question and contexts from the document
             question = document.question.question
             contexts = [context.text for context in document.contexts]
 
-        # Construct the prompt
-        prompt = f"""Answer this question based on the given contexts, provide a concise answer. You only need to answer the question, not provide context.
-        Question: {question}\nContexts:\n""" + "\n".join(contexts)
+            # Construct the prompt
+            prompt = f"""Answer this question based on the given contexts, provide a concise answer. You only need to answer the question, not provide context.
+            Question: {question}\nContexts:\n""" + "\n".join(contexts)
 
-        # Generate the answer using the model
-        answer = self.model.generate(prompt=prompt, **kwargs)
-        
-        return answer
+            # Generate the answer using the model
+            answer = self.model.generate(prompt=prompt, **kwargs)
+            
+            # Append the answer to the list
+            answers.append(answer)
+
+        return answers

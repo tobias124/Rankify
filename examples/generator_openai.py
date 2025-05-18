@@ -21,5 +21,5 @@ api_key = get_openai_api_key()
 generator = Generator(method="basic-rag", model_name='gpt-3.5-turbo', backend="openai", api_keys=[api_key])
 
 # Generate answer
-generated_answers = generator.generator.answer_question([doc], max_tokens=10)
+generated_answers = generator.generate([doc], max_tokens=10)
 print(generated_answers)  # Output: ["Paris"]

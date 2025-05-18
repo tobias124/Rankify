@@ -21,5 +21,5 @@ api_key = get_litellm_api_key()
 generator = Generator(method="basic-rag", model_name='ollama/mistral', backend="litellm", api_key=api_key)
 
 # Generate answer
-generated_answers = generator.generator.answer_question([doc])
+generated_answers = generator.generate([doc])
 print(generated_answers)  # Output: ["Paris"]

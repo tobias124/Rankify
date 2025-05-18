@@ -8,17 +8,23 @@ class ChainOfThoughtRAG(BaseRAGMethod):
     def __init__(self, model: BaseRAGModel, **kwargs):
         self.model = model
 
-    def answer_question(self, documents: List[Document], **kwargs) -> str:
+    def answer_questions(self, documents: List[Document], **kwargs) -> List[Document]:
         """Answer a question using chain-of-thought reasoning."""
-        
-        # Extract question from the first document
-        question = documents[0].question.question
-        # Extract contexts from all documents
-        contexts = []
+        answers = []
+
         for document in documents:
-            contexts.extend([context.text for context in document.contexts])
-        
-        prompt = f"""Answer this question using internal chain of thought reasoning, think and
+            # Extract question and contexts from the document
+            question = document.question.question
+            contexts = [context.text for context in document.contexts]
+
+            # Construct the prompt
+            prompt = f"""Answer this question using internal chain of thought reasoning, think and
           lay out your logic in multiple steps. You may use the provided contexts, but you can also discard it and just 
              reason by your own knowledge.   :\nQuestion: {question}\nContexts:\n""".join(contexts)
-        return self.model.generate(prompt, **kwargs)
+        
+            # Generate the answer using the model
+            answer = self.model.generate(prompt=prompt, **kwargs)
+            
+            # Append the answer to the list
+            answers.append(answer)
+        return answers

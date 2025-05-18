@@ -17,5 +17,5 @@ doc = Document(question=question, answers=answers, contexts=contexts)
 generator = Generator(method="fid", model_name='nq_reader_base', backend="fid")
 
 # Generate answer
-generated_answers = generator.generator.answer_question([doc])
+generated_answers = generator.generate([doc])
 print(generated_answers)  # Output: ["Paris"]
