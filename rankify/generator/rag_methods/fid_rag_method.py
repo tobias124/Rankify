@@ -9,7 +9,7 @@ class FiDRAGMethod(BaseRAGMethod):
     def __init__(self, model: BaseRAGModel):
         self.model = model
 
-    def answer_question(self, documents: List[Document], **kwargs) -> List[str]:
+    def answer_questions(self, documents: List[Document], **kwargs) -> List[str]:
         """
         Answer question for a list of documents using the model.
 

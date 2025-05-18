@@ -4,7 +4,7 @@ from rankify.generator.rag_methods.chain_of_thought_rag import ChainOfThoughtRAG
 from rankify.generator.models.huggingface_model import HuggingFaceModel
 from rankify.generator.rag_methods.fid_rag_method import FiDRAGMethod
 from rankify.generator.rag_methods.in_context_ralm_rag import InContextRALMRAG
-from rankify.utils.generator.generator_models import GENERATOR_MODELS
+from rankify.utils.generator.generator_models import RAG_METHODS
 
 
 class Generator:
@@ -55,20 +55,20 @@ class Generator:
         Raises:
             ValueError: If the specified `method` is not available in `GENERATOR_MODELS`.
         """
-        if method not in GENERATOR_MODELS:
+        if method not in RAG_METHODS:
             raise ValueError(f"Generator method {method} is not supported.")
         
         # Initialize the generator model based on the method
         model = model_factory(model_name=model_name, backend=backend, method=method, **kwargs)
         
         # get the class for the specified method
-        rag_method_class = GENERATOR_MODELS[method]
+        rag_method_class = RAG_METHODS[method]
 
         # Initialize the generator with the model and any additional parameters
-        self.generator = rag_method_class(model, **kwargs)
+        self.rag_method = rag_method_class(model, **kwargs)
 
 
-    def generate(self, documents):
+    def generate(self, documents, **kwargs):
         """
         Generates answers based on the **input documents**.
 
@@ -86,4 +86,4 @@ class Generator:
             # Output: ['William Shakespeare wrote Hamlet in the early 1600s.']
             ```
         """
-        return self.generator.generate(documents)
+        return self.rag_method.answer_questions(documents, **kwargs)
