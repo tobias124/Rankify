@@ -1,11 +1,9 @@
-import torch
 from rankify.dataset.dataset import Document, Question, Answer, Context
 from rankify.generator.generator import Generator
 
 # Define question and answer
-question = Question("What is the capital of Austria?")
-#answers = Answer(["Paris"])
-answers=Answer("")
+question = Question("What is the capital of France?")
+answers = Answer([""])
 contexts = [
     Context(id=1, title="France", text="The capital of France is Paris.", score=0.9),
     Context(id=2, title="Germany", text="Berlin is the capital of Germany.", score=0.5)
@@ -15,8 +13,8 @@ contexts = [
 doc = Document(question=question, answers=answers, contexts=contexts)
 
 # Initialize Generator (e.g., Meta Llama)
-generator = Generator(method="zero-shot", model_name='meta-llama/Meta-Llama-3.1-8B-Instruct', backend="huggingface", torch_dtype=torch.float16)
+generator = Generator(method="fid", model_name='nq_reader_base', backend="fid")
 
 # Generate answer
-generated_answers = generator.generate([doc], max_new_tokens=256)
-print(generated_answers[0].answers.generated_answer)  # Output: ["Paris"]
+generated_answers = generator.generate([doc])
+print(generated_answers)  # Output: ["Paris"]

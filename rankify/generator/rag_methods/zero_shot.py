@@ -24,7 +24,7 @@ class ZeroShotRAG(BaseRAGMethod):
         """
         self.model = model
 
-    def answer_questions(self, documents: List[Document], **kwargs) -> List[Document]:
+    def answer_questions(self, documents: List[Document], **kwargs) -> List[str]:
         """
         Answer questions for a list of documents using the model in a zero-shot manner.
 
@@ -32,7 +32,7 @@ class ZeroShotRAG(BaseRAGMethod):
             documents (List[Document]): A list of Document objects containing questions and contexts.
 
         Returns:
-            List[Document]: A list of Document objects with answers populated.
+            List[str]: A list of answers.
         """
         answers = []
 
@@ -46,8 +46,7 @@ class ZeroShotRAG(BaseRAGMethod):
             # Generate the answer using the model
             answer = self.model.generate(prompt, **kwargs)
 
-            # Append the answer to the document
-            document.answers.generated_answer = answer
-            answers.append(document)
+            # Append the answer to the list
+            answers.append(answer)
 
         return answers

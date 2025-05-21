@@ -5,7 +5,6 @@ from rankify.generator.generator import Generator
 
 # Define question and answer
 question = Question("What is the capital of France?")
-#answers = Answer(["Paris"])
 answers=Answer("")
 contexts = [
     Context(id=1, title="France", text="The capital of France is Paris.", score=0.9),
