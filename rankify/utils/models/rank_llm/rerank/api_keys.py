@@ -21,6 +21,15 @@ def get_openai_api_key() -> str:
             return os.getenv(path)
     return None
 
+def get_litellm_api_key() -> str:
+    load_dotenv(dotenv_path=f".env.local")
+    litellm_api_key = os.getenv("LITELLM_API_KEY")
+
+    if litellm_api_key is None:
+        raise ValueError(
+            "LITELLM_API_KEY not found in environment variables. Please set it."
+        )
+    return litellm_api_key
 
 def get_azure_openai_args() -> Dict[str, str]:
     load_dotenv(dotenv_path=f".env.local")

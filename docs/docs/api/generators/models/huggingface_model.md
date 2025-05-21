@@ -1,6 +1,6 @@
-# In Context Ralm Generator
+# HuggingFace Model
 
-::: rankify.generator.in_context_ralm
+::: rankify.generator.models.huggingface_model
     handler: python
     options:
         show_source: true
