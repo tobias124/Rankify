@@ -964,7 +964,7 @@ print(after_ranking_metrics)
 - ✅ **[Blender Reranker](https://arxiv.org/abs/2306.02561)**
 - ✅ **[LLM2VEC Reranker](https://arxiv.org/abs/2404.05961)**
 - ✅ **[ECHO Reranker](https://arxiv.org/abs/2402.10866)**
-- ✅ **[Incontext Reranker](https://arxiv.org/abs/2411.18947)**
+- ✅ **[Incontext Reranker](https://arxiv.org/abs/2410.02642)**
 - 🕒 **DynRank**
 - 🕒 **ASRank**
 - 🕒 **RankLlama**
