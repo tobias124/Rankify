@@ -15,7 +15,9 @@
  <a href="https://pepy.tech/projects/rankify"><img src="https://static.pepy.tech/badge/rankify" alt="PyPI Downloads"></a>
 <a href="https://github.com/DataScienceUIBK/rankify/releases"><img alt="GitHub release" src="https://img.shields.io/github/release/DataScienceUIBK/rankify.svg?label=Version&color=orange"></a>  
 <a href="https://star-history.com/#DataScienceUIBK/Rankify"> <img src="https://img.shields.io/github/stars/DataScienceUIBK/Rankify?style=social" alt="GitHub stars"> </a>  
-<!--   -->
+
+[![GitCode](https://gitcode.com/abdoelsayed2016/Rankify/star/badge.svg)](https://gitcode.com/abdoelsayed2016/Rankify)
+
 </div>
 
 If you like our Framework, **don't hesitate to ⭐ star this repository ⭐**. This helps us to **make the Framework more better and scalable to different models and methods 🤗**.
