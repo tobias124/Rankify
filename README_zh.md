@@ -19,6 +19,9 @@
  <a href="https://pepy.tech/projects/rankify"><img src="https://static.pepy.tech/badge/rankify" alt="PyPI Downloads"></a>
 <a href="https://github.com/DataScienceUIBK/rankify/releases"><img alt="GitHub release" src="https://img.shields.io/github/release/DataScienceUIBK/rankify.svg?label=Version&color=orange"></a>  
 <a href="https://star-history.com/#DataScienceUIBK/Rankify"> <img src="https://img.shields.io/github/stars/DataScienceUIBK/Rankify?style=social" alt="GitHub stars"> </a>  
+
+ [![GitCode](https://gitcode.com/abdoelsayed2016/Rankify/star/badge.svg)](https://gitcode.com/abdoelsayed2016/Rankify)
+
 </div>
 
 如果你喜欢我们的框架，**请不要犹豫，⭐ 给这个仓库加星 ⭐**。这将帮助我们**使 Rankify 变得更强大，并扩展到更多模型和方法 🤗**。
