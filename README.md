@@ -29,10 +29,10 @@ If you like our Framework, **don't hesitate to ⭐ star this repository ⭐**. T
 
 _A modular and efficient retrieval, reranking  and RAG  framework designed to work with state-of-the-art models for retrieval, ranking and rag tasks._
 
-_Rankify is a Python toolkit designed for unified retrieval, re-ranking, and retrieval-augmented generation (RAG) research. Our toolkit integrates 40 pre-retrieved benchmark datasets and supports 7 retrieval techniques, 24 state-of-the-art re-ranking models, and multiple RAG methods. Rankify provides a modular and extensible framework, enabling seamless experimentation and benchmarking across retrieval pipelines. Comprehensive documentation, open-source implementation, and pre-built evaluation tools make Rankify a powerful resource for researchers and practitioners in the field._
+_Rankify is a Python toolkit designed for unified retrieval, re-ranking, and retrieval-augmented generation (RAG) research. Our toolkit integrates 40 pre-retrieved benchmark datasets and supports 7 retrieval techniques, 24 state-of-the-art re-ranking models, and multiple RAG methods. With a flexible generator architecture supporting multiple endpoints, Rankify provides a modular and extensible framework, enabling seamless experimentation and benchmarking across retrieval pipelines. Comprehensive documentation, open-source implementation, and pre-built evaluation tools make Rankify a powerful resource for researchers and practitioners in the field._
 
 <p align="center">
-<img src="images/overview.png" width="500" height="500" >
+<img src="images/overview.png" width="500" height="700" >
 </p>
 
 ---
@@ -845,15 +845,36 @@ model = Reranking(method='zephyr_reranker', model_name='rank_zephyr_7b_v1_full')
 ---
 
 ## 4️⃣ Using Generator Module
-Rankify provides a **Generator Module** to facilitate **retrieval-augmented generation (RAG)** by integrating retrieved documents into generative models for producing answers. Below is an example of how to use different generator methods.  
+
+Rankify provides a **Generator Module** for **retrieval-augmented generation (RAG)**, integrating retrieved documents with generative models like OpenAI, LiteLLM, vLLM, and Hugging Face. Its modular design allows easy addition of new **RAG methods** and **endpoints**, enabling seamless experimentation with approaches like zero-shot RAG, chain-of-thought RAG, and FiD-based RAG.  Below there are examples of how to use different RAG methods and how to include different LLM endpoints.
+
+Please note that in order to use API-based endpoints (OpenAI, LiteLLM), you need to specify an api-key. See how to do this in our example below. 
+
+**Examples of Using Different RAG methods and backends**  
+
+```python
+# Zero-shot with Huggingface endpoint
+generator = Generator(method="zero-shot", model_name='meta-llama/Meta-Llama-3.1-8B-Instruct', backend="huggingface")
+
+# Basic RAG with LiteLLM endpoint
+generator = Generator(method="basic-rag", model_name='ollama/mistral', backend="litellm", api_key=api_key)
+
+# Chain-of-Thought RAG with vLLM endpoint
+generator = Generator(method="chain-of-thought-rag", model_name='mistralai/Mistral-7B-v0.1', backend="vllm")
+
+# In-context-RALM with OpenAI endpoint
+generator = Generator(method="in-context-ralm", model_name='gpt-3.5-turbo', backend="openai", api_keys=[api_key])
+```
+
+**Usage example without API-inference**
 
 ```python
 from rankify.dataset.dataset import Document, Question, Answer, Context
 from rankify.generator.generator import Generator
 
 # Define question and answer
-question = Question("What is the capital of France?")
-answers = Answer(["Paris"])
+question = Question("What is the capital of Austria?")
+answers=Answer("")
 contexts = [
     Context(id=1, title="France", text="The capital of France is Paris.", score=0.9),
     Context(id=2, title="Germany", text="Berlin is the capital of Germany.", score=0.5)
@@ -863,7 +884,49 @@ contexts = [
 doc = Document(question=question, answers=answers, contexts=contexts)
 
 # Initialize Generator (e.g., Meta Llama)
-generator = Generator(method="in-context-ralm", model_name='meta-llama/Llama-3.1-8B')
+generator = Generator(method="basic-rag", model_name='meta-llama/Meta-Llama-3.1-8B-Instruct', backend="huggingface")
+
+# Generate answer
+generated_answers = generator.generate([doc])
+print(generated_answers)  # Output: ["Paris"]
+```
+**Usage example with API-inference**
+
+Saving your API-keys in .env.local file will enables using this metods:
+in .env.local:
+```python
+OPENAI_API_KEY=your-key
+LITELLM_API_KEY=your-key
+```
+```python
+#load LiteLLM api-key
+api_key = get_litellm_api_key()
+#load OpenAI api-key
+api_key = get_openai_api_key()
+```
+**Full example using LiteLLM:**
+
+```python
+from rankify.dataset.dataset import Document, Question, Answer, Context
+from rankify.generator.generator import Generator
+from rankify.utils.models.rank_llm.rerank.api_keys import get_litellm_api_key
+
+# Define question and answer
+question = Question("What is the capital of France?")
+answers = Answer([""])
+contexts = [
+    Context(id=1, title="France", text="The capital of France is Paris.", score=0.9),
+    Context(id=2, title="Germany", text="Berlin is the capital of Germany.", score=0.5)
+]
+
+# Construct document
+doc = Document(question=question, answers=answers, contexts=contexts)
+
+#load api-key
+api_key = get_litellm_api_key()
+
+# Initialize Generator (e.g., Meta Llama)
+generator = Generator(method="basic-rag", model_name='ollama/mistral', backend="litellm", api_key=api_key)
 
 # Generate answer
 generated_answers = generator.generate([doc])
@@ -971,9 +1034,20 @@ print(after_ranking_metrics)
 
 ---
 
-### **3️⃣ Generators**  
+### **3️⃣ Generator**
+#### **RAG-Methods**
+- ✅ **Zero-shot**
+- ✅ **Basic-RAG**
+- ✅ **Chain-of-Thought-RAG**  
 - ✅ **Fusion-in-Decoder (FiD) with T5**
-- ✅ **In-Context Learning RLAM** 
+- ✅ **In-Context Learning RALM**
+
+#### **LLM-Endpoints**
+- ✅ **Hugging Face**
+- ✅ **vLLM**
+- ✅ **LiteLLM**  
+- ✅ **OpenAI**
+
 ---
 
 
@@ -984,7 +1058,7 @@ print(after_ranking_metrics)
 - 🧲 **Diverse Retrieval Methods**: Supports **BM25, DPR, ANCE, BPR, ColBERT, BGE, and Contriever** for flexible retrieval strategies.  
 - 🎯 **Powerful Re-Ranking**: Implements **24 advanced models** with **41 sub-methods** to optimize ranking performance.  
 - 🏗️ **Prebuilt Indices**: Provides **Wikipedia and MS MARCO** corpora, eliminating indexing overhead and speeding up retrieval.  
-- 🔮 **Seamless RAG Integration**: Works with **GPT, LLAMA, T5, and Fusion-in-Decoder (FiD)** models for **retrieval-augmented generation**.  
+- 🔮 **Seamless RAG Integration**: Works with backends like **Hugging Face, OpenAI, vLLM, LiteLLM** inferening models like **GPT, LLAMA, T5, and Fusion-in-Decoder (FiD)** models for multiple **retrieval-augmented generation** methods.  
 - 🛠 **Extensible & Modular**: Easily integrates **custom datasets, retrievers, ranking models, and RAG pipelines**.  
 - 📊 **Built-in Evaluation Suite**: Includes **retrieval, ranking, and RAG metrics** for robust benchmarking.  
 - 📖 **User-Friendly Documentation**: Access detailed **[📖 online docs](http://rankify.readthedocs.io/)**, **example notebooks**, and **tutorials** for easy adoption.  
@@ -1011,8 +1085,8 @@ print(after_ranking_metrics)
 ✨ ⏳ **Adding new datasets & custom dataset integration**  
 
 #### **Retrieval-Augmented Generation (RAG)**  
-✅ **Works with**: GPT, LLAMA, T5  
-✨ ⏳ **Expanding to more generative models**  
+✅ **Works with**: **4 endpoints and 5 RAG-methods**
+✨ ⏳ **Expanding to more endpoints/RAG-methods**  
 
 #### **Evaluation & Usability**  
 ✅ **Standard metrics**: Top-K, EM, Recall  
