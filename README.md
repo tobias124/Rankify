@@ -892,8 +892,7 @@ print(generated_answers)  # Output: ["Paris"]
 ```
 **Usage example with API-inference**
 
-Saving your API-keys in .env.local file will enables using this metods:
-in .env.local:
+Saving your API-keys in .env.local file, you can access them via the listed methods:
 ```python
 OPENAI_API_KEY=your-key
 LITELLM_API_KEY=your-key
@@ -1041,6 +1040,8 @@ print(after_ranking_metrics)
 - ✅ **Chain-of-Thought-RAG**  
 - ✅ **Fusion-in-Decoder (FiD) with T5**
 - ✅ **In-Context Learning RALM**
+- 🕒 **Self-Consistency RAG**
+- 🕒 **Retrieval Chain-of-Thought**  
 
 #### **LLM-Endpoints**
 - ✅ **Hugging Face**
@@ -1058,7 +1059,7 @@ print(after_ranking_metrics)
 - 🧲 **Diverse Retrieval Methods**: Supports **BM25, DPR, ANCE, BPR, ColBERT, BGE, and Contriever** for flexible retrieval strategies.  
 - 🎯 **Powerful Re-Ranking**: Implements **24 advanced models** with **41 sub-methods** to optimize ranking performance.  
 - 🏗️ **Prebuilt Indices**: Provides **Wikipedia and MS MARCO** corpora, eliminating indexing overhead and speeding up retrieval.  
-- 🔮 **Seamless RAG Integration**: Works with backends like **Hugging Face, OpenAI, vLLM, LiteLLM** inferening models like **GPT, LLAMA, T5, and Fusion-in-Decoder (FiD)** models for multiple **retrieval-augmented generation** methods.  
+- 🔮 **Seamless RAG Integration**: Works with backends like **Hugging Face, OpenAI, vLLM, LiteLLM** inferening models like **GPT, LLAMA, T5, and Fusion-in-Decoder (FiD)** for multiple **retrieval-augmented generation** methods.  
 - 🛠 **Extensible & Modular**: Easily integrates **custom datasets, retrievers, ranking models, and RAG pipelines**.  
 - 📊 **Built-in Evaluation Suite**: Includes **retrieval, ranking, and RAG metrics** for robust benchmarking.  
 - 📖 **User-Friendly Documentation**: Access detailed **[📖 online docs](http://rankify.readthedocs.io/)**, **example notebooks**, and **tutorials** for easy adoption.  
