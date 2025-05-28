@@ -892,11 +892,11 @@ print(generated_answers)  # Output: ["Paris"]
 ```
 **Usage example with API-inference**
 
-Saving your API-keys in .env.local file, you can access them via the listed methods:
+Saving your API-keys in a .env.local file, you can access them via the listed methods:
 ```python
 # in .env.local:
-OPENAI_API_KEY=your-key
-LITELLM_API_KEY=your-key
+OPENAI_API_KEY=your-api-key
+LITELLM_API_KEY=your-api-key
 ```
 **Usage**
 ```python
