@@ -894,13 +894,15 @@ print(generated_answers)  # Output: ["Paris"]
 
 Saving your API-keys in .env.local file, you can access them via the listed methods:
 ```python
+# in .env.local:
 OPENAI_API_KEY=your-key
 LITELLM_API_KEY=your-key
 ```
 ```python
-#load LiteLLM api-key
+# Usage
+# load LiteLLM api-key
 api_key = get_litellm_api_key()
-#load OpenAI api-key
+# load OpenAI api-key
 api_key = get_openai_api_key()
 ```
 **Full example using LiteLLM:**
