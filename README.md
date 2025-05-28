@@ -1088,7 +1088,7 @@ print(after_ranking_metrics)
 ✨ ⏳ **Adding new datasets & custom dataset integration**  
 
 #### **Retrieval-Augmented Generation (RAG)**  
-✅ **Works with**: **4 endpoints and 5 RAG-methods**
+✅ **4 endpoints and 5 RAG-methods**    
 ✨ ⏳ **Expanding to more endpoints/RAG-methods**  
 
 #### **Evaluation & Usability**  
