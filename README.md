@@ -898,8 +898,8 @@ Saving your API-keys in .env.local file, you can access them via the listed meth
 OPENAI_API_KEY=your-key
 LITELLM_API_KEY=your-key
 ```
+**Usage**
 ```python
-# Usage
 # load LiteLLM api-key
 api_key = get_litellm_api_key()
 # load OpenAI api-key
