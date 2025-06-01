@@ -73,6 +73,7 @@ class WebSearchTool(Tool):
     def __init__(self, model: Optional[str]=None, search_provider: str = 'serper',
                  search_provider_api_key: Optional[str] = None):
         super().__init__()
+        self.search_client = None
         self.model = model
         self.search_provider = search_provider
         self.search_provider_api_key = search_provider_api_key
@@ -93,8 +94,8 @@ class WebSearchTool(Tool):
         else:
             raise ValueError(f'Invalid search provider{search_provider}')
 
-    def forward(self, query: str):
-        sources = self.search_client.search_web(query=query)
+    def forward(self, query: str,num_result:int=10):
+        sources = self.search_client.search_web(query=query,num_results=num_result)
         print(sources)
 
         try:
