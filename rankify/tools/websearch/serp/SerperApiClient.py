@@ -21,7 +21,7 @@ class SerperApiClient(SearchAPIClient):
             'X-API-Key': self.config.api_key,
         }
 
-    def search_web(self,query:str,num_results:int = 2 , search_location:Optional[str]=None) -> SerpResult[
+    def search_web(self,query:str,num_results:int = 10 , search_location:Optional[str]=None) -> SerpResult[
         Dict[str, Any]]:
 
         if not query.strip():

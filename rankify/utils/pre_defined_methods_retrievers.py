@@ -1,3 +1,4 @@
+from rankify.retrievers.OnlineRetriever import OnlineRetriever
 from rankify.retrievers.dpr import DenseRetriever
 from rankify.retrievers.bm25 import BM25Retriever
 from rankify.retrievers.contriever import ContrieverRetriever
@@ -15,4 +16,5 @@ METHOD_MAP ={
     'bge': BGERetriever,
     'colbert': ColBERTRetriever,
     'hyde': HydeRetreiver,
+    'online_retriever': OnlineRetriever,
 }
