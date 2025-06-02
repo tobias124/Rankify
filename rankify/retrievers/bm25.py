@@ -89,8 +89,9 @@ class BM25Retriever:
         # self._ensure_index_downloaded()
 
         self.searcher = LuceneSearcher(self.index_path)
-        with open(self.title_map_path, "r", encoding="utf-8") as f:
-            self.pid2title = json.load(f)
+        #Todo: remove
+        #with open(self.title_map_path, "r", encoding="utf-8") as f:
+            #self.pid2title = json.load(f)
 
     def _ensure_index_downloaded(self) -> None:
         """
@@ -159,6 +160,7 @@ class BM25Retriever:
                 print(f"Error retrieving contexts for query '{query}': {e}")
 
         return documents
+
     def retrieve(self, documents: List[Document]) -> List[Document]:
         """
         Retrieves **relevant contexts** for each document in the input list using BM25.
@@ -186,10 +188,12 @@ class BM25Retriever:
             for hit in hits:
                 try:
                     lucene_doc = self.searcher.doc(hit.docid)
-                    raw_content = json.loads(lucene_doc.raw())  # Parse the raw JSON
-                    #print(raw_content)
-                    text = raw_content.get("contents", "")
-                    title = self.pid2title.get(hit.docid, "No Title")
+                    raw_content = json.loads(lucene_doc.raw())
+
+                    content = raw_content.get("contents", "")
+                    has_title = '\n' in content
+                    title = content.split('\n')[0] if has_title else "No Title"
+                    text = content.split('\n')[1] if has_title else content
 
                     #Todo: Change id type from int to str
                     context = Context(
