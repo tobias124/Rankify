@@ -9,17 +9,17 @@ def count_file_lines(path):
             count += 1
     return count
 
-def process_chunk(chunk_lines, start_idx):
+def process_chunk(chunk_lines, start_idx, dense_index=False):
     """
     Process a chunk of lines from the corpus file and convert them to the required format.
-    Each line is expected to be a JSON object with an "id" and "contents" field.
 
     Args:
-        chunk_lines (list): A list of lines from the corpus file.
-        start_idx (int): The starting index for the document IDs.
-    
+        chunk_lines (list): Lines from the corpus file.
+        start_idx (int): Fallback starting index for IDs.
+        dense_index (bool): True for dense format with separate title field.
+
     Returns:
-        list: A list of JSON strings, each containing the document ID and contents.
+        list: List of JSON strings with the required fields.
     """
     results = []
     for i, line in enumerate(chunk_lines):
@@ -27,19 +27,29 @@ def process_chunk(chunk_lines, start_idx):
             doc = json.loads(line.strip())
 
             raw_id = doc.get("id")
-            # Todo: Change type from int to str when supported
-            if raw_id and isinstance(raw_id, str) and raw_id.startswith("doc"):
-                doc_id = int(raw_id.replace("doc", ""))
-            else:
-                doc_id = int(raw_id) if raw_id else start_idx + i
+            #Todo: replace doc can be removed when str is supported as type
+            doc_id = (
+                int(raw_id.replace("doc", "")) if isinstance(raw_id, str) and raw_id.startswith("doc")
+                else int(raw_id) if raw_id
+                else start_idx + i
+            )
 
-            contents = doc.get("contents", "").strip()
-            title = doc.get("title", "").strip()
-            if title:
-                full_contents = f"{title}. {contents}"
+            contents = (doc.get("contents") or doc.get("text", "")).strip()
+            title = doc.get("title", contents[:100] if contents else "").strip()
+
+            if dense_index:
+                # Keep title and contents separate
+                doc_dict = {"id": doc_id, "contents": contents}
+                if title:
+                    doc_dict["title"] = title
+                results.append(json.dumps(doc_dict, ensure_ascii=False))
             else:
-                full_contents = contents
-            results.append(json.dumps({"id": doc_id, "contents": full_contents}, ensure_ascii=False))
+                # For sparse, combine title and contents
+                if title:
+                    full_contents = f"{title}\n{contents}"
+                else:
+                    full_contents = contents
+                results.append(json.dumps({"id": doc_id, "contents": full_contents}, ensure_ascii=False))
 
         except (json.JSONDecodeError, ValueError):
             continue

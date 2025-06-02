@@ -34,7 +34,7 @@ class BaseIndexer(ABC):
     def cleanup_lock_file(self, index_dir=None):
         if index_dir is None:
             index_dir = self.output_dir / "bm25_index"
-        lock_file = index_dir / ".lock"
+        lock_file = index_dir / "write.lock"
         if lock_file.exists():
             print(f"Remove Lock-File {lock_file}")
             lock_file.unlink()
@@ -47,7 +47,7 @@ class BaseIndexer(ABC):
                 try:
                     doc = json.loads(line.strip())
                     doc_id = doc.get("id") or f"doc{i}"
-                    title = doc.get("title") or doc.get("contents") or "[No Title]"
+                    title = doc.get("title") or doc.get("contents") or doc.get("text") or "No Title"
                     title_map[doc_id] = title[:100]
                 except json.JSONDecodeError:
                     continue
