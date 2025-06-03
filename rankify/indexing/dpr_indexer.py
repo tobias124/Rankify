@@ -21,7 +21,7 @@ class DPRIndexer(BaseIndexer):
         threads (int): Number of threads to use for processing.
         index_type (str): Type of index to build (default: "wiki").
         batch_size (int): Batch size for encoding passages.
-        cpu (bool): If True, use CPU for encoding; otherwise use GPU.
+        device (str): Device to use for encoding ("cpu" or "cuda").
     """
 
     def __init__(self,
@@ -32,11 +32,11 @@ class DPRIndexer(BaseIndexer):
                  threads=32,
                  index_type="wiki",
                  batch_size=16,
-                 cpu=False):
+                 device="cuda"):
         super().__init__(corpus_path, output_dir, chunk_size, threads, index_type)
         self.encoder_name = encoder_name
         self.index_dir = self.output_dir / f"dpr_index_{index_type}"
-        self.cpu = cpu
+        self.device = device
         self.batch_size = batch_size
 
     def _save_dense_corpus(self):
@@ -86,8 +86,7 @@ class DPRIndexer(BaseIndexer):
             "--max-length", "512",
         ]
 
-        if self.cpu:
-            # if no GPU is available, use CPU
+        if self.device == "cpu":
             cmd.extend(["--device", "cpu"])
         else:
             cmd.extend(["--device", "cuda:0"])
