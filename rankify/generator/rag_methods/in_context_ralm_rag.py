@@ -1,12 +1,14 @@
 import os
 import json
+from typing import List
 import torch
 from tqdm import tqdm
-from rankify.generator.base import BaseGenerator
 from rankify.dataset.dataset import Document
-from rankify.utils.generator.InContextRalm.model_utils import load_model_and_tokenizer
+from rankify.generator.models.base_rag_model import BaseRAGModel
+from rankify.generator.rag_methods.base_rag_method import BaseRAGMethod
+from transformers import AutoConfig
 
-class InContextRALMGenerator(BaseGenerator):
+class InContextRALMRAG(BaseRAGMethod):
     """
     **In-Context Retrieval-Augmented Language Model (RALM) Generator**.
 
@@ -58,7 +60,7 @@ class InContextRALMGenerator(BaseGenerator):
 
     CACHE_DIR = os.environ.get("RERANKING_CACHE_DIR", "./cache")
 
-    def __init__(self, method: str = "in-context-ralm", model_name: str = "meta-llama/Llama-3.1-8B", **kwargs):
+    def __init__(self, model:BaseRAGModel, **kwargs):
         """
         Initializes the RALM Generator.
 
@@ -72,17 +74,17 @@ class InContextRALMGenerator(BaseGenerator):
             generator = InContextRALMGenerator(method="in-context-ralm", model_name="meta-llama/Llama-3.1-8B")
             ```
         """
-        super().__init__(method, model_name)
+        self.model = model.model
+        self.tokenizer = model.tokenizer
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model_name = model_name
         self.cache_dir = self.CACHE_DIR
         self.num_docs = kwargs.get("num_docs", 1)  # Default: 1 supporting document
 
-        # Load the model and tokenizer
-        self.model, self.tokenizer, self.config, self.device = load_model_and_tokenizer(
-            self.model_name
-        )
+
+
         self.tokenizer.pad_token = self.tokenizer.eos_token
+
+        self.config = AutoConfig.from_pretrained(model.model_name)
 
         # Set generation parameters
         self.max_length = self.config.n_positions if hasattr(self.config, "n_positions") else self.config.max_position_embeddings
@@ -142,7 +144,7 @@ class InContextRALMGenerator(BaseGenerator):
 
         return examples
 
-    def generate(self, documents: list[Document]) -> list[str]:
+    def answer_questions(self, documents: List[Document]) -> List[str]:
         """
         Generates answers for **a list of documents** using RALM.
 
