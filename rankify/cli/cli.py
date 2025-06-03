@@ -33,7 +33,7 @@ def main():
     # Dense-specific option
     index_parser.add_argument("--encoder", type=str, default="facebook/dpr-ctx_encoder-single-nq-base", help="Encoder model name for dense indexing")
     index_parser.add_argument("--batch_size", type=int, default=32, help="Batch size for DPR encoding")
-    index_parser.add_argument("--device", type=str, choices=["cpu", "gpu"], default="gpu", help="Device to use for indexing (default: gpu)")
+    index_parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default="cuda", help="Device to use for indexing (default: cuda)")
 
     args = parser.parse_args()
 
@@ -65,7 +65,7 @@ def main():
                     index_type=args.index_type,
                     encoder_name=args.encoder,
                     batch_size=args.batch_size,
-                    cpu=args.device == "cpu"
+                    device=args.device
                 )
 
                 indexer.build_index()
