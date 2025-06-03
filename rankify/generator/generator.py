@@ -1,12 +1,11 @@
-from rankify.generator.fid import FiDGenerator
-from rankify.generator.in_context_ralm import InContextRALMGenerator
+from rankify.generator.models.model_factory import model_factory
+from rankify.generator.rag_methods.basic_rag import BasicRAG
+from rankify.generator.rag_methods.chain_of_thought_rag import ChainOfThoughtRAG
+from rankify.generator.models.huggingface_model import HuggingFaceModel
+from rankify.generator.rag_methods.fid_rag_method import FiDRAGMethod
+from rankify.generator.rag_methods.in_context_ralm_rag import InContextRALMRAG
+from rankify.utils.generator.generator_models import RAG_METHODS
 
-GENERATOR_MODELS = {
-    "fid": FiDGenerator,
-    "in-context-ralm": InContextRALMGenerator,
-
-    # Future models can be added here (e.g., "t5": T5Generator, "gpt": GPTGenerator)
-}
 
 class Generator:
     """
@@ -44,7 +43,7 @@ class Generator:
         ```
     """
 
-    def __init__(self, method: str, model_name: str, **kwargs):
+    def __init__(self, method: str, model_name: str, backend:str = "huggingface", **kwargs):
         """
         Initializes the selected **generator model**.
 
@@ -56,12 +55,20 @@ class Generator:
         Raises:
             ValueError: If the specified `method` is not available in `GENERATOR_MODELS`.
         """
-        if method not in GENERATOR_MODELS:
+        if method not in RAG_METHODS:
             raise ValueError(f"Generator method {method} is not supported.")
         
-        self.generator = GENERATOR_MODELS[method](method, model_name, **kwargs)
+        # Initialize the generator model based on the method
+        model = model_factory(model_name=model_name, backend=backend, method=method, **kwargs)
+        
+        # get the class for the specified method
+        rag_method_class = RAG_METHODS[method]
 
-    def generate(self, documents):
+        # Initialize the generator with the model and any additional parameters
+        self.rag_method = rag_method_class(model, **kwargs)
+
+
+    def generate(self, documents, **kwargs):
         """
         Generates answers based on the **input documents**.
 
@@ -79,4 +86,4 @@ class Generator:
             # Output: ['William Shakespeare wrote Hamlet in the early 1600s.']
             ```
         """
-        return self.generator.generate(documents)
+        return self.rag_method.answer_questions(documents, **kwargs)

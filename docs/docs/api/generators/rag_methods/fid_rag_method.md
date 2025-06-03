@@ -1,6 +1,6 @@
-# Base Generator
+# FiD Generator
 
-::: rankify.generator.base
+::: rankify.generator..rag_methods.fid_rag_method
     handler: python
     options:
         show_source: true

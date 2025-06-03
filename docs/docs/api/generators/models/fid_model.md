@@ -1,6 +1,6 @@
-# FiD Generator
+# Base RAG Model
 
-::: rankify.generator.fid
+::: rankify.generator.models.fid_model
     handler: python
     options:
         show_source: true

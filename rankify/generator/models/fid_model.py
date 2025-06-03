@@ -1,16 +1,16 @@
 import os
 import torch
-import json
-from pathlib import Path
 from torch.utils.data import DataLoader, SequentialSampler
+from rankify.generator.models.base_rag_model import BaseRAGModel
 from rankify.utils.generator.FiD.data import Dataset, Collator
 #from rankify.utils.generator.FiD.util import load_t5_tokenizer
 from  rankify.utils.generator.FiD.model import FiDT5
-from rankify.generator.base import BaseGenerator
 from rankify.utils.generator.download import ModelDownloader
 from rankify.dataset.dataset import Document
 import transformers
-class FiDGenerator(BaseGenerator):
+
+
+class FiDModel(BaseRAGModel):
     """
     **FiD (Fusion-in-Decoder) Generator** for Open-Domain Question Answering.
 
@@ -83,7 +83,9 @@ class FiDGenerator(BaseGenerator):
             generator = FiDGenerator(method="fid", model_name="nq_reader_base")
             ```
         """
-        super().__init__(method, model_name)
+        #super().__init__(method, model_name)
+        self.method = method
+        self.model_name = model_name
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model_path = self._download_model()
         self.tokenizer, self.model = self._load_model()
