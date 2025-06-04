@@ -52,6 +52,6 @@ class BaseIndexer(ABC):
                 except json.JSONDecodeError:
                     continue
 
-        title_map_path = self.index_dir / "corpus.json"
+        title_map_path = self.index_dir / "title_map.json"
         with open(title_map_path, "w", encoding="utf-8") as f:
             json.dump(title_map, f, ensure_ascii=False, indent=2)

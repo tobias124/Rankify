@@ -41,7 +41,6 @@ def main():
     if len(results) == 0:
         print("no results")
     else:
-        print("we have results\n\n")
         print(query.question)
         print_result(results)
 

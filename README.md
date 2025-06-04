@@ -940,14 +940,29 @@ print(generated_answers)  # Output: ["Paris"]
 Rankify provides a command-line interface (CLI) for indexing documents.\
 You can create an index from a JSONL file containing documents, specifying the retriever and other parameters.
 
+### BM25
+
 ``` bash
-rankify-index index \
-data/wikipedia_10k.jsonl \
---retriever bm25 \
---output rankify_indices \
---chunk_size 1024 \
---threads 8
---indexing-type wiki
+rankify-index index data/wikipedia_10k.jsonl --retriever bm25 --output rankify_indices
+```
+
+### DPR
+
+wiki
+``` bash
+rankify-index index data/wikipedia_100.jsonl --retriever dpr --output rankify_indices
+```
+
+msmarco
+``` bash
+rankify-index index data/msmarco_100.jsonl --retriever dpr --output rankify_indices --index_type msmarco
+```
+
+
+### Contriever
+
+``` bash
+rankify-index index data/wikipedia_100.jsonl --retriever contriever --output rankify_indices/contriever --device cpu
 ```
 
 ---
