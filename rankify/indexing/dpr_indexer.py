@@ -2,6 +2,8 @@ import shutil
 import subprocess
 import logging
 
+import torch
+
 from rankify.indexing.base_indexer import BaseIndexer
 from rankify.indexing.format_converters import to_pyserini_jsonl_dense
 
@@ -26,7 +28,7 @@ class DPRIndexer(BaseIndexer):
 
     def __init__(self,
                  corpus_path,
-                 encoder_name="facebook/dpr-ctx_encoder-multiset-base",
+                 encoder_name="facebook/dpr-ctx_encoder-single-nq-base",
                  output_dir="rankify_indices",
                  chunk_size=100,
                  threads=32,
@@ -55,7 +57,7 @@ class DPRIndexer(BaseIndexer):
         """
         corpus_path = self._save_dense_corpus()
 
-        temp_corpus_dir = self.output_dir / "temp_dense_corpus"
+        temp_corpus_dir = self.output_dir / "temp_corpus"
 
         if temp_corpus_dir.exists():
             shutil.rmtree(temp_corpus_dir)
@@ -81,15 +83,18 @@ class DPRIndexer(BaseIndexer):
 
             "encoder",
             "--encoder", self.encoder_name,
-            "--fields", "id", "text",
             "--batch-size", str(self.batch_size),
             "--max-length", "512",
         ]
 
-        if self.device == "cpu":
-            cmd.extend(["--device", "cpu"])
+        if self.device == "cuda":
+            if torch.cuda.is_available():
+                cmd.extend(["--device", "cuda"])
+            else:
+                logging.warning("CUDA is not available. Using CPU for encoding.")
+                cmd.extend(["--device", "cpu"])
         else:
-            cmd.extend(["--device", "cuda:0"])
+            cmd.extend(["--device", self.device])
 
         logging.info(f"Encoding dense vectors with DPR: {' '.join(cmd)}")
         subprocess.run(cmd, check=True)
@@ -109,7 +114,7 @@ class DPRIndexer(BaseIndexer):
         if dense_file.exists():
             dest_file = self.index_dir / "corpus.jsonl"
             if dest_file.exists():
-                dest_file.unlink()  # Remove old file if exists
+                dest_file.unlink()
             shutil.move(str(dense_file), str(dest_file))
 
         if temp_corpus_dir.exists():
