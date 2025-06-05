@@ -60,6 +60,7 @@ class Tool:
 
 
 class WebSearchTool(Tool):
+
     name = "web_search"
     description = "Performs web search using user query and returns the top n results."
     inputs = {
@@ -90,6 +91,7 @@ class WebSearchTool(Tool):
             SearchAPIClient: An instance of the search API client. E.g., SerpAPIClient.
         """
         if search_provider.lower() == 'serper':
+            print(api_key)
             return SerperApiClient(api_key=api_key)
         else:
             raise ValueError(f'Invalid search provider{search_provider}')
@@ -114,5 +116,5 @@ class WebSearchTool(Tool):
         """
         Performs time-consuming setup operations here e.g., model loading.
         """
-        self.search_client = self.create_search_api()
+        self.search_client = self.create_search_api(api_key=self.search_provider_api_key)
         self.is_initialized = True

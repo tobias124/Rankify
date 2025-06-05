@@ -49,7 +49,7 @@ class LiT5DistillReranker(BaseRanking):
             print(context.text)
         ```
     """
-    def __init__(self,method: str= None, model_name: str = "castorini/LiT5-Distill-base", api_key: str= None):
+    def __init__(self,method: str= None, model_name: str = "castorini/LiT5-Distill-base", api_key: str= None, **kwargs):
         """
         Initializes the **LiT5-Distill reranker**.
 
@@ -147,7 +147,7 @@ class LiT5ScoreReranker(BaseRanking):
         window_size (int): The **window size** for processing candidate passages (default: `20`).
         _reranker (Reranker): The **LiT5-Score** reranking agent.
     """
-    def __init__(self, method: str = None, model_name: str = "castorini/LiT5-Score-base", api_key: str = None):
+    def __init__(self, method: str = None, model_name: str = "castorini/LiT5-Score-base", api_key: str = None, **kwargs):
         """
         Initializes the **LiT5-Score reranker**.
 

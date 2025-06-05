@@ -7,6 +7,7 @@ from typing import Optional
 @dataclass
 class ScrapedResult:
     def __init__(self, name:str,success:bool, content:Optional[str]=None,error:Optional[str]=None):
+        print(f"results:{content}")
         self.name = name
         self.success = success
         self.content = content

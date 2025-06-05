@@ -57,7 +57,7 @@ class RankT5(BaseRanking):
             print(context.text)
         ```
     """
-    def __init__(self, method: str = None, model_name: str = 'castorini/monot5-base-msmarco', api_key: str = None):
+    def __init__(self, method: str = None, model_name: str = 'castorini/monot5-base-msmarco', api_key: str = None , **kwargs):
         """
         Initializes the **MonoRankT5** class.
 
