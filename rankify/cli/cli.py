@@ -1,10 +1,12 @@
 import argparse
+
+from rankify.indexing.colbert_indexer import ColBERTIndexer
 from rankify.indexing.lucene_indexer import LuceneIndexer
 from rankify.indexing.dpr_indexer import DPRIndexer
 from rankify.indexing.contriever_indexer import ContrieverIndexer
 from pathlib import Path
 
-SUPPORTED_RETRIEVERS = ["bm25", "dpr", "contriever"]
+SUPPORTED_RETRIEVERS = ["bm25", "dpr", "contriever", "colbert"]
 
 def handle_output_directory(output_dir):
     """
@@ -34,6 +36,7 @@ def main():
     index_parser.add_argument("--index_type", type=str, default="wiki", help="Type of index to create (default: wiki)")
 
     # Dense-specific option
+    #Todo: use encoder map - to input only model name
     index_parser.add_argument("--encoder", type=str, help="Encoder model name for dense indexing")
     index_parser.add_argument("--batch_size", type=int, default=32, help="Batch size for DPR encoding")
     index_parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default="cuda", help="Device to use for indexing (default: cuda)")
@@ -42,6 +45,7 @@ def main():
 
     if args.command == "index":
         handle_output_directory(args.output)
+        args.retriever = args.retriever.lower()
 
         if args.retriever == "bm25":
             indexer = LuceneIndexer(corpus_path=args.corpus_path, output_dir=args.output,
@@ -83,6 +87,7 @@ def main():
         elif args.retriever == "contriever":
 
             if args.encoder is None:
+                #Todo: check if supported
                 args.encoder = "facebook/contriever"
                 print("No encoder specified. Using default: facebook/contriever")
 
@@ -102,5 +107,26 @@ def main():
 
             print("Contriever indexing complete.")
 
+        elif args.retriever == "colbert":
+            if args.encoder is None:
+                #Todo: check if supported
+                args.encoder = "colbert-ir/colbertv2.0"
+                print("No encoder specified. Using default: colbert-ir/colbertv2.0")
+
+            indexer = ColBERTIndexer(
+                corpus_path=args.corpus_path,
+                output_dir=args.output,
+                chunk_size=args.chunk_size,
+                threads=args.threads,
+                index_type=args.index_type,
+                encoder_name=args.encoder,
+                batch_size=args.batch_size,
+                device=args.device
+            )
+
+            indexer.build_index()
+            indexer.load_index()
+
+            print("ColBERT indexing complete.")
         else:
             print(f"Unknown retriever type: {args.retriever}. Supported types are {SUPPORTED_RETRIEVERS}.")

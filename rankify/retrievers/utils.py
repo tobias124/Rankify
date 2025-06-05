@@ -1,13 +1,26 @@
 import json
+import logging
 
 
-def count_file_lines(path):
-    """Efficiently count the number of lines in a file."""
+def count_file_lines(path) -> int:
+    """
+    Efficiently count the number of lines in a file.
+    :param path: str: Path to the file.
+    :return: int: Number of lines in the file.
+    """
     count = 0
     with open(path, "r", encoding="utf-8") as f:
         for _ in f:
             count += 1
     return count
+
+def sanitize(text):
+    """
+    Sanitize text by replacing tabs and newlines with spaces and stripping leading/trailing whitespace.
+    :param text: str: The text to sanitize.
+    :return: str: Sanitized text.
+    """
+    return text.replace("\t", " ").replace("\n", " ").strip()
 
 def process_chunk(chunk_lines, start_idx, dense_index=False):
     """
@@ -53,6 +66,29 @@ def process_chunk(chunk_lines, start_idx, dense_index=False):
 
         except (json.JSONDecodeError, ValueError):
             continue
+    return results
+
+def process_chunk_colbert(chunk_lines, start_idx) -> list:
+    """
+    Process a chunk of lines from the corpus file for ColBERT format.
+    Args:
+        chunk_lines (list): Lines from the corpus file.
+        start_idx (int): Fallback starting index for IDs.
+    Returns:
+        list: List of strings formatted as "id\tcontents\ttitle".
+    """
+    results = []
+    for i, line in enumerate(chunk_lines):
+        try:
+            doc = json.loads(line.replace("\t", " ").strip())
+            doc_id = doc.get("id", "docid").replace("doc", "")
+            doc_id = doc_id if doc_id else start_idx + i
+            contents = (doc.get("contents") or doc.get("text", "")).strip()
+            title = doc.get("title", contents[:100] if contents else "No Title").strip()
+
+            results.append(f"{sanitize(str(doc_id))}\t{sanitize(contents)}\t{sanitize(title)}")
+        except (json.JSONDecodeError, ValueError) as e:
+            logging.warning(f"Skipping line due to error: {e}")
     return results
 
 def generate_chunks(file_obj, chunk_size=512):
