@@ -207,11 +207,13 @@ class RankGPT(BaseRanking):
         if self.method == 'rankgpt-api':
             response = self.model.chat(model=self.model_name, messages=messages, temperature=0, return_text=True)
         else:
+            
             input_ids = self.tokenizer.apply_chat_template(
                 messages,
                 add_generation_prompt=True,
                 return_tensors="pt"
             ).to(self.model.device)
+
             terminators = [
                 self.tokenizer.eos_token_id,
                 self.tokenizer.convert_tokens_to_ids("<|eot_id|>")

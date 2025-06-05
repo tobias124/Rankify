@@ -40,6 +40,7 @@ class WebScraper:
 
     async def extract(self, extraction_config: ExtractionConfig, url: str) -> ScrapedResult:
             """ Method to perform extraction using a strategy(e.g., markdown strategy)"""
+            logger.info("Extracting...")
             try:
                 config = self._create_crawler_config()
                 config.extraction_strategy = extraction_config.strategy
@@ -101,10 +102,10 @@ class WebScraper:
             try:
                 content = get_wikipedia_content(url)
                 results['no_extraction'] = ScrapedResult(name='no_extraction', success=True, content=content)
-
+               
             except Exception as e:
                 raise ValueError(f"Debug: Wikipedia extraction failed {str(e)}")
-
+        
         for strategy_name in self.strategies:
             config = ExtractionConfig(
                 name=strategy_name, strategy=self.strategy_map[strategy_name]()
@@ -114,8 +115,9 @@ class WebScraper:
 
         return results
 
-    async def scrape_many(self, urls: List[str]) -> Dict[str, Dict[str, ScrapedResult]]:
+    async def scrape_many(self, urls: List[str], pro_mode:Optional[bool]=True) -> Dict[str, Dict[str, ScrapedResult]]:
         """ Extracted multiple URLs concurrently using chosen strategies """
+       
         tasks = [self.scrape(url) for url in urls]
         results_list = await asyncio.gather(*tasks)
 
@@ -125,8 +127,7 @@ class WebScraper:
 
         return results
 
-
-'''async def main():
+async def main():
     urls = [
         "https://en.wikipedia.org/wiki/Apple_Inc.",
         "https://python.org",
@@ -143,4 +144,4 @@ class WebScraper:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())'''
+    asyncio.run(main())
