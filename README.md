@@ -965,6 +965,12 @@ rankify-index index data/msmarco_100.jsonl --retriever dpr --output rankify_indi
 rankify-index index data/wikipedia_100.jsonl --retriever contriever --output rankify_indices/contriever --device cpu
 ```
 
+### ColBERT
+
+``` bash
+rankify-index index data/wikipedia_100.jsonl --retriever colbert --output rankify_indices/colbert --device cpu
+```
+
 ---
 ## 5️⃣ Evaluating with Metrics  
 
