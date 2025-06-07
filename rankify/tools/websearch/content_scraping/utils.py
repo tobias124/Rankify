@@ -4,8 +4,7 @@ import fasttext
 from huggingface_hub import hf_hub_download
 import wikipediaapi
 import logging
-
-logger = logging.getLogger(__name__)
+from loguru import logger
 # Load the model
 model = fasttext.load_model(hf_hub_download("kenhktsui/llm-data-textbook-quality-fasttext-classifer-v2", "model.bin"))
 
@@ -132,7 +131,6 @@ def get_wikipedia_content(url: str) -> str | None:
         str: Page content if found, None otherwise
     """
     wiki = wikipediaapi.Wikipedia(user_agent="websearchtool", language='en')
-
     # Extract the page title from URL (everything after /wiki/)
     try:
         title = url.split('/wiki/')[-1]
