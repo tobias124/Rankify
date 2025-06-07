@@ -31,9 +31,9 @@ _A modular and efficient retrieval, reranking  and RAG  framework designed to wo
 
 _Rankify is a Python toolkit designed for unified retrieval, re-ranking, and retrieval-augmented generation (RAG) research. Our toolkit integrates 40 pre-retrieved benchmark datasets and supports 7 retrieval techniques, 24 state-of-the-art re-ranking models, and multiple RAG methods. With a flexible generator architecture supporting multiple endpoints, Rankify provides a modular and extensible framework, enabling seamless experimentation and benchmarking across retrieval pipelines. Comprehensive documentation, open-source implementation, and pre-built evaluation tools make Rankify a powerful resource for researchers and practitioners in the field._
 
-<p align="center">
+<!-- <p align="center">
 <img src="images/overview.png" width="500" height="700" >
-</p>
+</p> -->
 
 ---
 ## 🚀 Demo
@@ -69,6 +69,17 @@ https://github.com/user-attachments/assets/13184943-55db-4f0c-b509-fde920b809bc
 - [Acknowledgments](#-acknowledgments)
 - [Citation](#star2-citation)
 
+
+
+## 🎉News
+
+- **[2025-06-01]** Many thanks to [@aherzinger](https://github.com/aherzinger) for implementing and refactoring the Generator and RAG models.
+
+- **[2025-05-30]** Huge thanks to [@baraayusry](https://github.com/baraayusry) for implementing the Online Retriever using CrawAI and ReACT.
+
+- **[2025-02-10]** Released [reranking-datasets](https://huggingface.co/datasets/abdoelsayed/reranking-datasets) and [reranking-datasets-light](https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light) on Hugging Face.
+
+- **[2025-02-04]** Our [paper](https://arxiv.org/abs/2502.02464) is released on arXiv.
 
 
 ## 🔧 Installation  

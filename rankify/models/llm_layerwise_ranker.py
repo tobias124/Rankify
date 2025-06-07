@@ -7,6 +7,8 @@ from rankify.utils.helper import get_device,get_dtype
 import torch
 from tqdm import tqdm  # Import tqdm for progress tracking
 import copy
+from transformers import AutoConfig
+from transformers import AutoModel
 
 class LLMLayerWiseRanker(BaseRanking):
     """
@@ -88,33 +90,50 @@ class LLMLayerWiseRanker(BaseRanking):
             kwargs (dict): Additional configuration arguments (e.g., `max_sequence_length`, `batch_size`, `device`, `dtype`).
         """
         
-        max_sequence_length= kwargs.get("max_sequence_length", 512)
+        max_sequence_length= kwargs.get("max_sequence_length", 1024)
         device = kwargs.get("device", "cuda")
         self.device = get_device(device)
-        self.batch_size = kwargs.get("batch_size", 16)
-        
-    
+        self.batch_size = kwargs.get("batch_size", 4)
+        self.cutoff_layer =  kwargs.get("cutoff_layer", None)
+        self.compress_ratio = kwargs.get("compress_ratio", None)  
+        self.compress_layer =  kwargs.get("compress_layer", None)  
+        self.prompt =  kwargs.get("prompt", None)  
+
         self.model_name = model_name
         
         self.dtype = get_dtype( kwargs.get("dtype", torch.float16), self.device)
 
         self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name, trust_remote_code=True
+            model_name,
+            trust_remote_code=True,
         )
         self.max_sequence_length = max_sequence_length
         self.tokenizer.model_max_length = self.max_sequence_length
         self.tokenizer.padding_side = "right"
 
-        if self.tokenizer.pad_token_id is None:
-            self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
 
         self.model = AutoModelForCausalLM.from_pretrained(
-            model_name, trust_remote_code=True, torch_dtype=self.dtype
+            model_name,
+            trust_remote_code=True,
+            torch_dtype=self.dtype,
         ).to(self.device)
         self.model.eval()
 
-        self.params = self.DEFAULT_PARAMS.get(model_name, self.DEFAULT_PARAMS["default"])
-        self.prompt = self.PROMPTS.get(model_name, self.PROMPTS["default"])
+         # Create params dict based on specified values or defaults
+        params = {}
+        if self.cutoff_layer is not None:
+            params["cutoff_layers"] = self.cutoff_layer
+        if self.compress_ratio is not None:
+            params["compress_ratio"] = self.compress_ratio
+        if self.compress_layer is not None:
+            params["compress_layer"] = self.compress_layer
+        if not params:
+            params = self.DEFAULT_PARAMS.get(model_name, self.DEFAULT_PARAMS["default"])
+        self.params = params
+
+        self.prompt = self.prompt
+        if self.prompt is None:
+            self.prompt = self.PROMPTS.get(model_name, self.PROMPTS["default"])
 
     def _get_inputs(self, pairs, max_sequence_length: int):
         prompt = self.prompt
@@ -185,14 +204,25 @@ class LLMLayerWiseRanker(BaseRanking):
             for batch in batched_pairs:
                 inputs = self._get_inputs(batch, max_sequence_length=self.max_sequence_length)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
-
+                print(self.params)
+                #aaaaaaa
                 outputs = self.model(**inputs, return_dict=True, **self.params)
-                all_scores = [scores[:, -1].view(-1,).float() for scores in outputs[0]]
+                #print(f"[DEBUG] Hidden states returned: {len(outputs.hidden_states)}")
+
+                all_scores = [
+                    scores[:, -1]
+                    .view(
+                        -1,
+                    )
+                    .float()
+                    for scores in outputs[0]
+                ]
                 batch_scores = all_scores[-1].cpu().numpy().tolist()
+
                 scores.extend(batch_scores)
 
+            # Assign scores and reorder
             contexts = copy.deepcopy(doc.contexts)
-            # Update each context with its score and reorder based on scores
             for context, score in zip(contexts, scores):
                 context.score = score
             
@@ -200,21 +230,23 @@ class LLMLayerWiseRanker(BaseRanking):
 
         return documents
 
-    @torch.no_grad()
+
+    @torch.inference_mode()
     def score(self, query: str, doc: str) -> float:
-        """
-        Scores a **single query-document pair**.
-
-        Args:
-            query (str): The **query string**.
-            doc (str): The **document** to be scored.
-
-        Returns:
-            float: The **relevance score** for the document.
-        """
-        inputs = self._get_inputs([(query, doc)], max_sequence_length=self.max_sequence_length)
+        inputs = self._get_inputs(
+            [(query, doc)], max_sequence_length=self.max_sequence_length
+        )
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
         outputs = self.model(**inputs, return_dict=True, **self.params)
-        score = outputs.logits[:, -1].view(-1).float().item()
+        all_scores = [
+            scores[:, -1]
+            .view(
+                -1,
+            )
+            .float()
+            for scores in outputs[0]
+        ]
+        score = all_scores[-1].item()
+
         return score
