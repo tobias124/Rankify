@@ -15,7 +15,7 @@ class LuceneIndexer(BaseIndexer):
     """
     def __init__(self, corpus_path, output_dir="rankify_indices", chunk_size=1024, threads=32, index_type="wiki",
                  retriever_name="bm25"):
-        super().__init__(corpus_path, output_dir, chunk_size, threads, index_type)
+        super().__init__(corpus_path, output_dir, chunk_size, threads, index_type, retriever_name)
         if index_type =="wiki" and retriever_name == "bm25":
             self.index_dir = self.output_dir / f"bm25_index"
         else:
