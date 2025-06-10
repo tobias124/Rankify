@@ -17,7 +17,7 @@ class SerpConfig:
     Configures the SERP API, which handles general configurations api_key, ...etc.
     Allowing multiple constructors of Serp configurations e.g., loading env variables.
     """
-    def __init__(self, api_key:str,api_url:str,serp_api_client:str='SERPER',default_location:str = "us" , timeout:int = 10 ):
+    def __init__(self, api_key:str,api_url:str="https://google.serper.dev/search",serp_api_client:str='SERPER',default_location:str = "us" , timeout:int = 10 ):
         self.api_key = api_key
         self.api_url = api_url
         self.serp_api_client = serp_api_client

@@ -183,7 +183,7 @@ class InContextReranker(BaseRanking):
         # Setup sliding window.
         # ICR typically works worse with sliding window, especially with smaller window sizes. Try to fit all documents to be re-ranked in the context as much as possible. 
         self.reverse_doc_order = kwargs.get("reverse_doc_order", False)
-        self.sliding_window_size = kwargs.get("sliding_window_size", 20)
+        self.sliding_window_size = kwargs.get("sliding_window_size", 10)
         if self.sliding_window_size is None:
             self.sliding_window_stride = self.sliding_window_size//2
         else:
@@ -237,10 +237,11 @@ class InContextReranker(BaseRanking):
             reranked_docs = model.rank(documents)
             ```
         """
+        max_length = 300
         for document in tqdm(documents, desc="Reranking Documents"):
             query = document.question.question
-            contexts = [ctx.text for ctx in document.contexts]
-
+            contexts = [ctx.text.split()[:int(max_length)] for ctx in document.contexts]
+            
             # Perform reranking with sliding windows
             #print(contexts)
             sorted_doc_ids, sorted_doc_scores = self.rerank(query, contexts, order="desc")[0]
@@ -253,6 +254,7 @@ class InContextReranker(BaseRanking):
             ranked_contexts = sorted(copy_context, key=lambda x: x.score, reverse=True)
             document.reorder_contexts = ranked_contexts
 
+            
         return documents
 
     def rerank(self, query, documents,  return_per_doc_results=False, order="desc"):
