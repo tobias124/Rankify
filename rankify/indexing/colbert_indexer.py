@@ -2,7 +2,7 @@ import shutil
 import logging
 
 from rankify.indexing.base_indexer import BaseIndexer
-from rankify.indexing.format_converters import to_colbert_tsv
+from rankify.indexing.format_converters import to_tsv
 from rankify.utils.retrievers.colbert.colbert import Indexer
 from rankify.utils.retrievers.colbert.colbert.data import Collection
 from rankify.utils.retrievers.colbert.colbert.infra import ColBERTConfig
@@ -33,24 +33,25 @@ class ColBERTIndexer(BaseIndexer):
                  threads=32,
                  index_type="wiki",
                  batch_size=64,
+                 retriever_name="colbert",
                  device="cuda"):
-        super().__init__(corpus_path, output_dir, chunk_size, threads, index_type)
+        super().__init__(corpus_path, output_dir, chunk_size, threads, index_type, retriever_name)
         self.encoder_name = encoder_name
         self.index_dir = self.output_dir / f"colbert_index_{index_type}"
         self.device = device
         self.batch_size = batch_size
 
-    def _convert_corpus_to_dense_format(self) -> str:
+    def _generate_colbert_passages_tsv(self) -> str:
         """
-        Convert the corpus to dense-compatible Pyserini format.
+        Convert the corpus to a TSV format suitable for ColBERT indexing.
         Each passage must have an id, a `text` or `contents` and optionally a `title`.
         The output is a TSV file with the format:
         <doc_id>\t<text>\t<title>
         :return: Path to the converted corpus file in TSV format.
         """
         #corpus_path = to_pyserini_jsonl_dense(self.corpus_path, self.index_dir, self.chunk_size, self.threads)
-        passages_path =  to_colbert_tsv(self.corpus_path, self.index_dir, self.chunk_size, self.threads)
-        return  passages_path
+        passages_path =  to_tsv(self.corpus_path, self.index_dir, self.chunk_size, self.threads)
+        return passages_path
 
 
     def build_index(self):
@@ -63,7 +64,7 @@ class ColBERTIndexer(BaseIndexer):
             shutil.rmtree(self.index_dir)
         self.index_dir.mkdir(parents=True)
 
-        collection_path = self._convert_corpus_to_dense_format()
+        collection_path = self._generate_colbert_passages_tsv()
 
         config = ColBERTConfig(
             root=str(self.output_dir),
