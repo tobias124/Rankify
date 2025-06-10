@@ -5,16 +5,16 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from rankify.retrievers.utils import process_chunk, generate_chunks, count_file_lines, process_chunk_colbert
+from rankify.retrievers.utils import process_chunk, generate_chunks, count_file_lines, process_chunk_tabbed
 from multiprocessing.dummy import Pool
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModel
 import json
 logging.basicConfig(level=logging.INFO)
 
-def to_colbert_tsv(input_path, output_dir, chunk_size, threads) -> str:
+def to_tsv(input_path, output_dir, chunk_size, threads) -> str:
     """
-    Convert a corpus file to ColBERT TSV format.
+    Convert a corpus file to TSV format.
     :param input_path: Path to the input corpus file.
     :param output_dir: Directory to save the output TSV file.
     :param chunk_size: Number of lines to process in each chunk.
@@ -31,14 +31,14 @@ def to_colbert_tsv(input_path, output_dir, chunk_size, threads) -> str:
 
             pbar = tqdm(total=total_lines, desc="Processing")
 
-            for result in pool.imap_unordered(lambda args: process_chunk_colbert(*args), generate_chunks(f_in, chunk_size)):
+            for result in pool.imap_unordered(lambda args: process_chunk_tabbed(*args), generate_chunks(f_in, chunk_size)):
                 for i, doc_json in enumerate(result):
                         f_out.write(doc_json + "\n")
                 pbar.update(len(result))
 
             pbar.close()
 
-    logging.info(f"✅ Done saving corpus to {output_path}")
+    logging.info(f"Done saving corpus to {output_path}")
     return output_path
 
 def to_pyserini_jsonl(input_path, output_dir, chunk_size, threads) -> str:
