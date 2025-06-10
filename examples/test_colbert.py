@@ -10,7 +10,7 @@ def main():
 
     query = Document(
         question=Question(question="Who was in charge of the Manhattan Project and what was its goal?"),
-        answers=Answer(answers=["Answer"])
+        answers=Answer(answers=["The Manhattan Project was the name for a project conducted during World War II, to develop the first atomic bomb. It refers specifically to the period of the project from 194 … 2-1946 under the control of the U.S. Army Corps of Engineers, under the administration of General Leslie R. Groves."])
     )
 
     results = retriever.retrieve([query])
