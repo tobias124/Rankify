@@ -8,7 +8,8 @@ class BaseIndexer(ABC):
     """
     Abstract base class for indexers. This class provides a template for building and loading indices.
     """
-    def __init__(self, corpus_path, output_dir="rankify_indices", chunk_size=512, threads=32, index_type="wiki"):
+    def __init__(self, corpus_path, output_dir="rankify_indices", chunk_size=512, threads=32, index_type="wiki",
+                 retriever_name="base"):
         self.index_dir = None
         self.corpus_path = corpus_path
         self.output_dir = Path(output_dir)
@@ -16,6 +17,7 @@ class BaseIndexer(ABC):
         self.threads = threads
         self.doc_chunks = []
         self.index_type = index_type
+        self.retriever_name = retriever_name
 
     @abstractmethod
     def build_index(self):
