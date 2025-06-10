@@ -962,13 +962,19 @@ rankify-index index data/msmarco_100.jsonl --retriever dpr --output rankify_indi
 ### Contriever
 
 ``` bash
-rankify-index index data/wikipedia_100.jsonl --retriever contriever --output rankify_indices/contriever --device cpu
+rankify-index index data/wikipedia_100.jsonl --retriever contriever --output rankify_indices/contriever
 ```
 
 ### ColBERT
 
 ``` bash
-rankify-index index data/wikipedia_100.jsonl --retriever colbert --output rankify_indices/colbert --device cpu
+rankify-index index data/wikipedia_100.jsonl --retriever colbert --output rankify_indices/colbert
+```
+
+### BGE
+
+``` bash
+rankify-index index data/wikipedia_100.jsonl --retriever bge --output rankify_indices/bg
 ```
 
 ---
