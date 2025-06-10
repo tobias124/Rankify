@@ -4,6 +4,7 @@ from rankify.models.base import BaseRanking
 from rankify.dataset.dataset import Document
 from typing import List
 from tqdm import tqdm  # Import tqdm for progress tracking
+from llm_blender.pair_ranker.config import RankerConfig  # Adjust import path if needed
 
 import copy
 
@@ -62,10 +63,14 @@ class BlenderReranker(BaseRanking):
             model = BlenderReranker(method="blender_reranker", model_name="PairRM")
             ```
         """
+        ranker_config = RankerConfig(
+            device="cuda",
+            fp16=True,
+        )
         self.device = kwargs.get("device", "cuda") 
         self.method = method
-        self.blender = llm_blender.Blender()
-        self.blender.loadranker(model_name , device=self.device)  # Load the ranker model
+        self.blender = llm_blender.Blender() #ranker_config=ranker_config
+        self.blender.loadranker(model_name , fp16=True, device=self.device)  # Load the ranker model
 
     def rank(self, documents: List[Document]) -> List[Document]:
         """

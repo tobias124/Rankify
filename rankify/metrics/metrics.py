@@ -500,8 +500,12 @@ class Metrics:
         Returns:
             dict: Dictionary containing **NDCG@k, MAP@k, and MRR@k** scores.
         """
-        if qrel not in self.QREL_MAPPING:
-            raise ValueError(f"Invalid dataset '{qrel}'. Choose from: {list(self.QREL_MAPPING.keys())}")
+        if os.path.exists(qrel):
+            qrel_path = qrel  # user gave a custom path like "./qrels.txt"
+        elif qrel in self.QREL_MAPPING:
+            qrel_path = self.QREL_MAPPING[qrel]
+        else:
+            raise ValueError(f"Invalid qrel: {qrel}. Must be a known key or a path to qrels.txt.")
 
         results = {}
 
@@ -514,17 +518,23 @@ class Metrics:
         trec_eval_cmd = "python -m pyserini.eval.trec_eval"
 
         for k in ndcg_cuts:
-            cmd = f"{trec_eval_cmd} -c -m ndcg_cut.{k} {self.QREL_MAPPING[qrel]} {trec_file_path}"
+            #cmd = f"{trec_eval_cmd} -c -m ndcg_cut.{k} {self.QREL_MAPPING[qrel]} {trec_file_path}"
+            cmd = f"{trec_eval_cmd} -c -m ndcg_cut.{k} {qrel_path} {trec_file_path}"
+
             output = self.run_trec_eval(cmd)
             results[f"ndcg@{k}"] = output
 
         for k in map_cuts:
-            cmd = f"{trec_eval_cmd} -c -m map_cut.{k} {self.QREL_MAPPING[qrel]} {trec_file_path}"
+            #cmd = f"{trec_eval_cmd} -c -m map_cut.{k} {self.QREL_MAPPING[qrel]} {trec_file_path}"
+            cmd = f"{trec_eval_cmd} -c -m map_cut.{k} {qrel_path} {trec_file_path}"
+
             output = self.run_trec_eval(cmd)
             results[f"map@{k}"] = output
 
         for k in mrr_cuts:
-            cmd = f"{trec_eval_cmd} -c -m recip_rank {self.QREL_MAPPING[qrel]} {trec_file_path}"
+            #cmd = f"{trec_eval_cmd} -c -m recip_rank {self.QREL_MAPPING[qrel]} {trec_file_path}"
+            cmd = f"{trec_eval_cmd} -c -m recip_rank {qrel_path} {trec_file_path}"
+
             output = self.run_trec_eval(cmd)
             results[f"mrr@{k}"] = output
 

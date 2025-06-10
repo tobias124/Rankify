@@ -129,12 +129,15 @@ class InRanker(BaseRanking):
             reranked_docs = model.rank(documents)
             ```
         """
-        scores =[]
-        logits = []
+        
 
         for document in tqdm(documents, desc="Reranking Documents"):
+            scores =[]
+            logits = []
             context_copy= copy.deepcopy(document.contexts)
             for batch in self._chunks(document.contexts,self.batch_size):
+                
+                
                 queries_documents = [ 
                     f"Query: {document.question.question} Document: {context.text} Relevant:" for context in batch
                 ]
@@ -164,8 +167,8 @@ class InRanker(BaseRanking):
 
                 scores.extend(batch_scores)
             
-            for score, context in zip(scores,context_copy):
-                context.score = score
+            for score, context in zip(scores, context_copy):
+                 context.score = score
             
             context_copy.sort(key=lambda x:x.score, reverse=True)
             document.reorder_contexts = context_copy
@@ -200,30 +203,28 @@ class InRanker(BaseRanking):
             ```
         """
         decode_ids = torch.full(
-            (input_ids.size(0),1),
+            (input_ids.size(0), 1),
             model.config.decoder_start_token_id,
-            dtype=torch.long
+            dtype=torch.long,
         ).to(input_ids.device)
-        encoder_outputs = model.get_encoder()(input_ids,attention_mask)
+        encoder_outputs = model.get_encoder()(input_ids, attention_mask=attention_mask)
         next_token_logits = None
         for _ in range(length):
             model_inputs = model.prepare_inputs_for_generation(
                 decode_ids,
-                encoder_outputs = encoder_outputs,
-                #past=None, # exception because the new version of transformer
+                encoder_outputs=encoder_outputs,
+                past=None,
                 attention_mask=attention_mask,
-                use_cache=True
+                use_cache=True,
             )
-
-            outputs = model(**model_inputs)
-            next_token_logits = outputs[0][:,-1,:]
+            outputs = model(**model_inputs)  # (batch_size, cur_len, vocab_size)
+            next_token_logits = outputs[0][:, -1, :]  # (batch_size, vocab_size)
             decode_ids = torch.cat(
-                [decode_ids, next_token_logits.max(1)[1].unsqueeze(-1)],dim=-1
+                [decode_ids, next_token_logits.max(1)[1].unsqueeze(-1)], dim=-1
             )
-
         if return_last_logits:
-            return decode_ids,next_token_logits
-        return decode_ids 
+            return decode_ids, next_token_logits
+        return decode_ids
     @staticmethod
     def _chunks(contexts: list[Context],batch_size: int):
         """
