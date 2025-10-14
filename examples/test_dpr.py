@@ -1,5 +1,5 @@
 from rankify.dataset.dataset import Document, Question, Answer
-from rankify.retrievers.dpr import DenseRetriever
+from rankify.retrievers.dense_retriever import DenseRetriever
 
 def wiki_retriever():
     retriever = DenseRetriever(

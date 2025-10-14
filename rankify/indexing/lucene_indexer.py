@@ -1,7 +1,9 @@
+#lucene_indexer.py
 import shutil
 import subprocess
 import logging
 
+from pathlib import Path
 
 from rankify.indexing.base_indexer import BaseIndexer
 from rankify.indexing.format_converters import to_pyserini_jsonl
@@ -32,7 +34,7 @@ class LuceneIndexer(BaseIndexer):
         
         logging.info("Creating ID mapping...")
         self.id_mapping = {}
-        next_id = 1
+        next_id = 0
         
         with open(self.corpus_path, "r", encoding="utf-8") as f:
             for line in f:
@@ -63,29 +65,32 @@ class LuceneIndexer(BaseIndexer):
     def build_index(self):
         """
         Build the Lucene index from the corpus.
-        This method prepares the corpus in the format required by Pyserini,
-        creates a temporary directory for the corpus, and runs the Pyserini indexer.
-        It also handles the cleanup of temporary files and saves a title map for the indexed documents.
         """
+        # 1) Create & save mapping BEFORE converting corpus (so converter can load it)
         self._create_id_mapping()
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        corpus_path = self._save_pyserini_corpus()
-        
-        temp_corpus_dir = self.output_dir / "temp_corpus"
+        self._save_id_mapping()
 
+        # 2) Convert corpus (may return str or Path depending on your converter)
+        corpus_path = Path(self._save_pyserini_corpus())
+
+        # 3) Prep temp dir
+        temp_corpus_dir = self.output_dir / "temp_corpus"
         if temp_corpus_dir.exists():
             shutil.rmtree(temp_corpus_dir)
         temp_corpus_dir.mkdir(parents=True)
 
         corpus_file_path = temp_corpus_dir / "corpus.json"
-        corpus_path.rename(corpus_file_path)
 
+        # 4) Move the file into the temp dir (works across filesystems)
+        shutil.move(str(corpus_path), str(corpus_file_path))
+
+        # 5) Reset index dir
         if self.index_dir.exists():
             shutil.rmtree(self.index_dir)
         self.index_dir.mkdir(parents=True)
-        
-        self._save_id_mapping()
 
+        # 6) Run Pyserini
         cmd = [
             "python", "-m", "pyserini.index.lucene",
             "-collection", "JsonCollection",
@@ -95,18 +100,12 @@ class LuceneIndexer(BaseIndexer):
             "-index", str(self.index_dir),
             "-storePositions", "-storeDocvectors", "-storeRaw"
         ]
-
         logging.info(f"Running Pyserini indexer:\n{' '.join(cmd)}")
-        
-        try:
-            subprocess.run(cmd, check=True)
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"Pyserini indexing failed: {e}")
+        subprocess.run(cmd, check=True)
 
+        # 7) Cleanup & finish
         shutil.rmtree(temp_corpus_dir)
-
         self._save_title_map()
-
         logging.info(f"Indexing complete. Index stored at {self.index_dir}")
 
     def load_index(self):

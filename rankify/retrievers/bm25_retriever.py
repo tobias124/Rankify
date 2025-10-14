@@ -25,17 +25,29 @@ class BM25Retriever(BaseRetriever):
         # Initialize index manager
         self.index_manager = IndexManager()
         
-        # Get index path and load mappings
+        # Get index path
         if index_folder:
             self.index_path = index_folder
-            self.id_mapping = self.index_manager.load_id_mapping(index_folder)
         else:
             self.index_path = self.index_manager.get_index_path("bm25", index_type)
-            self.id_mapping = None
         
         # Initialize searcher
         self.searcher = self._initialize_searcher()
-    
+        self.rev_id_mapping = self._load_reverse_mapping()
+    def _load_reverse_mapping(self):
+        # prefer explicit reverse file; fall back to inverting id_mapping.json
+        base = self.index_path
+        rev_path = os.path.join(base, "id_mapping_rev.json")
+        fwd_path = os.path.join(base, "id_mapping.json")
+        m = {}
+        if os.path.exists(rev_path):
+            with open(rev_path, "r", encoding="utf-8") as f:
+                m = json.load(f)                     # { "123": "orig_id" }
+        elif os.path.exists(fwd_path):
+            with open(fwd_path, "r", encoding="utf-8") as f:
+                fwd = json.load(f)                   # { "orig_id": 123 }
+            m = {str(v): k for k, v in fwd.items()}  # ensure string keys
+        return m
     def _initialize_searcher(self) -> LuceneSearcher:
         """Initialize Lucene searcher."""
         if self.index_path.startswith("wikipedia-") or "prebuilt" in self.index_path:
@@ -79,21 +91,22 @@ class BM25Retriever(BaseRetriever):
         """Create Context object from search hit."""
         lucene_doc = self.searcher.doc(hit.docid)
         raw_content = json.loads(lucene_doc.raw())
-        
-        content = raw_content.get("contents", "")
-        has_title = '\n' in content
-        title = content.split('\n')[0] if has_title else "No Title"
-        text = content.split('\n')[1] if has_title else content
-        
-        # Handle ID mapping if available
-        doc_id = self.id_mapping.get(int(hit.docid)) if self.id_mapping else hit.docid
-        
+
+        contents = raw_content.get("contents", "")
+        if "\n" in contents:
+            title, text = contents.split("\n", 1)
+        else:
+            title, text = "No Title", contents
+
+        # Map the (string) docid back to original ID
+        doc_id = self.rev_id_mapping.get(str(hit.docid), str(hit.docid))
+
         return Context(
             id=doc_id,
             title=title,
             text=text,
             score=hit.score,
-            has_answer=has_answers(text, document.answers.answers, self.tokenizer)
+            has_answer=has_answers(text, document.answers.answers, self.tokenizer),
         )
     
     def _batch_search(self, queries: List[str], qids: List[str]) -> dict:

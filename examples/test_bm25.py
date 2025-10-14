@@ -1,4 +1,4 @@
-from rankify.retrievers.bm25 import BM25Retriever
+from rankify.retrievers.bm25_retriever import BM25Retriever
 from rankify.dataset.dataset import Document, Question, Answer
 
 def main():

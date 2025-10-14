@@ -1,95 +1,141 @@
+# rankify/retrievers/retriever.py - UPDATED VERSION
+from typing import List, Dict, Type
+from rankify.dataset.dataset import Document
+from .base_retriever import BaseRetriever
+from .bm25_retriever import BM25Retriever
+from .dense_retriever import DenseRetriever
+from .ance_retriever import ANCERetriever 
+from .bge_retriever import BGERetriever
+from .colbert_retriever import ColBERTRetriever
+from .contriever_retriever import ContrieverRetriever
+from .online_retriever import OnlineRetriever
+from .hyde_retriever import HydeRetriever
 
-#retriever.py
-from rankify.dataset.dataset import Document, Question, Answer, Context
-from rankify.utils.pre_defined_methods_retrievers import METHOD_MAP
-
-from typing import List
+# Method mapping - UPDATED WITH PROPER ANCE SUPPORT
+METHOD_MAP: Dict[str, Type[BaseRetriever]] = {
+    "bm25": BM25Retriever,
+    "dpr-multi": DenseRetriever,
+    "dpr-single": DenseRetriever,
+    "ance-multi": ANCERetriever,   
+    "bpr-single": DenseRetriever,
+    "bge": BGERetriever, 
+    "colbert": ColBERTRetriever, 
+    "contriever": ContrieverRetriever, 
+    "online": OnlineRetriever, 
+    "hyde": HydeRetriever, 
+}
 
 class Retriever:
     """
-    Implements a **retriever interface** that selects relevant **documents** based on predefined retrieval methods.
-
-    The class provides an interface for **various retrieval methods** (e.g., BM25, Dense Retrieval),
-    allowing **customization of retrieval parameters**.
-
-    Attributes:
-        method (str): The **name of the retrieval method** (must be in `METHOD_MAP`).
-        n_docs (int): The **number of documents** to retrieve per query (default: `10`).
-        kwargs (dict): Additional retrieval parameters.
-
-    Raises:
-        ValueError: If the **specified retrieval method** is **not supported** in `METHOD_MAP`.
-
+    Unified retriever interface for the rankify framework.
+    
+    Provides a simple interface to access different retrieval methods
+    (BM25, DPR, ANCE, BPR) with consistent parameters.
+    
     Example:
         ```python
-        from rankify.dataset.dataset import Document, Question, Answer, Context
-        from rankify.models.retrieval import Retriever
-
-        # Define a query
-        question = Question("What are the benefits of artificial intelligence?")
-        answers = Answer(["AI improves efficiency and automates tasks."])
-        contexts = [
-            Context(text="Artificial intelligence enhances automation.", id=0),
-            Context(text="AI is used in healthcare and finance.", id=1),
-            Context(text="Machine learning is a subset of AI.", id=2),
-        ]
-        document = Document(question=question, answers=answers, contexts=contexts)
-
-        # Initialize Retriever (using BM25 or Dense Retrieval)
-        retriever = Retriever(method="bm25", n_docs=5)
-        retrieved_documents = retriever.retrieve([document])
-
-        # Print retrieved documents
-        print("Retrieved Documents:")
-        for doc in retrieved_documents:
-            for ctx in doc.contexts:
-                print(ctx.text)
+        # Initialize with BM25
+        retriever = Retriever(method="bm25", n_docs=10, index_type="wiki")
+        
+        # Initialize with DPR
+        retriever = Retriever(method="dpr-multi", n_docs=5, index_type="msmarco")
+        
+        # Initialize with ANCE (UPDATED - now works with index_type)
+        retriever = Retriever(method="ance", n_docs=10, index_type="wiki")
+        
+        # Initialize with ANCE-Multi (uses prebuilt Wikipedia indices)
+        retriever = Retriever(method="ance-multi", n_docs=10, index_type="wiki")
+        
+        # Initialize with custom index folder (works for all methods)
+        retriever = Retriever(method="ance", n_docs=10, index_folder="/path/to/index")
+        
+        # Retrieve documents
+        retrieved_documents = retriever.retrieve(documents)
         ```
     """
-    def __init__(self, method: str = None, n_docs: int = 10, **kwargs):
+    
+    def __init__(self, method: str, n_docs: int = 10, index_type: str = "wiki", 
+                 index_folder: str = None, encoder_name: str = None, **kwargs):
         """
-        Initializes the Retriever instance.
-
+        Initialize the retriever.
+        
         Args:
-            method (str, optional): The **name of the retrieval method** 
-                (must be in `METHOD_MAP`, default: `None`).
-            n_docs (int, optional): The **number of top documents to retrieve** (default: `10`).
-            kwargs (dict): Additional parameters for retrieval.
-
-        Raises:
-            ValueError: If the retrieval `method` is **not found** in `METHOD_MAP`.
+            method (str): Retrieval method ('bm25', 'dpr-multi', 'dpr-single', 'ance', 'ance-multi', 'bpr-single', etc.)
+            n_docs (int): Number of documents to retrieve per query
+            index_type (str): Index type ('wiki', 'msmarco') - ignored if index_folder is provided
+            index_folder (str): Path to custom index folder (optional)
+            encoder_name (str): Model name for encoding (method-specific)
+            **kwargs: Additional parameters passed to the specific retriever
         """
-        self.method = method
+        self.method = method.lower()
         self.n_docs = n_docs
+        self.index_type = index_type.lower()
+        self.index_folder = index_folder
+        self.encoder_name = encoder_name
         self.kwargs = kwargs
-        self.retriever = self.initialize()
-
-    def initialize(self):
-        """
-        Initializes the retrieval method.
-
-        Returns:
-            object: The **retriever instance** corresponding to `self.method`.
-
-        Raises:
-            ValueError: If the **retrieval method is not supported**.
-        """
-        if self.method in METHOD_MAP:
-            return METHOD_MAP[self.method](n_docs=self.n_docs, **self.kwargs)
+        
+        # Initialize the specific retriever
+        self.retriever = self._initialize_retriever()
+    
+    def _initialize_retriever(self) -> BaseRetriever:
+        """Initialize the specific retriever based on the method."""
+        if self.method not in METHOD_MAP:
+            supported_methods = ", ".join(METHOD_MAP.keys())
+            raise ValueError(f"Unsupported method '{self.method}'. "
+                           f"Supported methods: {supported_methods}")
+        
+        retriever_class = METHOD_MAP[self.method]
+        
+        # Prepare initialization parameters
+        init_params = {
+            "n_docs": self.n_docs,
+            **self.kwargs
+        }
+        
+        # UPDATED: Handle all ANCE variants the same way (with index_type support)
+        if self.method in ["ance", "ance-msmarco", "ance-multi"]:
+            init_params["index_type"] = self.index_type
+            
+            # Add index_folder if provided
+            if self.index_folder:
+                init_params["index_folder"] = self.index_folder
+            
+            # Add encoder_name if provided
+            if self.encoder_name:
+                init_params["encoder_name"] = self.encoder_name
+                
+        # Handle other retrieval methods (same as before)
         else:
-            raise ValueError(f"Retrieving method {self.method} is not supported.")
-
+            init_params["index_type"] = self.index_type
+            
+            # Add index_folder if provided
+            if self.index_folder:
+                init_params["index_folder"] = self.index_folder
+            
+            # Add method parameter for dense retrievers
+            if self.method in ["dpr-multi", "dpr-single", "bpr-single"]:
+                init_params["method"] = self.method
+        
+        return retriever_class(**init_params)
+    
     def retrieve(self, documents: List[Document]) -> List[Document]:
         """
-        Retrieves **relevant documents** for a given set of **queries**.
-
+        Retrieve relevant contexts for the given documents.
+        
         Args:
-            documents (List[Document]): A list of **Document** instances containing queries.
-
+            documents (List[Document]): List of documents containing queries
+            
         Returns:
-            List[Document]: A **list of retrieved documents**, each containing:
-                - The **original query** (`Question`)
-                - **Retrieved contexts** (`Context`)
-                - (Optional) Corresponding **answers** (`Answer`).
+            List[Document]: Documents updated with retrieved contexts
         """
         return self.retriever.retrieve(documents)
+    
+    @classmethod
+    def supported_methods(cls) -> List[str]:
+        """Get list of supported retrieval methods."""
+        return list(METHOD_MAP.keys())
+    
+    def __repr__(self) -> str:
+        index_info = f"index_folder='{self.index_folder}'" if self.index_folder else f"index_type='{self.index_type}'"
+        return (f"Retriever(method='{self.method}', n_docs={self.n_docs}, "
+                f"{index_info})")

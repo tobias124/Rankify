@@ -51,7 +51,6 @@ class IndexManager:
                     "encoder": "facebook/dpr-question_encoder-single-nq-base"
                 }
             },
-            # FIXED: ance-multi should use PREBUILT indices, not download URLs
             "ance-multi": {
                 "wiki": {
                     "prebuilt": "wikipedia-dpr-100w.ance-multi",

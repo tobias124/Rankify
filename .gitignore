@@ -178,3 +178,5 @@ test/
 
 rankify_indices/
 rankify-focus.code-workspace
+rankify/old_retrievers
+unit_test

@@ -1,147 +1,133 @@
-import argparse
+# rankify/cli/cli.py
 
-from rankify.indexing.colbert_indexer import ColBERTIndexer
-from rankify.indexing.lucene_indexer import LuceneIndexer
-from rankify.indexing.dpr_indexer import DPRIndexer
-from rankify.indexing.ance_indexer import ANCEIndexer  # NEW IMPORT
-from rankify.indexing.contriever_indexer import ContrieverIndexer
-from rankify.indexing.bge_indexer import BGEIndexer
+import argparse
+import logging
 from pathlib import Path
 
-SUPPORTED_RETRIEVERS = ["bm25", "dpr", "ance", "contriever", "colbert", "bge"]  # ADDED "ance"
+from rankify.indexing.lucene_indexer import LuceneIndexer
+from rankify.indexing.dpr_indexer import DPRIndexer
+from rankify.indexing.ance_indexer import ANCEIndexer
+from rankify.indexing.contriever_indexer import ContrieverIndexer
+from rankify.indexing.colbert_indexer import ColBERTIndexer
+from rankify.indexing.bge_indexer import BGEIndexer
 
-def handle_output_directory(output_dir):
-    """
-    Ensure the output directory exists, creating it if necessary.
-    """
-    if not output_dir:
-        print("Output directory is not specified. Using default 'rankify_indices'.")
-        output_dir = "rankify_indices"
-    else:
-        output_path = Path(output_dir)
-        if not output_path.exists():
-            print(f"Output directory {output_dir} does not exist. Creating it.")
-            output_path.mkdir(parents=True, exist_ok=True)
-    return output_dir
+SUPPORTED_RETRIEVERS = ["bm25", "dpr", "ance", "contriever", "colbert", "bge"]
+logger = logging.getLogger("rankify.cli")
 
-def get_indexer_args(args) -> dict:
-    """
-    Extracts relevant arguments from the parsed command line arguments
-    and prepares them for the indexer constructor.
-    This function filters out None values and maps specific argument names
-    to their corresponding indexer constructor parameters.
+def handle_output_directory(output_dir: str) -> str:
+    """Ensure the output directory exists."""
+    out = Path(output_dir or "rankify_indices")
+    if not out.exists():
+        out.mkdir(parents=True, exist_ok=True)
+        logger.info(f"Created output directory: {out}")
+    return str(out)
 
-    :param args: Parsed command line arguments
-    :return: dict of indexer arguments
+def get_indexer_args(args: argparse.Namespace) -> dict:
     """
-    indexer_args = {}
-    constructor_names = {"output": "output_dir", "retriever": "retriever_name", "encoder": "encoder_name"}
-    not_used_variables = ["command"]
+    Map CLI names -> indexer constructor parameters, dropping None values.
+    """
+    rename = {
+        "output": "output_dir",
+        "retriever": "retriever_name",
+        "encoder": "encoder_name",
+    }
+    skip = {"command"}
+    out = {}
     for k, v in vars(args).items():
-        if v is None or k in not_used_variables:
+        if v is None or k in skip:
             continue
-        if k in constructor_names:
-            indexer_args[constructor_names[k]] = v
-        else:
-            indexer_args[k] = v
-    #print(f"Indexer arguments: {indexer_args}")
-    return indexer_args
+        out[rename.get(k, k)] = v
+    return out
+
+def _build_and_load(indexer, label: str):
+    logger.info(f"Building {label} index…")
+    indexer.build_index()
+    indexer.load_index()
+    logger.info(f"{label} indexing complete. Index at: {indexer.index_dir}")
 
 def main():
-    print("CLI Started")
-    parser = argparse.ArgumentParser(description="Rankify Indexer CLI")
-    subparsers = parser.add_subparsers(dest="command")
+    # App-level logging (safe here; this is the CLI, not the library)
+    logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 
-    index_parser = subparsers.add_parser("index", help="Index a corpus")
-    index_parser.add_argument("corpus_path", type=str, help="Path to the corpus JSONL file")
-    index_parser.add_argument("--retriever", type=str, choices=SUPPORTED_RETRIEVERS, help="Retriever to use")
-    index_parser.add_argument("--output", default="rankify_indices", help="Output directory for index")
-    index_parser.add_argument("--chunk_size", type=int, help="Lines per chunk")
-    index_parser.add_argument("--threads", type=int, default=32, help="Thread count for processing")
-    index_parser.add_argument("--index_type", type=str, default="", help="Type of index to create (default: wiki)")
+    parser = argparse.ArgumentParser(prog="rankify-index", description="Rankify Indexer CLI")
+    subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # Dense-specific option
-    index_parser.add_argument("--encoder", type=str, help="Encoder model name for dense indexing")
-    index_parser.add_argument("--batch_size", type=int, help="Batch size for encoding")
-    index_parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default="cuda", help="Device to use for indexing (default: cuda)")
+    # index subcommand
+    p = subparsers.add_parser("index", help="Index a corpus")
+    p.add_argument("corpus_path", type=str, help="Path to a JSONL corpus")
+    p.add_argument("--retriever", required=True, choices=SUPPORTED_RETRIEVERS,
+                   help=f"Which retriever to use: {', '.join(SUPPORTED_RETRIEVERS)}")
+    p.add_argument("--output", default="rankify_indices", help="Root output directory (default: rankify_indices)")
+    p.add_argument("--index_type", default="wiki", help="Index type label used for folder names (default: wiki)")
+    p.add_argument("--threads", type=int, default=32, help="Threads for preprocessing (default: 32)")
+    p.add_argument("--chunk_size", type=int, default=1024, help="Lines per chunk when converting corpora (default: 1024)")
+
+    # dense options
+    p.add_argument("--encoder", help="Encoder model name (dense indexers)")
+    p.add_argument("--batch_size", type=int, help="Batch size for encoding/indexing")
+    p.add_argument("--embedding_batch_size", type=int,
+                   help="Per-forward batch size for Contriever embedding (optional)")
+    p.add_argument("--device", choices=["cpu", "cuda"], default="cuda",
+                   help="Device for dense models (default: cuda)")
 
     args = parser.parse_args()
 
     if args.command == "index":
-        handle_output_directory(args.output)
-        args.retriever = args.retriever.lower()
-        print(args)
-        if args.retriever == "bm25":
+        # validate corpus
+        corpus = Path(args.corpus_path)
+        if not corpus.exists():
+            parser.error(f"Corpus not found: {corpus}")
+
+        # output folder
+        args.output = handle_output_directory(args.output)
+
+        retriever = args.retriever.lower()
+        # sensible defaults per retriever
+        if retriever == "bm25":
             indexer = LuceneIndexer(**get_indexer_args(args))
-            indexer.build_index()
-            indexer.load_index()
-            print("BM25 indexing complete.")
+            _build_and_load(indexer, "BM25")
 
-        elif args.retriever == "dpr":
-            if args.index_type == "wiki":
-                indexer = LuceneIndexer(**get_indexer_args(args))
-                indexer.build_index()
-                indexer.load_index()
-                print("DPR wiki indexing complete.")
-                return
-            else:
-                if args.encoder is None:
-                    args.encoder = "facebook/dpr-ctx_encoder-single-nq-base"
-                    print("No encoder specified. Using default: facebook/dpr-ctx_encoder-single-nq-base")
+        elif retriever == "dpr":
+            if not args.encoder:
+                args.encoder = "facebook/dpr-ctx_encoder-single-nq-base"
+                logger.info(f"No --encoder provided; using {args.encoder}")
+            indexer = DPRIndexer(**get_indexer_args(args))
+            _build_and_load(indexer, "DPR")
 
-                indexer = DPRIndexer(**get_indexer_args(args))
-
-                indexer.build_index()
-                indexer.load_index()
-
-                print("DPR indexing complete.")
-
-        # NEW ANCE BLOCK
-        elif args.retriever == "ance":
-            if args.encoder is None:
+        elif retriever == "ance":
+            if not args.encoder:
                 args.encoder = "castorini/ance-dpr-context-multi"
-                print("No encoder specified. Using default: castorini/ance-msmarco-passage")
-
+                logger.info(f"No --encoder provided; using {args.encoder}")
             indexer = ANCEIndexer(**get_indexer_args(args))
-            indexer.build_index()
-            indexer.load_index()
+            _build_and_load(indexer, "ANCE")
 
-            print("ANCE indexing complete.")
+        elif retriever == "contriever":
+            if not args.encoder:
+                args.encoder = "facebook/contriever"
+                logger.info(f"No --encoder provided; using {args.encoder}")
+            # pass embedding_batch_size only if provided (constructor has a default)
+            kwargs = get_indexer_args(args)
+            if args.embedding_batch_size is not None:
+                kwargs["embedding_batch_size"] = args.embedding_batch_size
+            indexer = ContrieverIndexer(**kwargs)
+            _build_and_load(indexer, "Contriever")
 
-        elif args.retriever == "contriever":
-            if args.encoder is None:
-                #Todo: check if supported
-                args.encoder = "facebook/contriever-msmarco"
-                print("No encoder specified. Using default: facebook/contriever-msmarco")
-
-            indexer = ContrieverIndexer(**get_indexer_args(args))
-            indexer.build_index()
-            indexer.load_index()
-
-            print("Contriever indexing complete.")
-
-        elif args.retriever == "colbert":
-            if args.encoder is None:
+        elif retriever == "colbert":
+            if not args.encoder:
                 args.encoder = "colbert-ir/colbertv2.0"
-                print("No encoder specified. Using default: colbert-ir/colbertv2.0")
-
+                logger.info(f"No --encoder provided; using {args.encoder}")
             indexer = ColBERTIndexer(**get_indexer_args(args))
-            indexer.build_index()
-            indexer.load_index()
+            _build_and_load(indexer, "ColBERT")
 
-            print("ColBERT indexing complete.")
-        elif args.retriever == "bge":
-            if args.encoder is None:
+        elif retriever == "bge":
+            if not args.encoder:
                 args.encoder = "BAAI/bge-large-en-v1.5"
-                print("No encoder specified. Using default: BAAI/bge-large-en-v1.5")
-
+                logger.info(f"No --encoder provided; using {args.encoder}")
             indexer = BGEIndexer(**get_indexer_args(args))
-            indexer.build_index()
-            indexer.load_index()
+            _build_and_load(indexer, "BGE")
 
-            print("BGE indexing complete.")
         else:
-            print(f"Unknown retriever type: {args.retriever}. Supported types are {SUPPORTED_RETRIEVERS}.")
+            parser.error(f"Unknown retriever: {retriever}")
 
 if __name__ == "__main__":
     main()

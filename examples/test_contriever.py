@@ -1,5 +1,5 @@
 from rankify.dataset.dataset import Document, Question, Answer
-from rankify.retrievers.contriever import ContrieverRetriever
+from rankify.retrievers.contriever_retriever import ContrieverRetriever
 
 
 def main():

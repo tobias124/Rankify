@@ -42,73 +42,115 @@ def to_tsv(input_path, output_dir, chunk_size, threads) -> str:
     logging.info(f"Done saving corpus to {output_path}")
     return output_path
 
+
 def to_pyserini_jsonl(input_path, output_dir, chunk_size, threads) -> str:
     """
-    Convert a corpus file to Pyserini JSONL format.
-    :param input_path: Path to the input corpus file.
-    :param output_dir: Directory to save the output JSONL file.
-    :param chunk_size: Number of lines to process in each chunk.
-    :param threads: Number of threads to use for processing.
-    :return: Path to the output JSONL file.
+    Convert the corpus to Pyserini JSONL format: one input JSON line -> one output JSON line.
+    Keeps your original string IDs and pairs them with the *same line's* contents.
     """
+    input_path = Path(input_path)
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "corpus.jsonl"
 
-    total_lines = count_file_lines(input_path)
-    mapping_file = output_dir / "id_mapping.json"
-    if mapping_file.exists():
-        import json
-        with open(mapping_file, "r", encoding="utf-8") as f:
-            id_mapping = json.load(f)
-        # Attach mapping to function for multiprocessing access
-        process_chunk.id_mapping = id_mapping
-        logging.info(f"Loaded ID mapping with {len(id_mapping)} entries")
-    
-    logging.info("Streaming and processing corpus with " + str(threads) + " threads...")
-    with open(input_path, "r", encoding="utf-8") as f_in, \
-         open(output_path, "w", encoding="utf-8") as f_out, \
-         Pool(processes=threads) as pool:
+    # Count for progress only
+    total_lines = sum(1 for _ in open(input_path, "r", encoding="utf-8"))
 
-        pbar = tqdm(total=total_lines, desc="Processing")
+    with open(input_path, "r", encoding="utf-8") as fin, \
+         open(output_path, "w", encoding="utf-8") as fout:
 
-        for result in pool.imap_unordered(lambda args: process_chunk(*args), generate_chunks(f_in, chunk_size)):
-            for doc_json in result:
-                #print(doc_json)
-                f_out.write(doc_json + "\n")
-            pbar.update(len(result))
+        for line in tqdm(fin, total=total_lines, desc="Rewriting corpus"):
+            line = line.strip()
+            if not line:
+                continue
 
-        pbar.close()
+            try:
+                rec = json.loads(line)
+            except Exception as e:
+                logging.warning(f"Skipping malformed line: {e}")
+                continue
+
+            doc_id = str(rec.get("id", ""))  # keep the original string id
+            title  = rec.get("title") or ""
+            # Prefer explicit 'text', then 'contents', then fallback to empty
+            body   = rec.get("text")
+            if body is None:
+                body = rec.get("contents", "")
+
+            # Build a Pyserini-friendly contents field: "title\nbody" if title exists
+            contents = f"{title}\n{body}" if title else body
+
+            out = {"id": doc_id, "contents": contents}
+            fout.write(json.dumps(out, ensure_ascii=False) + "\n")
 
     logging.info(f"✅ Done saving corpus to {output_path}")
-    return output_path
+    return str(output_path)
+
 
 def to_pyserini_jsonl_dense(input_path, output_dir, chunk_size, threads) -> str:
     """
-    Convert a dense corpus file to Pyserini JSONL format.
-    :param input_path: Path to the input dense corpus file.
-    :param output_dir: Directory to save the output JSONL file.
-    :param chunk_size: Number of lines to process in each chunk.
-    :param threads: Number of threads to use for processing.
-    :return: Path to the output JSONL file.
+    Create a JSONL where each line is: {"id": "...", "title": "...", "text": "..."}
+    Accepts:
+      - existing JSONL (dict per line)
+      - TSV ("id<TAB>text")
+      - raw text (one passage per line)
     """
+    input_path = Path(input_path)
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "corpus.jsonl"
 
-    total_lines = count_file_lines(input_path)
-    logging.info("Streaming and processing dense corpus with " + str(threads) + " threads...")
+    # First pass: peek to detect format
+    def _peek_nonempty_line(p):
+        with open(p, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    return line
+        return ""
 
-    with open(input_path, "r", encoding="utf-8") as f_in, \
-         open(output_path, "w", encoding="utf-8") as f_out, \
-         Pool(processes=threads) as pool:
+    first = _peek_nonempty_line(input_path)
+    is_jsonl = first.lstrip().startswith("{")
+    is_tsv = ("\t" in first) and not is_jsonl
 
-        pbar = tqdm(total=total_lines, desc="Processing")
+    total = sum(1 for _ in open(input_path, "r", encoding="utf-8"))
 
-        for result in pool.imap_unordered(lambda args: process_chunk(*args, dense_index=True), generate_chunks(f_in, chunk_size)):
-            for doc_json in result:
-                f_out.write(doc_json + "\n")
-            pbar.update(len(result))
+    with open(input_path, "r", encoding="utf-8") as fin, \
+         open(output_path, "w", encoding="utf-8") as fout:
+        for i, line in enumerate(tqdm(fin, total=total, desc="Rewriting corpus"), 1):
+            line = line.rstrip("\n")
+            if not line.strip():
+                continue
 
-        pbar.close()
+            rec = None
+            if is_jsonl:
+                try:
+                    rec_in = json.loads(line)
+                    # normalize fields
+                    text = rec_in.get("text") or rec_in.get("contents") or rec_in.get("paragraph") or rec_in.get("content") or ""
+                    title = rec_in.get("title")
+                    if not title and isinstance(rec_in.get("titles"), list) and rec_in["titles"]:
+                        title = rec_in["titles"][0]
+                    doc_id = rec_in.get("id") or f"doc{i}"
+                    rec = {"id": str(doc_id), "title": title or "", "text": str(text)}
+                except Exception:
+                    # Fall through to raw handling
+                    pass
 
-    logging.info(f"Done saving dense corpus to {output_path}")
+            if rec is None and is_tsv:
+                parts = line.split("\t", 1)
+                if len(parts) == 2:
+                    doc_id, text = parts
+                else:
+                    doc_id, text = f"doc{i}", line
+                rec = {"id": str(doc_id), "title": "", "text": text}
+
+            if rec is None:
+                # raw line
+                rec = {"id": f"doc{i}", "title": "", "text": line}
+
+            fout.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+    logging.info(f"✅ Done saving dense corpus to {output_path}")
     return output_path
 
 def to_contriever_embedding_chunks(jsonl_path, output_dir, chunk_size, model_name, batch_size, device):

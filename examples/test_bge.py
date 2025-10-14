@@ -1,5 +1,5 @@
 from rankify.dataset.dataset import Document, Question, Answer
-from rankify.retrievers.BGERetriever import BGERetriever
+from rankify.retrievers.bge_retriever import BGERetriever
 
 def main():
     retriever = BGERetriever(

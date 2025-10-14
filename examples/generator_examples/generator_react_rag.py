@@ -1,7 +1,7 @@
 import torch
 from rankify.dataset.dataset import Document, Question, Answer, Context
 from rankify.generator.generator import Generator
-from rankify.n_retreivers.retriever import Retriever
+from rankify.retrievers.retriever import Retriever
 
 
 test_docs = [

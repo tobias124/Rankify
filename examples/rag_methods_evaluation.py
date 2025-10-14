@@ -1,35 +1,43 @@
 import os
 import torch
+import gc  # Add garbage collection
 
 from rankify.generator.generator import Generator
 from rankify.dataset.dataset import Dataset
 from rankify.metrics.metrics import Metrics
 from pathlib import Path
 
-from rankify.n_retreivers.retriever import Retriever
+from rankify.retrievers.retriever import Retriever
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-summary_path = "benchmark_summary.txt"        # one file for the whole script run
+def clear_memory():
+    """Clear GPU memory and force garbage collection"""
+    gc.collect()  # Force garbage collection
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()  # Clear CUDA cache
+        torch.cuda.synchronize()  # Wait for all operations to complete
+
+summary_path = "benchmark_summary-react-rag-triviaqa-test-1000-2.txt"        # one file for the whole script run
 header_written = Path(summary_path).exists()  # keep track of whether we already wrote the header
 
 # Datasets to evaluate
 DATASETS = [
-    "web_questions-test",
-    "nq-test",
+    # "web_questions-test",
+    # "nq-test",
     "triviaqa-test",
-    "strategyqa-test",
-    "hotpotqa-test"
+    # "strategyqa-test",
+    # "hotpotqa-dev"
 ]
 
 # RAG methods to evaluate
 RAG_METHODS = [
-    "basic-rag",
-    "chain-of-thought-rag",
-    "fid",
-    "in-context-ralm",
-    "zero-shot",
-    "self-consistency-rag",
+    #"basic-rag",
+    #"chain-of-thought-rag",
+    # "fid",
+    # "in-context-ralm",
+    #"zero-shot",
+    #"self-consistency-rag",
     "react-rag"
 ]
 
@@ -47,16 +55,16 @@ MODELS = [
 FID_MODEL_NAME = "nq_reader_base"
 FID_BACKEND = "fid"
 
-N_DOCS = 5  # Number of docs to retrieve per query
+N_DOCS = 1  # Number of docs to retrieve per query
 
 # Number of questions to evaluate per dataset (set to None to use all)
-N_QUESTIONS = 1  # e.g., 1 for one question, 10 for ten, None for all
+N_QUESTIONS = 1000  # e.g., 1 for one question, 10 for ten, None for all
 
 # Generation parameters for HuggingFace models (pass as kwargs)
 generation_kwargs = dict(
-    temperature=0.7,
+    temperature=0.1,
     top_p=0.95,
-    max_new_tokens=32,
+    max_new_tokens=64,
     num_return_sequences=1,
 )
 
@@ -80,44 +88,67 @@ for model_cfg in MODELS:
             print("-" * 80)
             print(f"Testing RAG method: {rag_method}")
 
-            # Special handling for FiD
-            if rag_method == "fid":
-                generator = Generator(
-                    method="fid",
-                    model_name=FID_MODEL_NAME,
-                    backend=FID_BACKEND
-                )
-                # FiD models typically do not use HuggingFace generation kwargs
-                try:
+            generator = None  # Initialize generator variable
+            retriever = None  # Initialize retriever variable
+            
+            try:
+                # Special handling for FiD
+                if rag_method == "fid":
+                    generator = Generator(
+                        method="fid",
+                        model_name=FID_MODEL_NAME,
+                        backend=FID_BACKEND
+                    )
+                    # FiD models typically do not use HuggingFace generation kwargs
                     generated_answers = generator.generate(documents)
-                except Exception as e:
-                    print(f"Error with method {rag_method} on dataset {dataset_name}: {e}")
-                    generated_answers = [""] * len(documents)
-            elif rag_method== "react-rag":
-                retriever = Retriever(method="bm25", n_docs=N_DOCS, index_type="wiki")
-                generator = Generator(
-                    method="react-rag",
-                    retriever=retriever,
-                    **model_cfg
-                )
-                try:
+                elif rag_method == "react-rag":
+                    retriever = Retriever(method="bm25", n_docs=N_DOCS, index_type="wiki")
+                    del model_cfg['torch_dtype']
+                    del model_cfg['stop_at_period']
+                    
+                    generator = Generator(
+                        method="react-rag",
+                        retriever=retriever,
+                        **model_cfg
+                    )
                     generated_answers = generator.generate(documents)
-                except Exception as e:
-                    print(f"Error with method {rag_method} on dataset {dataset_name}: {e}")
-                    generated_answers = [""] * len(documents)
-            else:
-                generator = Generator(
-                    method=rag_method,
-                    **model_cfg  # Pass all model parameters as kwargs
-                )
-                try:
+                else:
+                    generator = Generator(
+                        method=rag_method,
+                        **model_cfg  # Pass all model parameters as kwargs
+                    )
                     generated_answers = generator.generate(
                         documents=documents,
                         #**generation_kwargs
                     )
-                except Exception as e:
-                    print(f"Error with method {rag_method} on dataset {dataset_name}: {e}")
-                    generated_answers = [""] * len(documents)
+            except Exception as e:
+                print(f"Error with method {rag_method} on dataset {dataset_name}: {e}")
+                generated_answers = [""] * len(documents)
+            
+            finally:
+                # CRITICAL: Clean up memory after each RAG method
+                if generator is not None:
+                    # If the generator has a model attribute, try to move it to CPU first
+                    if hasattr(generator, 'model') and generator.model is not None:
+                        try:
+                            generator.model.cpu()  # Move model to CPU
+                        except:
+                            pass  # Some models might not support .cpu()
+                    
+                    # Delete the generator
+                    del generator
+                
+                if retriever is not None:
+                    del retriever
+                
+                # Clear memory
+                clear_memory()
+                
+                # Print memory info if available
+                if torch.cuda.is_available():
+                    memory_allocated = torch.cuda.memory_allocated() / 1024**3  # GB
+                    memory_reserved = torch.cuda.memory_reserved() / 1024**3   # GB
+                    print(f"GPU Memory: {memory_allocated:.2f}GB allocated, {memory_reserved:.2f}GB reserved")
 
             print(f"Generated answers ({rag_method}): {generated_answers}")
             generation_metrics = metrics.calculate_generation_metrics(generated_answers)
@@ -136,12 +167,18 @@ for model_cfg in MODELS:
 
             print(f"Intermediate summary appended to {summary_path}")
             print("=" * 120)
+        
+        # Additional cleanup after each dataset
+        clear_memory()
+        
         # Optionally save intermediate results
         dataset.save_dataset(f"{dataset_name}-bm25-eval.json", save_text=True)
 
+    # Additional cleanup after each model
+    clear_memory()
 
 # Save summary to file instead of printing
-summary_path = "benchmark_summary_final.txt"
+summary_path = "benchmark_summary_final-hotpot-1000.txt"
 with open(summary_path, "w", encoding="utf-8") as f:
     f.write("Benchmark Results Summary:\n")
     for model_name, model_results in results.items():
@@ -161,3 +198,6 @@ for model_name, model_results in results.items():
         print(f"  Dataset: {dataset_name}")
         for rag_method, metrics_dict in rag_results.items():
             print(f"    {rag_method}: {metrics_dict}")
+
+# Final cleanup
+clear_memory()

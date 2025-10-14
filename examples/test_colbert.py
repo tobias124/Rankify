@@ -1,5 +1,5 @@
 from rankify.dataset.dataset import Document, Question, Answer
-from rankify.retrievers.colbert import ColBERTRetriever
+from rankify.retrievers.colbert_retriever import ColBERTRetriever
 
 def main():
     retriever = ColBERTRetriever(
