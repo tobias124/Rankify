@@ -1094,6 +1094,63 @@ print(after_ranking_metrics)
 ```
 
 
+## 🧪 BEIR & TREC DL19/DL20 with BM25
+
+**Rankify** ships convenient hooks to run BM25 baselines on **BEIR** tasks and **TREC DL'19/20**, and to evaluate with TREC-style metrics (nDCG, MAP, MRR).
+
+### Quick start (single dataset)
+```python
+from rankify.dataset.dataset import Dataset
+from rankify.metrics.metrics import Metrics
+
+# Download pre-retrieved BM25 results (top-k per query)
+docs = Dataset('bm25', 'dl19', n_docs=1000).download(force_download=False)
+
+# Evaluate with TREC metrics (nDCG@10/100 by default shown here)
+metrics = Metrics(docs)
+print(metrics.calculate_trec_metrics(ndcg_cuts=[10, 100], use_reordered=False))
+```
+
+> **Notes**
+> - Supported names include **`dl19`**, **`dl20`**, and BEIR tasks with the `beir-` prefix, e.g.:
+>   `beir-arguana`, `beir-covid`, `beir-dbpedia`, `beir-fever`, `beir-fiqa`, `beir-news`,
+>   `beir-nfc`, `beir-quora`, `beir-robust04`, `beir-scidocs`, `beir-scifact`, `beir-signal`, `beir-touche`.
+> - If you need explicit qrels selection, pass `qrel=name.replace("beir-", "")` to `calculate_trec_metrics`.
+
+### Batch over BEIR & DL datasets
+```python
+from rankify.dataset.dataset import Dataset
+from rankify.metrics.metrics import Metrics
+
+BEIR_TASKS = [
+    "beir-arguana", "beir-covid", "beir-dbpedia", "beir-fever", "beir-fiqa", "beir-news",
+    "beir-nfc", "beir-quora", "beir-robust04", "beir-scidocs", "beir-scifact",
+    "beir-signal", "beir-touche",
+]
+
+for name in ["dl19", "dl20", *BEIR_TASKS]:
+    docs = Dataset('bm25', name, n_docs=100).download(force_download=False)
+    m = Metrics(docs)
+    res = m.calculate_trec_metrics(ndcg_cuts=[10, 100], use_reordered=False)
+    print(name, res)
+```
+
+### (Optional) Add a reranker, then evaluate
+```python
+from rankify.models.reranking import Reranking
+from rankify.dataset.dataset import Dataset
+from rankify.metrics.metrics import Metrics
+
+name = "beir-arguana"
+docs = Dataset('bm25', name, n_docs=100).download(force_download=False)
+reranker = Reranking(method='transformer_ranker', model_name='bge-reranker-base')
+reranker.rank(docs)
+
+m = Metrics(docs)
+print("Before:", m.calculate_trec_metrics(ndcg_cuts=[10, 100], use_reordered=False))
+print("After :", m.calculate_trec_metrics(ndcg_cuts=[10, 100], use_reordered=True))
+```
+
 ## 📜 Supported Models
 
 ### **1️⃣ Index**  
