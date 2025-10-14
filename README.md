@@ -45,11 +45,11 @@
 </div>
 
 <!-- Product Hunt badge -->
-<div style="margin-top: 10px;">
+<!--<div style="margin-top: 10px;">
   <a href="https://www.producthunt.com/products/github-113?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-github&#0045;73d2dbbf&#0045;d84f&#0045;495d&#0045;86d8&#0045;af4dd72fc31f">
     <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=980097&theme=light&t=1750416463103" style="height: 40px;">
   </a>
-</div>
+</div>-->
 
 </div>
 
@@ -63,7 +63,7 @@ If you like our Framework, **don't hesitate to ⭐ star this repository ⭐**. T
 
 _A modular and efficient retrieval, reranking  and RAG  framework designed to work with state-of-the-art models for retrieval, ranking and rag tasks._
 
-_Rankify is a Python toolkit designed for unified retrieval, re-ranking, and retrieval-augmented generation (RAG) research. Our toolkit integrates 40 pre-retrieved benchmark datasets and supports 7 retrieval techniques, 24 state-of-the-art re-ranking models, and multiple RAG methods. With a flexible generator architecture supporting multiple endpoints, Rankify provides a modular and extensible framework, enabling seamless experimentation and benchmarking across retrieval pipelines. Comprehensive documentation, open-source implementation, and pre-built evaluation tools make Rankify a powerful resource for researchers and practitioners in the field._
+<!--_Rankify is a Python toolkit designed for unified retrieval, re-ranking, and retrieval-augmented generation (RAG) research. Our toolkit integrates 40 pre-retrieved benchmark datasets and supports 7 retrieval techniques, 24 state-of-the-art re-ranking models, and multiple RAG methods. With a flexible generator architecture supporting multiple endpoints, Rankify provides a modular and extensible framework, enabling seamless experimentation and benchmarking across retrieval pipelines. Comprehensive documentation, open-source implementation, and pre-built evaluation tools make Rankify a powerful resource for researchers and practitioners in the field._-->
 
 <!-- <p align="center">
 <img src="images/overview.png" width="500" height="700" >
@@ -107,6 +107,8 @@ https://github.com/user-attachments/assets/13184943-55db-4f0c-b509-fde920b809bc
 
 
 ## 🎉News
+-  **[2025-10-14]** Updated installation with optional extras: `retriever`, `reranking`, `rag`, and `all`.
+- **[2025-10-14]** New **CLI** (`rankify-index`) syntax & examples for **BM25, DPR, ANCE, Contriever, ColBERT, BGE**.
 
 - **[2025-06-11]** Many thanks to [@tobias124](https://github.com/tobias124) for implementing [Indexing](#cli-running-indexing-module) for Custom Dataset.
 
@@ -146,7 +148,6 @@ To install **Rankify**, simply use **pip** (requires Python 3.10+):
 pip install rankify
 ```
 
-This will install the base functionality required for retrieval, re-ranking, and retrieval-augmented generation (RAG).  
 
 #### Recommended Installation  
 
@@ -160,11 +161,14 @@ This ensures you have all necessary modules, including retrieval, re-ranking, an
 
 If you prefer to install only specific components, choose from the following:
 ```bash
-# Install dependencies for retrieval only (BM25, DPR, ANCE, etc.)
+# Retrieval stack (BM25, dense retrievers, web tools)
 pip install "rankify[retriever]"
 
 # Install base re-ranking with vLLM support for `FirstModelReranker`, `LiT5ScoreReranker`, `LiT5DistillReranker`, `VicunaReranker`, and `ZephyrReranker'.
 pip install "rankify[reranking]"
+
+# RAG endpoints (OpenAI, LiteLLM, vLLM clients)
+pip install "rankify[rag]"
 ```
 
 Or, to install from **GitHub** for the latest development version:  
@@ -180,6 +184,8 @@ pip install -e ".[all]"
 pip install -e ".[retriever]"
 # Install base re-ranking with vLLM support for `FirstModelReranker`, `LiT5ScoreReranker`, `LiT5DistillReranker`, `VicunaReranker`, and `ZephyrReranker'.
 pip install -e ".[reranking]"
+# RAG endpoints (OpenAI, LiteLLM, vLLM clients)
+pip install -e ".[rag]"
 ```
 
 
@@ -253,24 +259,6 @@ from rankify.dataset.dataset import Dataset
 # Download BM25-retrieved documents for nq-dev
 dataset = Dataset(retriever="bm25", dataset_name="nq-dev", n_docs=100)
 documents = dataset.download(force_download=False)
-# Download BGE-retrieved documents for nq-dev
-dataset = Dataset(retriever="bge", dataset_name="nq-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download ColBERT-retrieved documents for nq-dev
-dataset = Dataset(retriever="colbert", dataset_name="nq-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download MSS-DPR-retrieved documents for nq-dev
-dataset = Dataset(retriever="mss-dpr", dataset_name="nq-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download MSS-retrieved documents for nq-dev
-dataset = Dataset(retriever="mss", dataset_name="nq-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download MSS-retrieved documents for nq-dev
-dataset = Dataset(retriever="contriever", dataset_name="nq-dev", n_docs=100)
-documents = dataset.download(force_download=False)
-# Download ANCE-retrieved documents for nq-dev
-dataset = Dataset(retriever="ance", dataset_name="nq-dev", n_docs=100)
-documents = dataset.download(force_download=False)
 ```
 
 
@@ -288,7 +276,7 @@ Now, you can integrate **retrieved documents** with **re-ranking** and **RAG** w
 
 
 
-#### Feature Comparison for Pre-Retrieved Datasets  
+<!-- #### Feature Comparison for Pre-Retrieved Datasets  
 
 The following table provides an overview of the availability of different retrieval methods (**BM25, DPR, ColBERT, ANCE, BGE, Contriever**) for each dataset.  
 
@@ -668,9 +656,87 @@ The following table provides an overview of the availability of different retrie
     <td align="center">🕒</td>
     <td align="center">🕒</td>
   </tr>
-</table>
+</table> -->
 
+## 🧱 Indexing via CLI
+The CLI entrypoint is **`rankify-index`** with a subcommand **`index`**.
 
+**Common flags**
+- `corpus_path` (positional): path to JSONL corpus.
+- `--retriever {bm25,dpr,ance,contriever,colbert,bge}`.
+- `--output PATH` (default: `rankify_indices`).
+- `--index_type {wiki,msmarco}` (default: `wiki`).
+- `--threads INT` (default: `32`, sparse & some dense prep).
+- `--device {cpu,cuda}` (default: retriever‑specific, typically `cuda`).
+- `--batch_size INT` (dense encoders / Faiss add batches).
+- `--encoder MODEL` (dense encoders only; sensible defaults used if omitted).
+
+> **Index layout**
+> - BM25 → `<output>/<stem>/bm25_index`
+> - DPR   → `<output>/<stem>/dpr_index_<index_type>`
+> - ANCE  → `<output>/<stem>/ance_index_<index_type>`
+> - BGE   → `<output>/<stem>/bge_index_<index_type>`
+> - Contriever → `<output>/<stem>/contriever_index_<index_type>`
+> - ColBERT    → `<output>/<stem>/colbert_index_<index_type>`
+
+### BM25
+```bash
+rankify-index index data/wikipedia_10k.jsonl \
+  --retriever bm25 \
+  --output ./indices
+```
+
+### DPR (single‑encoder by default)
+```bash
+# Wikipedia style
+rankify-index index data/wikipedia_100.jsonl \
+  --retriever dpr \
+  --encoder facebook/dpr-ctx_encoder-single-nq-base \
+  --batch_size 16 --device cuda \
+  --output ./indices
+
+# MS MARCO
+rankify-index index data/msmarco_100.jsonl \
+  --retriever dpr --index_type msmarco \
+  --encoder facebook/dpr-ctx_encoder-single-nq-base \
+  --batch_size 16 --device cuda \
+  --output ./indices
+```
+
+### ANCE
+```bash
+rankify-index index data/wikipedia_100.jsonl \
+  --retriever ance \
+  --encoder castorini/ance-dpr-context-multi \
+  --batch_size 16 --device cuda \
+  --output ./indices
+```
+
+### Contriever
+```bash
+rankify-index index data/wikipedia_100.jsonl \
+  --retriever contriever \
+  --encoder facebook/contriever-msmarco \
+  --batch_size 16 --device cuda \
+  --output ./indices
+```
+
+### ColBERT
+```bash
+rankify-index index data/wikipedia_100.jsonl \
+  --retriever colbert \
+  --batch_size 32 --device cuda \
+  --output ./indices
+```
+
+### BGE
+```bash
+rankify-index index data/wikipedia_100.jsonl \
+  --retriever bge \
+  --encoder BAAI/bge-large-en-v1.5 \
+  --batch_size 16 --device cuda \
+  --output ./indices
+```
 
 
 ---
@@ -982,48 +1048,6 @@ generated_answers = generator.generate([doc])
 print(generated_answers)  # Output: ["Paris"]
 ```
 
----
-## CLI Running Indexing Module
-
-Rankify provides a command-line interface (CLI) for indexing documents.\
-You can create an index from a JSONL file containing documents, specifying the retriever and other parameters.
-
-### BM25
-
-``` bash
-rankify-index index data/wikipedia_10k.jsonl --retriever bm25 --output rankify_indices
-```
-
-### DPR
-
-wiki
-``` bash
-rankify-index index data/wikipedia_100.jsonl --retriever dpr --output rankify_indices
-```
-
-msmarco
-``` bash
-rankify-index index data/msmarco_100.jsonl --retriever dpr --output rankify_indices --index_type msmarco
-```
-
-
-### Contriever
-
-``` bash
-rankify-index index data/wikipedia_100.jsonl --retriever contriever --output rankify_indices/contriever
-```
-
-### ColBERT
-
-``` bash
-rankify-index index data/wikipedia_100.jsonl --retriever colbert --output rankify_indices/colbert
-```
-
-### BGE
-
-``` bash
-rankify-index index data/wikipedia_100.jsonl --retriever bge --output rankify_indices/bg
-```
 
 ---
 ## 5️⃣ Evaluating with Metrics  
@@ -1162,33 +1186,6 @@ print(after_ranking_metrics)
 
 **Rankify** is still under development, and this is our first release (**v0.1.0**). While it already supports a wide range of retrieval, re-ranking, and RAG techniques, we are actively enhancing its capabilities by adding more retrievers, rankers, datasets, and features.  
 
-
-### **🛠 Planned Improvements**  
-
-#### **Retrievers**  
-✅ **Supports**: BM25, DPR, ANCE, BPR, ColBERT, BGE, Contriever  
-✨ ⏳ **Coming Soon**: Spar, MSS, MSS-DPR  
-✨ ⏳ **Custom Index Loading** for user-defined retrieval corpora  
-
-#### **Re-Rankers**  
-✅ **24 models & 41 sub-methods**  
-✨ ⏳ **Expanding with more ranking models**  
-
-#### **Datasets**  
-✅ **40 benchmark datasets**  
-✨ ⏳ **Adding new datasets & custom dataset integration**  
-
-#### **Retrieval-Augmented Generation (RAG)**  
-✅ **4 endpoints and 5 RAG-methods**    
-✨ ⏳ **Expanding to more endpoints/RAG-methods**  
-
-#### **Evaluation & Usability**  
-✅ **Standard metrics**: Top-K, EM, Recall  
-✨ ⏳ **Adding advanced metrics**: NDCG, MAP for retrievers  
-
-#### **Pipeline Integration**  
-✨ ⏳ **Introducing a pipeline module** for end-to-end retrieval, ranking, and RAG workflows  
---
 
 ## 📖 Documentation
 
