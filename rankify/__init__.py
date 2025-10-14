@@ -1,4 +1,7 @@
+# rankify/__init__.py
 import os
+from pathlib import Path
 
-if 'RERANKING_CACHE_DIR' not in os.environ:
-    os.environ['RERANKING_CACHE_DIR'] = os.path.join(os.path.expanduser('~'),'.cache','rankify')
+DEFAULT_CACHE_DIR = str(Path.home() / ".cache" / "rankify")
+os.environ.setdefault("RERANKING_CACHE_DIR", DEFAULT_CACHE_DIR)
+Path(os.environ["RERANKING_CACHE_DIR"]).mkdir(parents=True, exist_ok=True)
