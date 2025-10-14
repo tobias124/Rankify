@@ -1151,6 +1151,78 @@ print("Before:", m.calculate_trec_metrics(ndcg_cuts=[10, 100], use_reordered=Fal
 print("After :", m.calculate_trec_metrics(ndcg_cuts=[10, 100], use_reordered=True))
 ```
 
+
+## 📏 Evaluating RAG with **RAGAS**
+
+Rankify ships a thin wrapper around **ragas** to make quality evaluation of generated answers simple and flexible—whether you judge with a local HF model or a hosted API like OpenAI. You can run **fast defaults**, **pick specific metrics**, or **simulate predictions** when compute is tight.
+### ✅ Install
+
+```bash
+# core Rankify RAG deps
+pip install bert-score
+pip install ragas
+pip install langchain_huggingface
+pip install rouge-score
+```
+
+
+```python
+import torch
+from rankify.dataset.dataset import Document, Question, Answer, Context
+from rankify.generator.generator import Generator
+from rankify.metrics.generator_metrics import GeneratorMetrics
+from rankify.metrics.ragas_bridge import RagasModels
+
+# 1) Build a tiny document
+question = Question("What is the capital of France?")
+answers  = Answer(["Paris"])
+contexts = [
+    Context(id=1, title="France",   text="The capital of France is Paris.", score=0.9),
+    Context(id=2, title="Germany",  text="Berlin is the capital of Germany.", score=0.5),
+]
+doc = Document(question=question, answers=answers, contexts=contexts)
+
+# 2) Generate an answer (or skip and provide your own predictions list)
+generator   = Generator(method="basic-rag",
+                        model_name="meta-llama/Meta-Llama-3.1-8B-Instruct",
+                        backend="huggingface",
+                        torch_dtype=torch.float16)
+predictions = generator.generate([doc])
+print("Generated:", predictions)
+
+# 3) Evaluate with RAGAS (HF judge)
+gen_metrics = GeneratorMetrics([doc])
+
+ragas_hf = RagasModels(
+    llm_kind="hf",
+    llm_name="meta-llama/Meta-Llama-3.1-8B-Instruct",
+    embeddings_kind="hf",
+    embeddings_name="sentence-transformers/all-MiniLM-L6-v2",
+    torch_dtype="float16",
+    max_new_tokens=256,  # shorter outputs = faster + cheaper
+    timeout=180,         # seconds per metric call
+    max_retries=1,
+    max_workers=2,       # keep small on limited hardware
+)
+
+# (A) Fast defaults
+scores_fast = gen_metrics.all(predictions, ragas_models=ragas_hf)
+print("RAGAS (fast):", scores_fast)
+
+# (B) Pick specific metrics
+scores_specific = gen_metrics.ragas_generator(
+    predictions,
+    judge=ragas_hf,
+    metrics=["faithfulness", "response_relevancy", "context_precision", "context_recall"],
+)
+print("RAGAS (specific):", scores_specific)
+
+# (C) OpenAI judge (much faster if you have an API key)
+ragas_openai = RagasModels(llm_kind="openai", llm_name="gpt-4o-mini", timeout=30)
+scores_openai = gen_metrics.all(predictions, ragas_models=ragas_openai)
+print("RAGAS (OpenAI):", {k: v for k, v in scores_openai.items() if k.startswith("ragas_")})
+```
+
 ## 📜 Supported Models
 
 ### **1️⃣ Index**  
