@@ -2,10 +2,24 @@ import os
 import requests
 from rankify.utils.pre_defined_datasets import HF_PRE_DEFIND_DATASET
 from tqdm import tqdm
+import os
+from pathlib import Path
+
+def get_cache_dir():
+    """Get cache directory, with fallback if not set"""
+    if 'RERANKING_CACHE_DIR' not in os.environ:
+        DEFAULT_CACHE_DIR = str(Path.home() / ".cache" / "rankify")
+        os.environ['RERANKING_CACHE_DIR'] = DEFAULT_CACHE_DIR
+        Path(DEFAULT_CACHE_DIR).mkdir(parents=True, exist_ok=True)
+    return os.environ['RERANKING_CACHE_DIR']
+
 
 class DownloadManger:
     @staticmethod
     def download(retriever: str, dataset: str, force_download: bool = True) ->str:
+        cache_dir = get_cache_dir()
+
+
         if retriever not in HF_PRE_DEFIND_DATASET:
             raise FileNotFoundError(f"Retriever {retriever} Not Supported yet. Please choose another retriever.\nCheck Dataset.available_dataset()")
         if dataset not in HF_PRE_DEFIND_DATASET[retriever]:
@@ -17,7 +31,7 @@ class DownloadManger:
         else:
             dataset_name = dataset
         urls = HF_PRE_DEFIND_DATASET[retriever][dataset]['url']
-        path = os.path.join(os.environ['RERANKING_CACHE_DIR'], 'dataset', retriever, dataset_name)
+        path = os.path.join(cache_dir, 'dataset', retriever, dataset_name)
         file_path = os.path.join(path, filename)
 
         # If force_download is False and file already exists, skip downloading
