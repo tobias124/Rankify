@@ -33,9 +33,6 @@
   <a href="https://github.com/DataScienceUIBK/rankify/releases">
     <img src="https://img.shields.io/github/release/DataScienceUIBK/rankify.svg?label=Version&color=orange" style="height: 24px;">
   </a>
-  <a href="https://star-history.com/#DataScienceUIBK/Rankify">
-    <img src="https://img.shields.io/github/stars/DataScienceUIBK/Rankify?style=social" style="height: 24px;">
-  </a>
   <a href="#">
     <img src="https://api.visitorbadge.io/api/visitors?path=https://github.com/DataScienceUIBK/Rankify" style="height: 24px;">
   </a>
