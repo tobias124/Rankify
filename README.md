@@ -42,6 +42,9 @@
   <a href="https://gitcode.com/abdoelsayed2016/Rankify">
     <img src="https://gitcode.com/abdoelsayed2016/Rankify/star/badge.svg" style="height: 24px;">
   </a>
+
+  <a href="https://colab.research.google.com/drive/1QukxP1WZHkPfD4321UcLXD24sKCpuUuP?usp=sharing"><img src="https://img.shields.io/static/v1?label=Colab&message=Demo&logo=Google%20Colab&color=f9ab00"></a>
+
 </div>
 
 <!-- Product Hunt badge -->
