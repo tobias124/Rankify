@@ -224,5 +224,5 @@ rankify-index index ./data/sample.jsonl \
   --output ./indicescli
 
 
-rankify-index index ./data/sample.jsonl   --retriever bm25 --output ./indicescli  
+rankify-index index ./sample.jsonl   --retriever bm25 --output ./indicescli  
 """
