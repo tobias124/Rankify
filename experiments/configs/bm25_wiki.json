@@ -1,0 +1,15 @@
+{
+  "name": "bm25_wiki",
+  "corpus_path": "data/wiki.jsonl",
+  "index_dir": "outputs/bm25_wiki",
+  "retriever": "bm25",
+  "chunking": {
+    "chunk_sizes": [128, 256, 512, 1024]
+  },
+  "threads": 8,
+  "thread_variants": [1, 4, 8],
+  "index_type": "wiki",
+  "benchmark": {
+    "log_file": "logs/bm25_wiki.json"
+  }
+}
