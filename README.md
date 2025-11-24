@@ -830,6 +830,55 @@ for i, doc in enumerate(retrieved_documents):
 ```
 
 ---
+
+## 🧪 Benchmark Indexing
+
+You can benchmark the Rankify indexing pipeline (e.g. BM25 on Wikipedia) using the provided experiment scripts.
+
+### 🔧 Configuration
+
+All experiment parameters are defined in the JSON config files inside:
+
+Commands:
+
+Use optional flag `--repeats 3`
+
+Run BM25 indexing on Wikipedia:
+```bash
+python3 experiments/benchmark_indexing.py --config experiments/configs/bm25_wiki.json --repeats 3
+```
+
+Run DPR indexing on Wikipedia:
+```bash
+python3 experiments/benchmark_indexing.py --config experiments/configs/dpr_wiki.json --repeats 3
+```
+
+Plot benchmark results:
+```bash
+python experiments/analyze_benchmarks.py --file logs/bm25_wiki/20251031_102342/master_benchmarks.csv
+```
+Analyze benchmarks:
+
+Median only (default)
+```bash
+python3 experiments/analyze_benchmarks.py --file logs/bm25_wiki/20251031_102300/master_benchmarks.csv
+```
+Mean only
+```bash
+python3 experiments/analyze_benchmarks.py --file logs/bm25_wiki/20251031_102300/master_benchmarks.csv
+```
+
+Both (Mean + Median)
+```bash
+python3 experiments/analyze_benchmarks.py --file logs/bm25_wiki/20251031_102300/master_benchmarks.csv
+```
+
+Save to custom folder
+```bash
+python3 analyze_benchmarks.py --file logs/.../master_benchmarks.csv --all --save-dir plots/
+```
+
+
 ## 3️⃣ Running Reranking
 Rankify provides support for multiple reranking models. Below are examples of how to use each model.  
 

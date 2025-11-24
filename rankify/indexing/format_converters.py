@@ -43,7 +43,7 @@ def to_tsv(input_path, output_dir, chunk_size, threads) -> str:
     return output_path
 
 
-def to_pyserini_jsonl(input_path, output_dir, chunk_size, threads) -> str:
+def to_pyserini_jsonl(input_path, output_dir) -> str:
     """
     Convert the corpus to Pyserini JSONL format: one input JSON line -> one output JSON line.
     Keeps your original string IDs and pairs them with the *same line's* contents.
@@ -87,7 +87,7 @@ def to_pyserini_jsonl(input_path, output_dir, chunk_size, threads) -> str:
     return str(output_path)
 
 
-def to_pyserini_jsonl_dense(input_path, output_dir, chunk_size, threads) -> str:
+def to_pyserini_jsonl_dense(input_path, output_dir) -> str:
     """
     Create a JSONL where each line is: {"id": "...", "title": "...", "text": "..."}
     Accepts:

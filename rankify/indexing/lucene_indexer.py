@@ -60,7 +60,7 @@ class LuceneIndexer(BaseIndexer):
         This method uses the `to_pyserini_jsonl` function to convert the corpus file
         :return: str - The path to the converted Pyserini JSONL corpus file.
         """
-        return to_pyserini_jsonl(self.corpus_path, self.output_dir, self.chunk_size, self.threads)
+        return to_pyserini_jsonl(self.corpus_path, self.output_dir)
        
     def build_index(self):
         """

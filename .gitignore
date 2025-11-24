@@ -181,3 +181,8 @@ rankify-focus.code-workspace
 rankify/old_retrievers
 unit_test
 examples/webq-bm25-test.json
+
+/logs
+/yes
+/data
+/outputs

@@ -176,10 +176,14 @@ class BGEIndexer(BaseIndexer):
         chunk_dir = self.index_dir
         chunk_dir.mkdir(parents=True, exist_ok=True)
 
-        chunk_paths = []
-        
         with open(self.corpus_path, "r", encoding="utf-8") as f:
-            for chunk_lines, start_idx in tqdm(self._generate_chunks(f, self.chunk_size), desc="Embedding chunks"):
+            total_lines = sum(1 for _ in f)
+
+        total_chunks = (total_lines + self.chunk_size - 1) // self.chunk_size
+
+        chunk_paths = []
+        with open(self.corpus_path, "r", encoding="utf-8") as f:
+            for chunk_lines, start_idx in tqdm(self._generate_chunks(f, self.chunk_size), desc="Embedding chunks", total=total_chunks):
                 chunk_data = self._bge_embed_chunk(chunk_lines, tokenizer, model)
 
                 chunk_path = chunk_dir / f"embeddings_chunk_{start_idx}.pkl"

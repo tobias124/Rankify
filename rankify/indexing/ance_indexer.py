@@ -58,7 +58,7 @@ class ANCEIndexer(BaseIndexer):
 
     def _save_dense_corpus(self):
         """Convert the corpus to dense-compatible format."""
-        return to_pyserini_jsonl_dense(self.corpus_path, self.output_dir, self.chunk_size, self.threads)
+        return to_pyserini_jsonl_dense(self.corpus_path, self.output_dir)
 
     def _load_ance_model(self):
         """Load ANCE model and tokenizer."""
