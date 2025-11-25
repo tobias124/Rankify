@@ -29,13 +29,19 @@ def run_lucene_benchmark(cfg, thread_variants):
     print("✅ Conversion complete.\n")
     run_benchmark_variants(cfg, thread_variants)
 
+def run_contriever_benchmark(cfg, batch_size_variants):
+    print("🔧 Converting to_pyserini_jsonl_dense ...")
+    format_converters.to_tsv(cfg["corpus_path"], Path(cfg["index_dir"]), 5000000, 8)
+    print("✅ Conversion complete.\n")
+    run_benchmark_variants(cfg, batch_size_variants, "batch_size")
+
 
 def run_benchmark_variants(cfg, variants_param, method="threads"):
     """Run benchmarks for each variant in the provided parameter list.
     Args: variants_param (list): List of parameter variants (e.g., thread counts).
           cfg (dict): Benchmark configuration dictionary.
         """
-    # --- LOOP OVER THREAD VARIANTS ---
+    # --- LOOP OVER VARIANTS ---
     for t in variants_param:
         print(f"\n=== 🧪 Benchmarking {method}={t} for {args.repeats} repeats ===")
 
@@ -46,7 +52,7 @@ def run_benchmark_variants(cfg, variants_param, method="threads"):
             result = benchmark_indexing(cfg, override_value=t, run_dir=run_dir, method=method)
             repeated_runs.append(result)
 
-        # Aggregate after all repeats for THIS thread value
+        # Aggregate after all repeats for method value
         summary = aggregate_repeats(repeated_runs)
         summary_path = run_dir / f"{cfg['name']}_{method}{t}_summary.csv"
         pd.DataFrame(summary).to_csv(summary_path, index=False)
