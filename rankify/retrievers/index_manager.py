@@ -297,6 +297,7 @@ class IndexManager:
             for doc_id, doc_data in data.items():
                 if isinstance(doc_data, dict):
                     contents = doc_data.get("contents", "")
+                    contents = contents if contents else doc_data.get("text", "")
                     title = doc_data.get("title", contents[:100] if contents else "No Title")
                 else:
                     # If doc_data is a string, use it as contents
@@ -309,6 +310,7 @@ class IndexManager:
             for doc in data:
                 doc_id = doc.get("docid") or doc.get("id")
                 contents = doc.get("contents", "")
+                contents = contents if contents else doc.get("text", "")
                 title = doc.get("title", contents[:100] if contents else "No Title")
                 corpus[str(doc_id)] = {"contents": contents, "title": title}
         
