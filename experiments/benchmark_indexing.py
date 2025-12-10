@@ -8,7 +8,7 @@ from pathlib import Path
 import argparse
 import pandas as pd
 
-from rankify.indexing import format_converters, LuceneIndexer, DPRIndexer, BGEIndexer, ContrieverIndexer
+from rankify.indexing import format_converters, LuceneIndexer, DPRIndexer, BGEIndexer, ContrieverIndexer, ColBERTIndexer
 from analyze_benchmarks import generate_plots
 
 def run_bge_benchmark(cfg, batch_size_variants):
@@ -30,11 +30,10 @@ def run_lucene_benchmark(cfg, thread_variants):
     run_benchmark_variants(cfg, thread_variants)
 
 def run_contriever_benchmark(cfg, batch_size_variants):
-    print("🔧 Converting to_pyserini_jsonl_dense ...")
-    format_converters.to_tsv(cfg["corpus_path"], Path(cfg["index_dir"]), 5000000, 8)
-    print("✅ Conversion complete.\n")
     run_benchmark_variants(cfg, batch_size_variants, "batch_size")
 
+def run_colbert_benchmark(cfg, batch_size_variants):
+    run_benchmark_variants(cfg, batch_size_variants, "batch_size")
 
 def run_benchmark_variants(cfg, variants_param, method="threads"):
     """Run benchmarks for each variant in the provided parameter list.
@@ -64,10 +63,9 @@ def validate_config(cfg):
     """Ensure the config contains all required keys."""
     required = ["name", "corpus_path", "index_dir", "retriever", "benchmark"]
     for key in required:
-        if key not in cfg:
+       if key not in cfg:
             raise ValueError(f"Missing required config key: '{key}'")
-    if cfg["retriever"].lower() in ["bm25"]:
-        if "thread_variants" not in cfg:
+    if cfg["retriever"].lower() in ["bm25"] and "thread_variants" not in cfg:
             raise ValueError("Config must include 'thread_variants' for BM25 retrievers.")
 
 
@@ -118,6 +116,56 @@ def log_stage(stage_name, start_time, results, index_dir=None, meta=None, lucene
     print(f"[{stage_name}] Time: {elapsed:.2f}s | Mem: {mem:.2f}MB | IndexSize: {size:.2f}MB")
     return time.time()
 
+def summarize_missingtask():
+    """
+    Reconstruct summary CSVs after an interrupted benchmarking process.
+
+    Args:
+        run_dir (str): Directory containing per-run JSON log files created by benchmark_indexing().
+    """
+    run_dir = "logs/contriever_wiki/20251125_213816"
+    run_dir = Path(run_dir)
+    if not run_dir.exists():
+        raise FileNotFoundError(f"Run directory does not exist: {run_dir}")
+
+    print(f"\n⚠️ Reconstructing missing summary files in: {run_dir}")
+
+    # --- Load all JSON log files ---
+    json_logs = sorted(run_dir.glob("*size12*.json"))
+    if not json_logs:
+        print("❌ No JSON logs found. Nothing to summarize.")
+        return
+
+    all_runs = []
+    for jf in json_logs:
+        try:
+            with open(jf) as f:
+                data = json.load(f)
+                if isinstance(data, list):
+                    all_runs.append(data)
+                else:
+                    print(f"⚠️ Skipping malformed log {jf}")
+        except Exception as e:
+            print(f"❌ Error reading {jf}: {e}")
+
+    if not all_runs:
+        print("❌ No valid runs found to aggregate.")
+        return
+
+    # --- Aggregate metrics ---
+    summary = aggregate_repeats(all_runs)
+
+    # Infer benchmark name from first entry
+    name = summary[0].get("name", "benchmark")
+
+    # Save summary
+    summary_path = run_dir / f"{name}_missingtask_summary.csv"
+    pd.DataFrame(summary).to_csv(summary_path, index=False)
+
+    print(f"📊 Summary reconstructed and saved at: {summary_path}")
+
+
+
 
 def benchmark_indexing(cfg, override_value, run_dir, method):
     """Run benchmark indexing for selected retriever."""
@@ -128,7 +176,6 @@ def benchmark_indexing(cfg, override_value, run_dir, method):
     index_dir = Path(cfg["index_dir"])
     retriever = cfg.get("retriever", "").lower()
 
-    # TODO: check if not already validated
     if not corpus_path.exists():
         raise FileNotFoundError(f"Corpus not found at {corpus_path}")
     if not retriever:
@@ -202,6 +249,17 @@ def benchmark_indexing(cfg, override_value, run_dir, method):
         t0 = time.time()
         idx.build_index()
         log_stage("contriever_build", t0, results, index_dir, meta=meta)
+    elif retriever == "colbert":
+        # ColBERT Index build
+        idx = ColBERTIndexer(
+            corpus_path=str(corpus_path),
+            output_dir=str(index_dir),
+            index_type="wiki",
+            batch_size=override_value,
+        )
+        t0 = time.time()
+        idx.build_index()
+        log_stage("colbert_build", t0, results, index_dir, meta=meta)
     else:
         raise NotImplementedError(f"Retriever '{retriever}' not supported yet.")
 
@@ -264,7 +322,21 @@ def aggregate_repeats(all_runs):
 
     return summary
 
+def merge_all_summaries(summary_csvs, run_dir):
+    if summary_csvs:
+        dfs = [pd.read_csv(f) for f in summary_csvs]
+        master = pd.concat(dfs, ignore_index=True)
+        master_path = run_dir / "master_benchmarks.csv"
+        master.to_csv(master_path, index=False)
 
+        print(f"\n📈 Master Summary CSV saved at {master_path}")
+
+        print("\n📊 Generating plots...")
+        generate_plots(master_path, save_dir=run_dir / "plots", median=True, group_by="batch_size")
+        print("✅ Plots generated.\n")
+        print(f"🎉 Benchmarking complete! Results and plots are available in {run_dir.resolve()}")
+    else:
+        print("⚠️ No summary CSV results found to aggregate.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -276,7 +348,7 @@ if __name__ == "__main__":
         cfg = json.load(f)
         validate_config(cfg)
 
-    ts = "20251117_215029"#time.strftime("%Y%m%d_%H%M%S", time.localtime())
+    ts = time.strftime("%Y%m%d_%H%M%S", time.localtime())
     run_dir = Path(cfg["benchmark"]["log_file"]).with_suffix("") / ts
 
     # BM 25 in pyserini
@@ -306,11 +378,15 @@ if __name__ == "__main__":
 
     if cfg.get("retriever", "").lower() == "bge":
         method = "batch_size"
-        #run_bge_benchmark(cfg, batch_variants)
+        run_bge_benchmark(cfg, batch_variants)
 
     if cfg.get("retriever", "").lower() == "contriever":
         method = "batch_size"
-        print("not implemented yet")
+        run_contriever_benchmark(cfg, batch_variants)
+
+    if cfg.get("retriever", "").lower() == "colbert":
+        method = "batch_size"
+        run_colbert_benchmark(cfg, batch_variants)
 
     # Merge all summary CSVs
     summary_csvs = [f for f in run_dir.glob("*_summary.csv")]

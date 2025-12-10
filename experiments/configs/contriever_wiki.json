@@ -1,0 +1,11 @@
+{
+  "name": "contriever_wiki",
+  "corpus_path": "data/wiki_50k.jsonl",
+  "index_dir": "outputs/contriever_index_wiki",
+  "retriever": "contriever",
+  "batch_variants": [12],
+  "index_type": "wiki",
+  "benchmark": {
+    "log_file": "logs/contriever_wiki.json"
+  }
+}

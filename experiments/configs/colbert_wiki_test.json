@@ -1,0 +1,11 @@
+{
+  "name": "colbert_wiki",
+  "corpus_path": "data/one_liner.jsonl",
+  "index_dir": "outputs/colbert_index_wiki",
+  "retriever": "colbert",
+  "batch_variants": [4, 8, 12],
+  "index_type": "wiki",
+  "benchmark": {
+    "log_file": "logs/colbert_wiki.json"
+  }
+}
