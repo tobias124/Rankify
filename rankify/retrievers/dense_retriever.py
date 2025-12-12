@@ -212,7 +212,7 @@ class DenseRetriever(BaseRetriever):
                     # Custom corpus format
                     doc_data = self.corpus.get(str(hit.docid), {})
                     if doc_data:
-                        text = doc_data.get("contents", "")
+                        text = doc_data.get("contents") or doc_data.get("text", "")
                         title = doc_data.get("title", "")
                         # Use ID mapping if available
                         if self.id_mapping:
@@ -226,7 +226,7 @@ class DenseRetriever(BaseRetriever):
                 try:
                     doc = self.searcher.doc(hit.docid)
                     raw_content = json.loads(doc.raw())
-                    content = raw_content.get("contents", "")
+                    content = raw_content.get("contents") or raw_content.get("text", "")
                     
                     if '\n' in content:
                         lines = content.split('\n', 1)
@@ -251,7 +251,6 @@ class DenseRetriever(BaseRetriever):
             print(f"Error processing hit {hit.docid}: {e}")
             text = f"Error: {str(e)}"
             title = f"Document {hit.docid}"
-        
         return Context(
             id=doc_id,
             title=title,
