@@ -1,6 +1,6 @@
 # RankFiD
 
-::: rankify.models.rankfid
+::: rankify.models.rank_fid
     options:
         show_source: true
         members: true
