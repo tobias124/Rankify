@@ -16,19 +16,25 @@ nav:
       - API Reference: api/index.md
       - Dataset: api/dataset.md
       - Metrics: api/metrics.md
+      - Indexing: api/indexing.md
+      - Tools: api/tools.md
       - Retrievers:
           - Retriever: api/retrievers/retriever.md
           - BM25 Retriever: api/retrievers/bm25.md
           - Dense Retriever: api/retrievers/dense.md
+          - ANCE Retriever: api/retrievers/ance.md
           - BGE Retriever: api/retrievers/bge.md
           - Colbert Retriever: api/retrievers/colbert.md
           - Contriever Retriever: api/retrievers/contriever.md
+          - Online Retriever: api/retrievers/online.md
+          - HyDE Retriever: api/retrievers/hyde.md
       - Rerankers:
           - Base: api/rerankings/base.md
           - Reranking: api/rerankings/reranking.md
           - UPR: api/rerankings/upr.md
           - FlashRank: api/rerankings/flashrank.md
           - RankGPT: api/rerankings/rankgpt.md
+          - API Reranker: api/rerankings/apiranker.md
           - Blender Reranker: api/rerankings/blender.md
           - ColBERT Reranker: api/rerankings/colbert_ranker.md
           - EchoRank: api/rerankings/echo_rank.md
@@ -54,7 +60,49 @@ nav:
           - Generator: api/generators/generator.md
           - FiD Generator: api/generators/fid.md
           - In Context Ralm Generator: api/generators/in_context_ralm.md
-  - Tutorials: tutorials/index.md
+  - Tutorials:
+      - Overview: tutorials/index.md
+      - Retrieval:
+          - Introduction: tutorials/retrieval/introduction.md
+          - BM25 Sparse Retrieval: tutorials/retrieval/bm25.md
+          - Dense Retrievers: tutorials/retrieval/dense_retrievers.md
+          - Hybrid Retrieval: tutorials/retrieval/hybrid.md
+          - Prebuilt Corpora: tutorials/retrieval/prebuilt_corpora.md
+          - Custom Datasets: tutorials/retrieval/custom_datasets.md
+      - Reranking:
+          - Introduction: tutorials/reranking/introduction.md
+          - Pointwise Reranking: tutorials/reranking/pointwise.md
+          - Pairwise Reranking: tutorials/reranking/pairwise.md
+          - Listwise Reranking: tutorials/reranking/listwise.md
+          - API Rerankers: tutorials/reranking/api_rerankers.md
+          - Evaluation: tutorials/reranking/evaluation.md
+      - RAG:
+          - Introduction: tutorials/rag/introduction.md
+          - Zero-Shot RAG: tutorials/rag/zero_shot.md
+          - Fusion-in-Decoder: tutorials/rag/fid.md
+          - In-Context Learning: tutorials/rag/in_context.md
+          - Building Pipelines: tutorials/rag/pipelines.md
+          - Evaluation: tutorials/rag/evaluation.md
+      - Datasets:
+          - Benchmark Datasets: tutorials/datasets/benchmark_datasets.md
+          - Custom Datasets: tutorials/datasets/custom_datasets.md
+          - Loading & Saving: tutorials/datasets/loading_saving.md
+          - Evaluation: tutorials/datasets/evaluation.md
+      - Evaluation:
+          - Retrieval Metrics: tutorials/evaluation/retrieval_metrics.md
+          - Reranking Metrics: tutorials/evaluation/reranking_metrics.md
+          - RAG Metrics: tutorials/evaluation/rag_metrics.md
+          - Method Comparisons: tutorials/evaluation/comparisons.md
+      - Advanced:
+          - Custom Retrievers: tutorials/advanced/custom_retrievers.md
+          - Custom Rerankers: tutorials/advanced/custom_rerankers.md
+          - Custom RAG: tutorials/advanced/custom_rag.md
+          - Saving Models: tutorials/advanced/saving_models.md
+      - Deployment:
+          - Large-Scale Apps: tutorials/deployment/large_scale.md
+          - External APIs: tutorials/deployment/apis.md
+          - Cloud & GPUs: tutorials/deployment/cloud.md
+          - Debugging: tutorials/deployment/debugging.md
 
 
 theme:

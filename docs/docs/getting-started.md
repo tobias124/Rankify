@@ -6,7 +6,7 @@ sidebar_position: 2
 # 🚀 Getting Started with Rankify
 
 ## 🔥 Overview
-Rankify is a **powerful Python toolkit** for **Retrieval, Re-Ranking, and Retrieval-Augmented Generation (RAG)**. It integrates **7 retrieval techniques, 24 state-of-the-art re-ranking models, and multiple RAG methods**, enabling seamless experimentation across retrieval pipelines.
+Rankify is a **powerful Python toolkit** for **Retrieval, Re-Ranking, and Retrieval-Augmented Generation (RAG)**. It integrates **10 retrieval methods** (BM25, DPR, ANCE, BGE, ColBERT, Contriever, Online, HyDE), **23 state-of-the-art re-ranking models**, and **7 RAG methods** (Zero-Shot, Basic RAG, Chain-of-Thought, Self-Consistency, ReAct, FiD, In-Context RALM), enabling seamless experimentation across retrieval pipelines.
 
 
 
@@ -115,18 +115,25 @@ print(generated_answers)
 Rankify provides **retrieval, re-ranking, and generation evaluation metrics**.
 
 ### **1️⃣ Evaluate Retrieval Performance**
-from rankify.metrics.metrics import Metrics
 
 ```python
+from rankify.metrics.metrics import Metrics
+
 metrics = Metrics(documents)
 retrieval_results = metrics.calculate_retrieval_metrics(ks=[1, 5, 10], use_reordered=False)
 print(retrieval_results)
+```
 
 ### **2️⃣ Evaluate Re-Ranked Results**
+
+```python
 re_ranked_results = metrics.calculate_retrieval_metrics(ks=[1, 5, 10], use_reordered=True)
 print(re_ranked_results)
+```
 
 ### **3️⃣ Evaluate RAG Performance**
+
+```python
 generated_answers = generator.generate(documents)
 generation_metrics = metrics.calculate_generation_metrics(generated_answers)
 print(generation_metrics)
