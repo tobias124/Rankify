@@ -4,11 +4,14 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.10"
+  jobs:
+    post_install:
+      # Install rankify in development mode without dependencies for docs only
+      - pip install -e . --no-deps
 
 python:
   install:
-    - requirements: docs/requirements.txt  # Use the lightweight docs requirements
-
+    - requirements: docs/requirements.txt
 
 mkdocs:
   configuration: docs/mkdocs.yml  
