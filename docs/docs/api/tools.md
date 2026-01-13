@@ -6,11 +6,6 @@ The tools module provides utilities for web search and other agent-based capabil
 
 The `WebSearchTool` enables real-time web search capabilities for RAG applications.
 
-### Features
-- Integrates with SERP providers (e.g., Serper.dev)
-- Automatic content extraction and context building
-- Async-compatible design
-
 ### Usage
 
 ```python
@@ -32,16 +27,10 @@ print(results)
 
 ## API Reference
 
-### Tool Base Class
-::: rankify.tools.Tools.Tool
-    handler: python
+::: rankify.tools.Tools
     options:
         show_source: true
-        heading_level: 3
-
-### WebSearchTool
-::: rankify.tools.Tools.WebSearchTool
-    handler: python
-    options:
-        show_source: true
-        heading_level: 3
+        members: true
+        show_root_heading: true
+        heading_level: 2
+        docstring_style: google
