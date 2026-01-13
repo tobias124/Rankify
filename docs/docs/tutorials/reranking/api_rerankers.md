@@ -6,6 +6,7 @@ title: "API-Based Rerankers"
 
 API-based rerankers provide high-quality reranking without local GPU requirements.
 
+
 ## Supported Providers
 
 | Provider | API | Default Model |
