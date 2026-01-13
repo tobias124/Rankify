@@ -12,6 +12,7 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - Getting Started: getting-started.md
+  - Contribution: contribution.md
   - References:
       - API Reference: api/index.md
       - Dataset: api/dataset.md
@@ -29,8 +30,8 @@ nav:
           - Online Retriever: api/retrievers/online.md
           - HyDE Retriever: api/retrievers/hyde.md
       - Rerankers:
-          - Base: api/rerankings/base.md
           - Reranking: api/rerankings/reranking.md
+          - Base: api/rerankings/base.md
           - UPR: api/rerankings/upr.md
           - FlashRank: api/rerankings/flashrank.md
           - RankGPT: api/rerankings/rankgpt.md
@@ -56,10 +57,26 @@ nav:
           - Vicuna Reranker: api/rerankings/vicuna_reranker.md
           - Zephyr Reranker: api/rerankings/zephyr_reranker.md
       - Generators:
-          - Base: api/generators/base.md
           - Generator: api/generators/generator.md
-          - FiD Generator: api/generators/fid.md
-          - In Context Ralm Generator: api/generators/in_context_ralm.md
+          - Prompt Generator: api/generators/prompt_generator.md
+          - Prompt Template: api/generators/prompt_template.md
+          - Models:
+              - Base RAG Model: api/generators/models/base_rag_model.md
+              - Model Factory: api/generators/models/model_factory.md
+              - HuggingFace Model: api/generators/models/huggingface_model.md
+              - LiteLLM Model: api/generators/models/litellm_model.md
+              - OpenAI Model: api/generators/models/openai_model.md
+              - vLLM Model: api/generators/models/vllm_model.md
+              - FiD Model: api/generators/models/fid_model.md
+          - RAG Methods:
+              - Base RAG Method: api/generators/rag_methods/basic_rag_method.md
+              - Zero-Shot: api/generators/rag_methods/zero_shot.md
+              - Basic RAG: api/generators/rag_methods/basic_rag.md
+              - Chain of Thought RAG: api/generators/rag_methods/chain_of_thought_rag.md
+              - Self Consistency RAG: api/generators/rag_methods/self_consistency_rag.md
+              - ReAct RAG: api/generators/rag_methods/react_rag.md
+              - FiD RAG Method: api/generators/rag_methods/fid_rag_method.md
+              - In Context RALM: api/generators/rag_methods/in_context_ralm_rag.md
   - Tutorials:
       - Overview: tutorials/index.md
       - Retrieval:
@@ -146,7 +163,6 @@ extra_css:
     - stylesheets/extra.css
 
 plugins:
-    #- social
     - search
     - mkdocstrings:
         handlers:
@@ -167,17 +183,8 @@ plugins:
                     annotations_path: brief
                     docstring_section_style: table
                     merge_init_into_class: true
-                    rendering:
-                        show_if_no_docstring: true
-                        show_warnings: false
-                        html_meta: false
     - mkdocs-jupyter:
         ignore_h1_titles: True
-    # - redirects:
-    #     redirect_maps:
-    #         # Redirect /intro/ to the main page
-    #         "intro/index.md": "index.md"
-    #         "intro.md": "index.md"
 
 extra:
     social:
@@ -185,7 +192,7 @@ extra:
           link: https://github.com/DataScienceUIBK/Rankify
         - icon: fontawesome/brands/discord
           link: https://discord.gg/Fbyf7ucKs5
-    cards: false  # Disable automatic generation of OG cards
+    cards: false
     footer: "Made with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) | Template taken from [DSPy](https://github.com/stanfordnlp/dspy)"
 
 
