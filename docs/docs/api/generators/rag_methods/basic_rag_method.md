@@ -1,6 +1,6 @@
 # Base RAG Method
 
-::: rankify.generator.rag_methods.basic_rag_method
+::: rankify.generator.rag_methods.base_rag_method
     options:
         show_source: true
         members: true

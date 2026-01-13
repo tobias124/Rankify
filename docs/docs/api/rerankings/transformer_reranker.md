@@ -1,6 +1,6 @@
 # Transformer Reranker
 
-::: rankify.models.transformer_reranker
+::: rankify.models.transformer_ranker
     options:
         show_source: true
         members: true

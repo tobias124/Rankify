@@ -1,6 +1,6 @@
 # LiT5 Reranker
 
-::: rankify.models.lit5
+::: rankify.models.lit5_reranker
     options:
         show_source: true
         members: true
