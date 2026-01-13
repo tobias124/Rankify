@@ -8,6 +8,7 @@ Pointwise rerankers score each query-document pair independently, then sort by s
 
 ## MonoT5
 
+
 MonoT5 uses T5 to predict relevance ("true" or "false"):
 
 ```python
