@@ -29,51 +29,10 @@ rankify-index index --help
 
 ## API Reference
 
-### Base Indexer
-::: rankify.indexing.base_indexer
-    handler: python
+::: rankify.indexing
     options:
         show_source: true
-        heading_level: 3
-
-### Lucene Indexer (BM25)
-::: rankify.indexing.lucene_indexer
-    handler: python
-    options:
-        show_source: true
-        heading_level: 3
-
-### DPR Indexer
-::: rankify.indexing.dpr_indexer
-    handler: python
-    options:
-        show_source: true
-        heading_level: 3
-
-### ANCE Indexer
-::: rankify.indexing.ance_indexer
-    handler: python
-    options:
-        show_source: true
-        heading_level: 3
-
-### BGE Indexer
-::: rankify.indexing.bge_indexer
-    handler: python
-    options:
-        show_source: true
-        heading_level: 3
-
-### ColBERT Indexer
-::: rankify.indexing.colbert_indexer
-    handler: python
-    options:
-        show_source: true
-        heading_level: 3
-
-### Contriever Indexer
-::: rankify.indexing.contriever_indexer
-    handler: python
-    options:
-        show_source: true
-        heading_level: 3
+        members: true
+        show_root_heading: true
+        heading_level: 2
+        docstring_style: google

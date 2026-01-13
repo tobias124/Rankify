@@ -173,16 +173,6 @@ plugins:
                     show_root_heading: true
                     heading_level: 3
                     members_order: source
-                    separate_signature: false
-                    show_category_heading: true
-                    show_symbol_type_heading: true
-                    show_docstring_parameters: true
-                    show_if_no_docstring: true
-                    show_signature_annotations: true
-                    unwrap_annotated: true
-                    annotations_path: brief
-                    docstring_section_style: table
-                    merge_init_into_class: true
     - mkdocs-jupyter:
         ignore_h1_titles: True
 
