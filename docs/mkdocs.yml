@@ -19,6 +19,7 @@ nav:
       - Metrics: api/metrics.md
       - Indexing: api/indexing.md
       - Tools: api/tools.md
+      - Agent: api/agent.md
       - Retrievers:
           - Retriever: api/retrievers/retriever.md
           - BM25 Retriever: api/retrievers/bm25.md
@@ -120,6 +121,14 @@ nav:
           - External APIs: tutorials/deployment/apis.md
           - Cloud & GPUs: tutorials/deployment/cloud.md
           - Debugging: tutorials/deployment/debugging.md
+      - Agent:
+          - Intelligent Model Selection: tutorials/agent/index.md
+      - Pipeline:
+          - One-Line API: tutorials/pipeline/index.md
+          - Hybrid Retrieval: tutorials/pipeline/hybrid_retrieval.md
+          - REST Server: tutorials/pipeline/server.md
+          - Integrations: tutorials/pipeline/integrations.md
+          - Web Playground: tutorials/pipeline/playground.md
 
 
 theme:
