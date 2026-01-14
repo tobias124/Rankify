@@ -91,7 +91,12 @@ https://github.com/user-attachments/assets/13184943-55db-4f0c-b509-fde920b809bc
 - [Roadmap](#-roadmap)
 - [Installation](#-installation)
 - [Quick Start](#rocket-quick-start)
-- [Indexing](#cli-running-indexing-module)
+  - [Pipeline API](#-one-line-pipeline-api-recommended)
+  - [RankifyAgent](#-rankifyagent---ai-powered-model-selection)
+  - [Rankify Server](#-rankify-server---deploy-as-rest-api)
+  - [Integrations](#-integrations---use-with-your-stack)
+  - [Web Playground](#-web-playground---interactive-ui)
+- [Indexing](#-indexing-via-cli)
 - [Retrievers](#2️⃣-running-retrieval)
 - [Re-Rankers](#3️⃣-running-reranking)
 - [Generators](#4️⃣-using-generator-module)
@@ -102,6 +107,7 @@ https://github.com/user-attachments/assets/13184943-55db-4f0c-b509-fde920b809bc
 - [License](#bookmark-license)
 - [Acknowledgments](#-acknowledgments)
 - [Citation](#star2-citation)
+
 
 
 
@@ -208,19 +214,136 @@ export PATH=$CONDA_PREFIX/bin:$PATH
 rm -rf ~/.cache/torch_extensions/*
 ```
 
----
 
 ## :rocket: Quick Start
 
-### **1️⃣ Pre-retrieved Datasets**  
+### 🚀 **One-Line Pipeline API** (Recommended)
 
-We provide **1,000 pre-retrieved documents per dataset**, which you can download from:  
+The **simplest way** to use Rankify - HuggingFace-style one-line interface:
+
+```python
+from rankify import pipeline
+
+# Create a RAG pipeline with intelligent defaults
+rag = pipeline("rag")
+answers = rag("What is machine learning?", documents)
+
+# Or customize your configuration
+rag = pipeline(
+    "rag",
+    retriever="bge",           # State-of-the-art dense retriever
+    reranker="flashrank",      # Ultra-fast reranker
+    generator="basic-rag"
+)
+```
+
+**Available Pipeline Types:**
+- `pipeline("search")` - Document retrieval only
+- `pipeline("rerank")` - Retrieve + rerank
+- `pipeline("rag")` - Full RAG pipeline (retrieve + rerank + generate)
+
+📖 **[Pipeline API Documentation](https://rankify.readthedocs.io/en/latest/tutorials/pipeline/)**
+
+---
+
+### 🤖 **RankifyAgent** - AI-Powered Model Selection
+
+Let AI help you choose the best models for your use case:
+
+```python
+from rankify.agent import RankifyAgent, recommend
+
+# Quick recommendation
+result = recommend(task="qa", gpu=True)
+print(f"Best Retriever: {result.retriever.name}")
+print(f"Best Reranker: {result.reranker.name}")
+
+# Conversational agent
+agent = RankifyAgent(backend="azure")  # or "openai", "litellm", "local"
+response = agent.chat("I need a fast search system for production")
+print(response.message)
+print(response.code_snippet)  # Ready-to-use code
+```
+
+📖 **[RankifyAgent Documentation](https://rankify.readthedocs.io/en/latest/tutorials/agent/)**
+
+---
+
+### 🌐 **Rankify Server** - Deploy as REST API
+
+Start a production-ready server in one command:
+
+```bash
+# CLI
+rankify serve --port 8000 --retriever bge --reranker flashrank
+
+# Or in Python
+from rankify.server import RankifyServer
+server = RankifyServer(retriever="bge", reranker="flashrank")
+server.start(port=8000)
+```
+
+**API Endpoints:**
+- `POST /retrieve` - Document retrieval
+- `POST /rerank` - Rerank documents  
+- `POST /rag` - Full RAG generation
+- `GET /health` - Health check
+
+```bash
+# Example API call
+curl -X POST http://localhost:8000/rag \
+  -H "Content-Type: application/json" \
+  -d '{"query": "What is AI?", "n_contexts": 5}'
+```
+
+📖 **[Server Documentation](https://rankify.readthedocs.io/en/latest/tutorials/pipeline/server/)**
+
+---
+
+### 🔌 **Integrations** - Use with Your Stack
+
+Seamlessly integrate with LangChain, LlamaIndex, and more:
+
+```python
+# LangChain
+from rankify.integrations import LangChainRetriever
+from langchain.chains import RetrievalQA
+
+retriever = LangChainRetriever(method="bge", reranker="flashrank")
+chain = RetrievalQA.from_chain_type(llm=your_llm, retriever=retriever)
+
+# LlamaIndex
+from rankify.integrations import LlamaIndexRetriever
+retriever = LlamaIndexRetriever(method="colbert", reranker="monot5")
+```
+
+📖 **[Integrations Documentation](https://rankify.readthedocs.io/en/latest/tutorials/pipeline/integrations/)**
+
+---
+
+### 🎨 **Web Playground** - Interactive UI
+
+Launch an interactive Gradio interface:
+
+```python
+from rankify.ui import launch_playground
+launch_playground(port=7860)
+```
+
+Try models, compare results, and export code - all in your browser!
+
+---
+
+### 1️⃣ **Traditional Workflow** (For Advanced Users)
+
+#### **Pre-retrieved Datasets**  
+
+We provide **40+ benchmark datasets** with **1,000 pre-retrieved documents** each:  
 
 🔗 **[Hugging Face Dataset Repository](https://huggingface.co/datasets/abdoelsayed/reranking-datasets-light)**  
 
 #### **Dataset Format**  
 
-The pre-retrieved documents are structured as follows:
 ```json
 [
     {
@@ -228,51 +351,34 @@ The pre-retrieved documents are structured as follows:
         "answers": ["...", "...", ...],
         "ctxs": [
             {
-                "id": "...",         // Passage ID from database TSV file
+                "id": "...",         // Passage ID
                 "score": "...",      // Retriever score
-                "has_answer": true|false  // Whether the passage contains the answer
+                "has_answer": true|false
             }
         ]
     }
 ]
 ```
 
-
-#### **Access Datasets in Rankify**  
-
-You can **easily download and use pre-retrieved datasets** through **Rankify**.  
-
 #### **List Available Datasets**  
 
-To see all available datasets:
 ```python
 from rankify.dataset.dataset import Dataset 
-
-# Display available datasets
-Dataset.avaiable_dataset()
+Dataset.available_dataset()  # Fixed typo: avaiable -> available
 ```
 
-**Retriever Datasets**
+#### **Download Datasets**
+
 ```python
 from rankify.dataset.dataset import Dataset
-# Download BM25-retrieved documents for nq-dev
+
+# Download BM25-retrieved documents
 dataset = Dataset(retriever="bm25", dataset_name="nq-dev", n_docs=100)
 documents = dataset.download(force_download=False)
+
+# Load from file
+documents = Dataset.load_dataset('./path/to/dataset.json', n_docs=100)
 ```
-
-
-**Load Pre-retrieved Dataset from File**  
-
-If you have already downloaded a dataset, you can load it directly:
-```python
-from rankify.dataset.dataset import Dataset
-
-# Load pre-downloaded BM25 dataset for WebQuestions
-documents = Dataset.load_dataset('./tests/out-datasets/bm25/web_questions/test.json', 100)
-```
-Now, you can integrate **retrieved documents** with **re-ranking** and **RAG** workflows! 🚀  
-
-
 
 
 <!-- #### Feature Comparison for Pre-Retrieved Datasets  
